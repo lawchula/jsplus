@@ -1,0 +1,29 @@
+.Schedule{
+background-color: #66B9BF;
+height: 1000px;
+}
+.test{
+    margin-top: 0px; 
+    margin-left: 150px;
+}
+.gbutton{
+    margin-top: 0px; 
+    margin-left: 20px;
+}
+.stat{
+    margin-top: 50px; 
+    margin-left: 980px;
+}
+.p{
+    margin-left: 40px ;
+}
+.tests{
+    background-color: white;
+    margin-top: 30px;
+    border: 1px solid black;
+  
+}
+.fix{
+    width: 200px;
+    height: 50px;;
+}
