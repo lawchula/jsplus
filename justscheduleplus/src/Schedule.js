@@ -18,42 +18,41 @@ import {
     DropdownItem
 } from 'reactstrap';
 import { Container, Row, Col } from 'react-grid-system';
-
+import Filter from './Filter';
 
 
 class Schedule extends Component {
     constructor(props){
         super(props)
         this.state = {
-            test : "test",
+            user : ["fifa","chin","toey"],
             day : [],
             year : new Date().getFullYear(),
-            month : new Date().getMonth()
+            month : new Date().getMonth(),
+            countday : new Date().getDay(),
+            show : false
         }
     }
-    test = () => {
-        var day = new Date();
-        day = day.getDate();
-        return day;
-    }
-
     componentDidMount(){
         this.getDaysInMonth(this.state.month,this.state.year)
+        
     }
-
          getDaysInMonth = (month, year) => {
             var date = new Date(year, month, 1);
             var days = [];
             
             while (date.getMonth() === month) {
-                
                days.push(new Date(date).toLocaleDateString("en-GB"));
                date.setDate(date.getDate() + 1);
             }
          this.setState({day: days})
+   }  
 
+   showPopup = () =>{
+       this.setState({
+        show: !this.state.show
+       });
    }
-       
 
     render() {
         return (
@@ -66,8 +65,11 @@ class Schedule extends Component {
                             <p className="stat">statistic</p>
                         </Col>
                         <Col md={8}>
-                            <Button color="btn btn-light" className="test">Filter</Button>{' '}
+                            <Button color="btn btn-light" className="test" onClick={this.showPopup}>Filter</Button>{' '}
                             <Button color="btn btn-light" className="gbutton">Genarate</Button>{' '}
+                            <Filter show={this.state.show} onClose={this.showPopup}>
+
+                            </Filter>
                         </Col>
                         <p className="p">Work Hour:</p>
                         <p className="p">Done: </p>
@@ -77,10 +79,10 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr>
-                                <th colSpan="30">Companyname</th>
+                                <th colSpan="32">Companyname</th>
                             </tr>
                             <tr>
-                                <th colSpan="30">Department</th>
+                                <th colSpan="32">Department</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,11 +90,8 @@ class Schedule extends Component {
                                 <th>Name</th>
                                 {this.state.day.map(event => {return <th>{event}</th>})}
                             </tr>
-                            <tr>
-                            </tr>
                         </tbody>
-                    </Table>          
-                   
+                    </Table>    
                 </Container>
             </div>
         );
@@ -100,3 +99,5 @@ class Schedule extends Component {
 }
 
 export default Schedule;
+
+
