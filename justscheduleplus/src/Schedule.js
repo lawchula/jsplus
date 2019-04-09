@@ -59,7 +59,6 @@ class Schedule extends Component {
             <div className="Schedule">
                 <Header />
                 <Container className="Schedule" fluid>
-
                     <Row>
                         <Col md={12}>
                             <p className="stat"><b><i>STATISTIC</i></b></p>
@@ -68,7 +67,6 @@ class Schedule extends Component {
                             <Button color="btn btn-light" className="test" onClick={this.showPopup} style={{color:'#E37222'}}><b>FILTER</b></Button>{' '}
                             <Button color="btn btn-light" className="gbutton" style={{color:'#E37222'}}><b>GENERATE</b></Button>{' '}
                             <Filter show={this.state.show} onClose={this.showPopup}>
-
                             </Filter>
                         </Col>
                         <Button color="btn btn-light" className="p1" style={{color:'#E37222'}} ><b>WORK HOUR:</b></Button>

@@ -16,6 +16,8 @@
     top: 25%;
     bottom: 25%;
     margin: auto;
+    width: 800px;
+    height: 400px;
     background: white;
   }
   .Addbutton{
@@ -24,9 +26,6 @@
   }
   .Filter{
     float: left;
-    width: 50%;
-    height: 87%;
-    background-color: #66B9BF;
   }
   .Advice{
       color: white;
