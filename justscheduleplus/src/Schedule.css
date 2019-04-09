@@ -13,9 +13,21 @@ height: 1000px;
 .stat{
     margin-top: 50px; 
     margin-left: 980px;
+    color: antiquewhite;
+    font-size: 18px;
 }
-.p{
-    margin-left: 40px ;
+.p1{
+    margin-left: -55px ;
+    color: #E37222;
+}
+.p2{
+    margin-left: 40px;
+    color: #E37222;
+}
+
+.p3{
+    margin-left: 40px;
+    color: #E37222;
 }
 .tests{
     background-color: white;

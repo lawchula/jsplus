@@ -62,32 +62,32 @@ class Schedule extends Component {
 
                     <Row>
                         <Col md={12}>
-                            <p className="stat">statistic</p>
+                            <p className="stat"><b><i>STATISTIC</i></b></p>
                         </Col>
                         <Col md={8}>
-                            <Button color="btn btn-light" className="test" onClick={this.showPopup}>Filter</Button>{' '}
-                            <Button color="btn btn-light" className="gbutton">Genarate</Button>{' '}
+                            <Button color="btn btn-light" className="test" onClick={this.showPopup} style={{color:'#E37222'}}><b>FILTER</b></Button>{' '}
+                            <Button color="btn btn-light" className="gbutton" style={{color:'#E37222'}}><b>GENERATE</b></Button>{' '}
                             <Filter show={this.state.show} onClose={this.showPopup}>
 
                             </Filter>
                         </Col>
-                        <p className="p">Work Hour:</p>
-                        <p className="p">Done: </p>
-                        <p className="p">Remain: </p>
+                        <Button color="btn btn-light" className="p1" style={{color:'#E37222'}} ><b>WORK HOUR:</b></Button>
+                        <Button color="btn btn-light" className="p2" style={{color:'#E37222'}} ><b>DONE:</b></Button>
+                        <Button  color="btn btn-light" className="p3" style={{color:'#E37222'}}><b>REMAIN:</b></Button>
                     </Row>
 
                     <Table bordered responsive className="tests">
                         <thead>
-                            <tr>
-                                <th colSpan="32">Companyname</th>
+                            <tr style={{'backgroundColor':'#07889B','color':'white'}}>
+                                <th colSpan="32">Companyname : </th>
                             </tr>
-                            <tr>
-                                <th colSpan="32">Department</th>
+                            <tr style={{'backgroundColor':'#E37222','color':'white'}}>
+                                <th colSpan="32">Department : </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>Name</th>
+                                <th>NAME</th>
                                 {this.state.day.map(event => {return <th>{event}</th>})}
                             </tr>
                         </tbody>

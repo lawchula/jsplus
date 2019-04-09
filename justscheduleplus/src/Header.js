@@ -15,6 +15,7 @@ import {
     DropdownItem
 } from 'reactstrap';
 import { Container, Row, Col } from 'react-grid-system';
+import './Header.css';
 
 class Header extends Component {
 
@@ -34,25 +35,32 @@ class Header extends Component {
 
     render() {
         return (
-            <div className="">    
-                    <Navbar color="light" light expand="md" className="header">
-                        <NavbarBrand className="" href="">JS+</NavbarBrand>
-                        <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                <NavLink href="" >How to use</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="" color="">About</NavLink>
-                            </NavItem>
-                            <NavItem>
-                            <NavLink href="">Contact</NavLink>
-                            </NavItem>
-                            <NavItem>
-                            <Button color="warning">User</Button>{' '}
-                            </NavItem>
-                        </Nav>
-                    </Navbar>
-            </div>
+            <div>
+            <Navbar color="light" light expand="md" >
+              <div className="JS" ><b>JS</b></div>
+              <div className="Plus" ><b>+</b></div>
+              <NavbarToggler onClick={this.toggle} />
+              <Collapse isOpen={this.state.isOpen} navbar>
+                <Nav className="ml-auto" navbar>
+                  <NavItem>
+                    <NavLink  href="" style={{color:'#07889B' ,fontSize:'15pt',marginTop:'4%'}} ><b>HOW TO USE</b></NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href=""  style={{color:'#07889B' ,fontSize:'15pt',marginTop:'7%'}}><b>ABOUT</b></NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href=""  style={{color:'#07889B' ,fontSize:'15pt',marginTop:'4%'}}><b>CONTRACT US</b></NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href=""><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="30" height="30" style={{marginTop:'8%'}}></img></NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href=""><button className="button1"  ><b>Teetuch</b></button></NavLink>
+                  </NavItem>
+                </Nav>
+              </Collapse>
+            </Navbar>
+          </div>
         );
     }
 }
