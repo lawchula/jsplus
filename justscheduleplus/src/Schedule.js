@@ -25,8 +25,10 @@ class Schedule extends Component {
     constructor(props){
         super(props)
         this.state = {
-            user : ["fifa","chin","toey"],
+            user : [],
             day : [],
+            department : [],
+            company : [],
             year : new Date().getFullYear(),
             month : new Date().getMonth(),
             countday : new Date().getDay(),
@@ -43,6 +45,36 @@ class Schedule extends Component {
         //console.log(this.state.month)
         //console.log(this.state.year)
         //console.log(this.test(this.state.month,this.state.year)
+
+        this.getDaysInMonth(this.state.month,this.state.year)
+        fetch('http://localhost:8080/users')
+        .then( (response) =>  {
+            return response.json();
+        })
+        .then((myJson) => {
+            console.log(myJson)
+            this.setState({user: myJson})
+            console.log("Users",this.state.user)
+        });
+        fetch('http://localhost:8080/company')
+        .then( (response) =>  {
+            return response.json();
+        })
+        .then((myJson) => {
+            console.log(myJson)
+            this.setState({company: myJson})
+            console.log("company",this.state.company)
+        });
+
+        fetch('http://localhost:8080/department')
+        .then( (response) =>  {
+            return response.json();
+        })
+        .then((myJson) => {
+            console.log(myJson)
+            this.setState({department: myJson})
+            console.log("department",this.state.department)
+        });
     }
          getDaysInMonth = (month, year) => {
             var date = new Date(year, month, 1);
@@ -94,10 +126,10 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr style={{'backgroundColor':'#07889B','color':'white'}}>
-                                <th colSpan="32">Companyname : </th>
+                                <th colSpan="32">Companyname : {this.state.company.map(event => {return <h20>{event.Company_Name}</h20>})}</th>
                             </tr>
                             <tr style={{'backgroundColor':'#E37222','color':'white'}}>
-                                <th colSpan="32">Department : </th>
+                                <th colSpan="32">Department : {this.state.department.map(event => {return <h20>{event.Department_Name}</h20>})}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,7 +138,8 @@ class Schedule extends Component {
                                 {this.state.day.map(event => {return <th>{event}</th>})}
                             </tr>
                             <tr>
-                            {this.state.block.map((e,i) => {return <td></td>})}
+                            {/* {this.state.block.map((e,i) => {return <td></td>})} */}
+                            {this.state.user.map(event => {return <tr style={{border:'1'}}>{event.Name}</tr>})}
                             </tr>
                         </tbody>
                         
