@@ -19,17 +19,20 @@ class Filter extends Component {
       showElement: false,
       period: [
       <div>
-      <input type="text" placeholder="Period Name" style={{ marginTop: 20, width: 150 }}></input> 
-      <input type="text" placeholder="Period Time" style={{ width: 60, marginLeft: 20 }}></input> 
+      <input type="text" placeholder="Period Name" style={{ marginTop: 20, width: 150 }}  name='periodName' onChange={this.handleChange} ></input> 
+      <input type="text" placeholder="Period Time" style={{ width: 60, marginLeft: 20 }} name='periodOne' onChange={this.handleChange} ></input> 
       <span style={{ marginLeft: 10 }}> - </span> 
-      <input type="text" placeholder="Period Time" style={{ width: 60, marginLeft: 10, }}></input>
+      <input type="text" placeholder="Period Time" style={{ width: 60, marginLeft: 10, }} name='periodTwo' onChange={this.handleChange} ></input>
       </div>
-      ]
+      ],
+      periodName: '',
+      periodOne : '',
+      periodTwo: ''
     }
   }
   onClose = (e) => {
     if (this.props.onClose != undefined) {
-      this.props.onClose(e);
+      this.props.onClose(e)
     }
     // this.props.onClose && this.props.onClose(e);
   }
@@ -38,13 +41,13 @@ class Filter extends Component {
   addPeriod = () => {
     var periods = (
       <div> 
-      <input type="text" placeholder="Period Name" style={{ marginTop: 20, width: 150 }}></input> 
+      <input type="text" placeholder="Period Name" style={{ marginTop: 20, width: 150 }} ></input> 
       <input type="text" placeholder="Period Time" style={{ width: 60, marginLeft: 20 }}></input> 
       <span style={{ marginLeft: 10 }}> - </span> 
       <input type="text" placeholder="Period Time" style={{ width: 60, marginLeft: 10 }}></input>
       </div>
     )
-    return this.setState({ period: this.state.period.concat(periods) });
+    return this.setState({ period: this.state.period.concat(periods) })
   }
   
   disablePeriod = () => {
@@ -63,6 +66,15 @@ class Filter extends Component {
     this.state.period.splice(key,1)
     this.forceUpdate()
   }
+  
+  handleSubmit = (event) => {
+      event.preventDefault()
+  }
+
+  handleChange = (event) => {
+    event.preventDefault()
+}
+
 
 
   render() {
@@ -85,13 +97,13 @@ class Filter extends Component {
             <Row>
               <Col md={6} className="Period">
                 <button className="Addbutton" onClick={this.addPeriod} disabled={this.disablePeriod()}>Add+</button>
+                <form method='POST' onSubmit={this.handleSubmit}>
                 {this.state.period.map((event,key) => { return <div style={{ display:"flex"}}>{event}
                   <img src={error} style={{ width: 15, height: 15, marginLeft:15, marginTop:30}} onClick={() => this.remove(key)}></img>
                   </div>
-                 })}
-                 <div style={{position:"absolute", top: 300}}> 
-                 <button style={{ marginLeft:285}}>Submit</button>
-                 </div>
+                 })}  
+                 <button style={{ marginLeft:285,position:"absolute", top: 320 }}>Submit</button>
+                </form>
               </Col>
               <Col md={6} style={{ backgroundColor: "#07889B", height: 372 }}>
                 <p style={{ marginTop: 70, color: "white" }} className="Advice">JS+</p>

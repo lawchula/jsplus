@@ -136,16 +136,11 @@ class Schedule extends Component {
                             <tr>
                                 <th>NAME</th>
                                 {this.state.day.map(event => {return <th>{event}</th>})}
-                            </tr>
-                            <tr>
-                            {/* {this.state.block.map((e,i) => {return <td></td>})} */}
-                            {this.state.user.map(event => {return <tr style={{border:'1'}}>{event.Name}</tr>})}
-                            </tr>
+                            </tr> 
+                            {this.state.user.map(event => {return <tr className="test2" style={{backgroundColor:' #E37222'}}>{event.Name} {this.state.block.map((e,i) => {return <td style={{backgroundColor:'white'}}></td>})} </tr>})}
                         </tbody>
-                        
                     </Table>    
                 </Container>
-               
                 {/* {console.log(this.test(this.state.month,this.state.year))} */}
             </div>
         );
