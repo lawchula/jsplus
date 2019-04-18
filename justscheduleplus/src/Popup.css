@@ -16,9 +16,10 @@
     top: 25%;
     bottom: 25%;
     margin: auto;
-    width: 800px;
-    height: 400px;
-    background: white;
+    width: 55%;
+    height: 50%;
+    background-color: "#66B9BF";
+    
   }
   .Addbutton{
    margin-left: 285px;
@@ -31,10 +32,16 @@
       color: white;
       text-align: center;
       font-size: 65px;
+      background-color: "#66B9BF";
+      
   }
   .Advice2{
       font-size: 20px;
       color: white;
       text-align: center;
       margin-top: 0px;
+  }
+  .Period{
+    background-color: #66B9BF;
+    height: auto;
   }

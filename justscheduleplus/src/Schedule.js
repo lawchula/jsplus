@@ -30,12 +30,19 @@ class Schedule extends Component {
             year : new Date().getFullYear(),
             month : new Date().getMonth(),
             countday : new Date().getDay(),
-            show : false
+            show : false,
+            countd : 0,
+            block : []
+            
         }
     }
     componentDidMount(){
-        this.getDaysInMonth(this.state.month,this.state.year)
         
+        this.getDaysInMonth(this.state.month,this.state.year)
+        this.setBlock(this.state.month,this.state.year)
+        //console.log(this.state.month)
+        //console.log(this.state.year)
+        //console.log(this.test(this.state.month,this.state.year)
     }
          getDaysInMonth = (month, year) => {
             var date = new Date(year, month, 1);
@@ -48,6 +55,15 @@ class Schedule extends Component {
          this.setState({day: days})
    }  
 
+   setBlock = (month,year) => {
+      var count = new Date(year,month+1,0).getDate();
+      var a =[]
+      for(var i=1; i <= count; i++){
+         a.push(i)
+      }
+      this.setState({block: a}) 
+   }
+
    showPopup = () =>{
        this.setState({
         show: !this.state.show
@@ -55,6 +71,7 @@ class Schedule extends Component {
    }
 
     render() {
+        // console.log(this.state.countd)
         return (
             <div className="Schedule">
                 <Header />
@@ -88,9 +105,15 @@ class Schedule extends Component {
                                 <th>NAME</th>
                                 {this.state.day.map(event => {return <th>{event}</th>})}
                             </tr>
+                            <tr>
+                            {this.state.block.map((e,i) => {return <td></td>})}
+                            </tr>
                         </tbody>
+                        
                     </Table>    
                 </Container>
+               
+                {/* {console.log(this.test(this.state.month,this.state.year))} */}
             </div>
         );
     }
