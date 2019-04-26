@@ -7,8 +7,8 @@ import './Popup.css';
 import { Container, Row, Col } from 'react-grid-system';
 import error from './Images/error.png';
 import { relative } from 'path';
-
-
+import Timepicker from './Timepicker';
+import TextField from '@material-ui/core/TextField';
 
 
 class Filter extends Component {
@@ -17,16 +17,9 @@ class Filter extends Component {
     super(props)
     this.state = {
       showElement: false,
-      period:[<div>
-        <input type="text" placeholder="Period Name" name='Period Name'  onChange={(e)=> this.state.periodName[this.state.i] = e.target.value} style={{ marginTop: 20, width: 150 }} ></input>
-        <input type="text" placeholder="Period Time" name='Period Time' onChange={(e)=> this.state.periodOne[this.state.i] = e.target.value} style={{ width: 60, marginLeft: 20 }}></input>
-        <span style={{ marginLeft: 10 }}> - </span>
-        <input type="text" placeholder="Period Time" name='Period Time2'  onChange={(e)=> this.state.periodTwo[this.state.i] = e.target.value} style={{ width: 60, marginLeft: 10 }}></input>
-      </div>],
-      periodName: [],
-      periodOne: [],
-      periodTwo: [],
-      i: 0
+      i: 0,
+      periods: [],
+      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00" }
     }
   }
   onClose = (e) => {
@@ -35,24 +28,12 @@ class Filter extends Component {
     }
     // this.props.onClose && this.props.onClose(e);
   }
-
-
-  addPeriod = () => {
-    this.setState({i: this.state.i+1 })
-    var periods = (
-      <div>
-        <input type="text" placeholder="Period Name" name='Period Name'  onChange={(e)=> this.state.periodName[this.state.i] = e.target.value} style={{ marginTop: 20, width: 150 }} ></input>
-        <input type="text" placeholder="Period Time" name='Period Time' onChange={(e)=> this.state.periodOne[this.state.i] = e.target.value} style={{ width: 60, marginLeft: 20 }}></input>
-        <span style={{ marginLeft: 10 }}> - </span>
-        <input type="text" placeholder="Period Time" name='Period Time2'  onChange={(e)=> this.state.periodTwo[this.state.i] = e.target.value} style={{ width: 60, marginLeft: 10 }}></input>
-      </div>
-    )
-   console.log(this.state.periodName)
-    return this.setState({ period: this.state.period.concat(periods)})
+  componentDidMount() {
+    console.log(this.state.i)
+    console.log(this.state.period)
   }
-
   disablePeriod = () => {
-    var lenght = this.state.period.length
+    var lenght = this.state.periods.length
     if (lenght == 4) {
       return true
     } else {
@@ -64,37 +45,52 @@ class Filter extends Component {
     // this.setState({
     //   period : this.state.period.splice(key,1)
     // })
-    this.state.period.splice(key, 1)
+    this.state.periods.splice(key, 1)
     this.forceUpdate()
   }
 
   handleSubmit = (event) => {
     event.preventDefault()
+    const periods = this.state.periods
+    const period = this.state.period
+    periods.push(period)
+    this.setState({
+      period:{ periodName: "", periodOne: "00:00", periodTwo: "00:00",
+      periods }
+    })
+    console.log('state', this.state.periods)
+    
   }
 
-  handleChange = (event,i) => {
-    event.preventDefault();
+  handleChange = (event) => {
+    event.preventDefault()
+    let { period } = this.state
+    period[event.target.name] = event.target.value
+    this.setState({ period })
+    
+    // this.setState({period.[event.target.name]: event.target.value})
   }
 
   onAfterInsertRow = () => {
-    console.log(this.state.periodName)
-    const Url='http://localhost:8080/period';
+    console.log(this.state.periodName + "....." + this.state.periodOne)
+    console.log(this.state.i)
+    const Url = 'http://localhost:8080/period';
 
-    const othepram={
-      headers:{
-        "content-type":"application/json; charset=UTF-8"
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
         periodName: this.state.periodName,
         periodOne: this.state.periodOne,
-        periodTwo: this.state.periodTwo 
+        periodTwo: this.state.periodTwo
       }),
-      method:"POST"
+      method: "POST"
     };
-    fetch(Url,othepram)
-    .then(data=>{return data.json()})
-    .then(res=>{console.log(res)})
-    .catch(error=>console.log(error))
+    fetch(Url, othepram)
+      .then(data => { return data.json() })
+      .then(res => { console.log(res) })
+      .catch(error => console.log(error))
   }
 
 
@@ -106,6 +102,9 @@ class Filter extends Component {
     return (
       <div className='popup'>
         <div className='popup_inner'>
+          {/* {
+          returnDB !== null ? () : ()
+        } */}
           <Container>
             <Row>
               <Col md={11} style={{ backgroundColor: "white" }}>
@@ -117,15 +116,38 @@ class Filter extends Component {
             </Row>
             <Row>
               <Col md={6} className="Period">
-                <button className="Addbutton" onClick={this.addPeriod} disabled={this.disablePeriod()}>Add+</button>
-                
-                   {this.state.period.map((event, key) => {
-                    return <div style={{ display: "flex" }}>{event}
-                      <img src={error} style={{ width: 15, height: 15, marginLeft: 15, marginTop: 30 }} onClick={() => this.remove(key)}></img>
-                    </div>
-                  })} 
-                  <input style={{ marginLeft: 280, position:"fixed", top:580}}className="btn btn-primary" onClick={()=>this.onAfterInsertRow()} type="submit" value="Submit" />
-                
+                <form onSubmit={(e) => { this.handleSubmit(e) }}>
+                  <div style={{ display: 'flex' }}>
+                    <input type="text" placeholder="periodName"  name="periodName" value={this.state.period.periodName} onChange={(event => this.handleChange(event))} style={{ marginTop: 20, width: 150 }} ></input>
+                    <TextField id="time" name="periodOne" type="time" value={this.state.period.periodOne} // className={textField}
+                      onChange={(event => this.handleChange(event))}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        step: 300, // 5 min
+                      }}
+                    />
+                    <span style={{ marginLeft: 10 }}> - </span>
+                    <TextField id="time" name="periodTwo" type="time" value={this.state.period.periodTwo} // className={textField}
+                      onChange={(event => this.handleChange(event))}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        step: 300, // 5 min
+                      }}
+                    />
+                    <input style={{ width: 60, height: 30 }} className="btn btn-primary" type="submit" value="Submit" disabled={this.disablePeriod()} />
+                  </div>
+                </form>
+                 {/* {this.state.periods.map((event) => {return <div>{}</div> })} */}
+                {this.state.periods.map((event, key) => {
+                  return <div style={{ display: "flex" }}>{event.periodName+event.periodOne+event.periodTwo}
+                    <img src={error} style={{ width: 15, height: 15, marginLeft: 15, marginTop: 30 }} onClick={() => this.remove(key)}></img>
+                  </div>
+                })}
+                 <input style={{ marginLeft: 280, position: "fixed", top: 580 }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />
               </Col>
               <Col md={6} style={{ backgroundColor: "#07889B", height: 372 }}>
                 <p style={{ marginTop: 70, color: "white" }} className="Advice">JS+</p>
