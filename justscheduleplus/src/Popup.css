@@ -11,28 +11,34 @@
   }
   .popup_inner {
     position: absolute;
-    left: 25%;
+    left: 15%;
     right: 25%;
-    top: 25%;
+    top: 20%;
     bottom: 25%;
     margin: auto;
-    width: 55%;
+    width: 70%;
     height: 50%;
-    background-color: "#66B9BF";
-    
+    background-color: "#66B9BF"; 
   }
   .Addbutton{
    margin-left: 285px;
    margin-top: 20px;
   }
   .Filter{
-    float: left;
+    margin-left: 20px;
+    margin-top: 25px;
+    color: white;
+    background-color: #E37222; 
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
   }
   .Advice{
       color: white;
       text-align: center;
       font-size: 65px;
       background-color: "#66B9BF";
+      height: auto;
       
   }
   .Advice2{
@@ -44,4 +50,8 @@
   .Period{
     background-color: #66B9BF;
     height: auto;
+  }
+  .InputPeriod{
+    margin-bottom: 15px;
+    width: 100px;
   }

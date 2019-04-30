@@ -6,8 +6,7 @@ import Schedule from './Schedule';
 import './Popup.css';
 import { Container, Row, Col } from 'react-grid-system';
 import error from './Images/error.png';
-import { relative } from 'path';
-import Timepicker from './Timepicker';
+import { Button, Table, Dropdown,DropdownItem,DropdownMenu,DropdownToggle } from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
 
 
@@ -16,10 +15,11 @@ class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      showPeriod: [],
       showElement: false,
       i: 0,
       periods: [],
-      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00" }
+      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00" },
     }
   }
   onClose = (e) => {
@@ -28,12 +28,24 @@ class Filter extends Component {
     }
     // this.props.onClose && this.props.onClose(e);
   }
+
   componentDidMount() {
     console.log(this.state.i)
     console.log(this.state.period)
+
+    fetch('http://localhost:8080/addperiod')
+      .then((response) => {
+        return response.json();
+      })
+      .then((myJson) => {
+        console.log(myJson)
+        this.setState({ showPeriod: myJson })
+        console.log("Period", this.state.showPeriod)
+      });
   }
+
   disablePeriod = () => {
-    var lenght = this.state.periods.length
+    var lenght = this.state.periods.length + this.state.showPeriod.length
     if (lenght == 4) {
       return true
     } else {
@@ -55,11 +67,13 @@ class Filter extends Component {
     const period = this.state.period
     periods.push(period)
     this.setState({
-      period:{ periodName: "", periodOne: "00:00", periodTwo: "00:00",
-      periods }
+      period: {
+        periodName: "", periodOne: "00:00", periodTwo: "00:00",
+        periods
+      }
     })
     console.log('state', this.state.periods)
-    
+
   }
 
   handleChange = (event) => {
@@ -67,13 +81,13 @@ class Filter extends Component {
     let { period } = this.state
     period[event.target.name] = event.target.value
     this.setState({ period })
-    
+
     // this.setState({period.[event.target.name]: event.target.value})
   }
 
   onAfterInsertRow = () => {
-    console.log(this.state.periodName + "....." + this.state.periodOne)
-    console.log(this.state.i)
+    // console.log(this.state.periodName + "....." + this.state.periodOne)
+    // console.log(this.state.i)
     const Url = 'http://localhost:8080/period';
 
     const othepram = {
@@ -81,9 +95,10 @@ class Filter extends Component {
         "content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
-        periodName: this.state.periodName,
-        periodOne: this.state.periodOne,
-        periodTwo: this.state.periodTwo
+        // periodName: this.state.periodName,
+        // periodOne: this.state.periodOne,
+        // periodTwo: this.state.periodTwo
+        period: this.state.periods
       }),
       method: "POST"
     };
@@ -94,10 +109,13 @@ class Filter extends Component {
   }
 
 
+
   render() {
     if (!this.props.show) {
       return null;
     }
+
+    const { showPeriod } = this.state
 
     return (
       <div className='popup'>
@@ -117,10 +135,11 @@ class Filter extends Component {
             <Row>
               <Col md={6} className="Period">
                 <form onSubmit={(e) => { this.handleSubmit(e) }}>
-                  <div style={{ display: 'flex' }}>
-                    <input type="text" placeholder="periodName"  name="periodName" value={this.state.period.periodName} onChange={(event => this.handleChange(event))} style={{ marginTop: 20, width: 150 }} ></input>
-                    <TextField id="time" name="periodOne" type="time" value={this.state.period.periodOne} // className={textField}
+                  <div style={{ display: 'flex', marginTop: 22 }}>
+                    <input className="InputPeriod" type="text" placeholder="periodName" name="periodName" value={this.state.period.periodName} onChange={(event => this.handleChange(event))} style={{ marginTop: 20, width: 150 }} ></input>
+                    <TextField style={{ marginTop: 20, marginLeft: 5, width: 300, height: 30, backgroundColor: "white" }} id="time" name="periodOne" type="time" value={this.state.period.periodOne} // className={textField}
                       onChange={(event => this.handleChange(event))}
+                      variant="outlined"
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -128,9 +147,10 @@ class Filter extends Component {
                         step: 300, // 5 min
                       }}
                     />
-                    <span style={{ marginLeft: 10 }}> - </span>
-                    <TextField id="time" name="periodTwo" type="time" value={this.state.period.periodTwo} // className={textField}
+                    <span style={{ marginLeft: 5, marginTop: 20 }}> - </span>
+                    <TextField style={{ marginTop: 20, marginLeft: 5, width: 300, height: 30, backgroundColor: "white" }} id="time" name="periodTwo" type="time" value={this.state.period.periodTwo} // className={textField}
                       onChange={(event => this.handleChange(event))}
+                      variant="outlined"
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -138,16 +158,26 @@ class Filter extends Component {
                         step: 300, // 5 min
                       }}
                     />
-                    <input style={{ width: 60, height: 30 }} className="btn btn-primary" type="submit" value="Submit" disabled={this.disablePeriod()} />
+                    <input style={{ width: 60, height: 40, marginTop: 5, marginLeft: 5 }} className="btn btn-primary" type="submit" value="Add" disabled={this.disablePeriod()} />
                   </div>
                 </form>
-                 {/* {this.state.periods.map((event) => {return <div>{}</div> })} */}
-                {this.state.periods.map((event, key) => {
-                  return <div style={{ display: "flex" }}>{event.periodName+event.periodOne+event.periodTwo}
-                    <img src={error} style={{ width: 15, height: 15, marginLeft: 15, marginTop: 30 }} onClick={() => this.remove(key)}></img>
-                  </div>
-                })}
-                 <input style={{ marginLeft: 280, position: "fixed", top: 580 }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />
+                {/* {this.state.periods.map((event) => {return <div>{}</div> })} */}
+                <Table responsive style={{ marginTop: 10 }}>
+                  <thead style={{ backgroundColor: "#E37222", color: "white", height: 200 }}>
+                    <tr>
+                      <th scope="col">Period Name</th>
+                      <th scope="col">Start</th>
+                      <th scope="col">End</th>
+                      <th scope="col">Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody style={{ backgroundColor: "#07889B", color: "white" }}>
+                    {/* {showPeriod.length >= 0 ? ( this.state.showPeriod.map(event => {return <div>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two} </div> })) : ("fail")} */}
+                    {showPeriod.map(event => { return <tr><td>{event.Period_Name}</td> <td> {event.Period_Time_One}</td> <td>{event.Period_Time_Two}</td></tr> })}
+                    {this.state.periods.map((event, key) => { return <tr><td>{event.periodName}</td> <td>{event.periodOne}</td> <td>{event.periodTwo}</td>  <td><img src={error} style={{ width: 15, height: 15, marginTop: 15, marginLeft: 40 }} onClick={() => this.remove(key)}></img></td> </tr> })}
+                  </tbody>
+                </Table>
+                <input style={{ marginLeft: 280, position: "absolute" }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />
               </Col>
               <Col md={6} style={{ backgroundColor: "#07889B", height: 372 }}>
                 <p style={{ marginTop: 70, color: "white" }} className="Advice">JS+</p>
