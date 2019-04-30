@@ -37,7 +37,8 @@ class Schedule extends Component {
             show: false,
             countd: 0,
             block: [],
-            showDropdown: true
+            showDropdown: -1,
+            Test3: []
            
 
         }
@@ -46,7 +47,7 @@ class Schedule extends Component {
 
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
-        this.test(this.state.block.length)
+        //this.test(this.state.block.length)
         //console.log(this.state.month)
         //console.log(this.state.year)
         //console.log(this.test(this.state.month,this.state.year)
@@ -107,9 +108,12 @@ class Schedule extends Component {
         });
     }
 
-    test = (i) => {
-      const {showDropdown} = this.state
-      this.setState({showDropdown : !showDropdown})
+    test(i,x) {
+        console.log('i ='+i)
+        console.log('x ='+x)
+        // this.setState({Test3: i})
+    //   const {showDropdown} = this.state
+      this.setState({showDropdown : i})
     }
 
     render() {
@@ -147,10 +151,10 @@ class Schedule extends Component {
                                 <th>NAME</th>
                                 {this.state.day.map(event => { return <th>{event}</th> })}
                             </tr>
-                            {this.state.user.map(event => { return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name} {this.state.block.map((e, i) => { return <td style={{ backgroundColor: 'white' }} onClick={this.test}></td> })} </tr> })} 
-                            {this.state.showDropdown && <Timepicker/>}
+                            {this.state.user.map((event,x) => { 
+                            return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name} {this.state.block.map((e,i) => { return <td style={{ backgroundColor: 'white' }} onClick={()=>this.test(i,x)}> {this.state.showDropdown === i && <Timepicker   />}</td> })} </tr> 
+                                })} 
                         </tbody>
-                        {console.log(this.state.block.length)}
                     </Table>
                 </Container>
                 {/* {console.log(this.test(this.state.month,this.state.year))} */}
@@ -160,5 +164,3 @@ class Schedule extends Component {
 }
 
 export default Schedule;
-
-

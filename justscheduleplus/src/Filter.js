@@ -86,19 +86,14 @@ class Filter extends Component {
   }
 
   onAfterInsertRow = () => {
-    // console.log(this.state.periodName + "....." + this.state.periodOne)
-    // console.log(this.state.i)
     const Url = 'http://localhost:8080/period';
-
+  
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
-        // periodName: this.state.periodName,
-        // periodOne: this.state.periodOne,
-        // periodTwo: this.state.periodTwo
-        period: this.state.periods
+        period : this.state.periods
       }),
       method: "POST"
     };
