@@ -39,8 +39,6 @@ class Schedule extends Component {
             block: [],
             showDropdown: -1,
             Test3: []
-           
-
         }
     }
     componentDidMount() {
@@ -52,7 +50,6 @@ class Schedule extends Component {
         //console.log(this.state.year)
         //console.log(this.test(this.state.month,this.state.year)
 
-        this.getDaysInMonth(this.state.month, this.state.year)
         fetch('http://localhost:8080/users')
             .then((response) => {
                 return response.json();
@@ -113,7 +110,11 @@ class Schedule extends Component {
         console.log('x ='+x)
         // this.setState({Test3: i})
     //   const {showDropdown} = this.state
-      this.setState({showDropdown : i})
+      this.setState({showDropdown : [x, i]})
+    }
+
+    dropdownTest = () =>{
+       this.props.dropdownTest()
     }
 
     render() {
@@ -152,7 +153,7 @@ class Schedule extends Component {
                                 {this.state.day.map(event => { return <th>{event}</th> })}
                             </tr>
                             {this.state.user.map((event,x) => { 
-                            return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name} {this.state.block.map((e,i) => { return <td style={{ backgroundColor: 'white' }} onClick={()=>this.test(i,x)}> {this.state.showDropdown === i && <Timepicker   />}</td> })} </tr> 
+                            return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name} {this.state.block.map((e,i) => { return <td style={{ backgroundColor: 'white' }} onClick={()=>this.test(i,x)}> {this.state.showDropdown[0] === x && this.state.showDropdown[1] === i && <Timepicker dropdownTest={this.dropdownTest} />}</td> })} </tr> 
                                 })} 
                         </tbody>
                     </Table>
