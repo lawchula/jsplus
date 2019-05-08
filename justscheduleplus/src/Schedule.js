@@ -20,6 +20,9 @@ import {
 import { Container, Row, Col } from 'react-grid-system';
 import Filter from './Filter';
 import Timepicker from './Timepicker';
+import { array } from 'prop-types';
+// import {ClickPeriod} from './Timepicker';
+// console.log(ClickPeriod);
 
 
 
@@ -35,38 +38,32 @@ class Schedule extends Component {
             month: new Date().getMonth(),
             countday: new Date().getDay(),
             show: false,
-            countd: 0,
             block: [],
             showDropdown: -1,
-            Test3: []
+            ShowPeriodAfterUserClick: [],
+            dropdownshouldclose: false,
+            TestShow: [],
+            dayTest: []
         }
     }
     componentDidMount() {
-
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
         //this.test(this.state.block.length)
-        //console.log(this.state.month)
-        //console.log(this.state.year)
-        //console.log(this.test(this.state.month,this.state.year)
-
         fetch('http://localhost:8080/users')
             .then((response) => {
                 return response.json();
             })
             .then((myJson) => {
-                console.log(myJson)
                 this.setState({ user: myJson })
-                console.log("Users", this.state.user)
             });
+
         fetch('http://localhost:8080/company')
             .then((response) => {
                 return response.json();
             })
             .then((myJson) => {
-                console.log(myJson)
                 this.setState({ company: myJson })
-                console.log("company", this.state.company)
             });
 
         fetch('http://localhost:8080/department')
@@ -74,11 +71,37 @@ class Schedule extends Component {
                 return response.json();
             })
             .then((myJson) => {
-                console.log(myJson)
                 this.setState({ department: myJson })
-                console.log("department", this.state.department)
             });
     }
+
+    // SelectDataFromDB = () => {
+    //     fetch('http://localhost:8080/users')
+    //         .then((response) => {
+    //             return response.json();
+    //         })
+    //         .then((myJson) => {
+    //             this.setState({ user: myJson })
+    //         });
+
+    //     fetch('http://localhost:8080/company')
+    //         .then((response) => {
+    //             return response.json();
+    //         })
+    //         .then((myJson) => {
+    //             this.setState({ company: myJson })
+    //         });
+
+    //     fetch('http://localhost:8080/department')
+    //         .then((response) => {
+    //             return response.json();
+    //         })
+    //         .then((myJson) => {
+    //             this.setState({ department: myJson })
+    //         });
+
+    // }
+
     getDaysInMonth = (month, year) => {
         var date = new Date(year, month, 1);
         var days = [];
@@ -105,20 +128,36 @@ class Schedule extends Component {
         });
     }
 
-    test(i,x) {
-        console.log('i ='+i)
-        console.log('x ='+x)
-        // this.setState({Test3: i})
-    //   const {showDropdown} = this.state
-      this.setState({showDropdown : [x, i]})
+    SendMultidimension(x, y) {
+        this.setState({ showDropdown: [x, y], dropdownshouldclose: false })
     }
 
-    dropdownTest = () =>{
-       this.props.dropdownTest()
+    dropdownTest = () => {
+        this.props.dropdownTest()
     }
+
+    AddPeriod = async (PeriodUserClick, x, y) => {
+
+        this.setState({ dropdownshouldclose: true })
+        const show = { ...this.state.TestShow }
+        // const show = {}
+        const oldShow = show[`${x},${y}`]
+        if (Array.isArray(oldShow)) {
+            if (oldShow.findIndex(show => {
+                return show.Period_Name == PeriodUserClick.Period_Name
+            }) === -1)
+                show[`${x},${y}`] = [...oldShow, PeriodUserClick]
+        } else {
+
+            show[`${x},${y}`] = [PeriodUserClick]
+        }
+
+        this.setState({ TestShow: show })
+
+    }
+
 
     render() {
-        // console.log(this.state.countd)
         return (
             <div className="Schedule">
                 <Header />
@@ -152,16 +191,41 @@ class Schedule extends Component {
                                 <th>NAME</th>
                                 {this.state.day.map(event => { return <th>{event}</th> })}
                             </tr>
-                            {this.state.user.map((event,x) => { 
-                            return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name} {this.state.block.map((e,i) => { return <td style={{ backgroundColor: 'white' }} onClick={()=>this.test(i,x)}> {this.state.showDropdown[0] === x && this.state.showDropdown[1] === i && <Timepicker dropdownTest={this.dropdownTest} />}</td> })} </tr> 
-                                })} 
+                            {this.state.user.map((event, x) => {
+                                return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name}
+
+
+                                    {this.state.block.map((e, y) => {
+                                        return <td style={{ backgroundColor: 'white' }}
+                                            onClick={() => this.SendMultidimension(x, y)}>
+                                            {this.state.showDropdown[0] === x && this.state.showDropdown[1] === y && !this.state.dropdownshouldclose &&
+                                                <Timepicker AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y)} />}
+                                            {Array.isArray(this.state.TestShow[`${x},${y}`])
+                                                &&
+                                                this.state.TestShow[`${x},${y}`].map(show => <div style={{ backgroundColor: 'red' }}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>)
+                                            }
+                                        </td>
+                                    })} </tr>
+
+
+
+                            })}
                         </tbody>
                     </Table>
                 </Container>
-                {/* {console.log(this.test(this.state.month,this.state.year))} */}
             </div>
         );
     }
 }
 
 export default Schedule;
+
+
+
+
+
+
+// var user = {
+//     test1love:[{30:"Morning"},{21:"Night"}]
+
+// }

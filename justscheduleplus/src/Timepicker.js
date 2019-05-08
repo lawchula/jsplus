@@ -12,6 +12,7 @@ import {
     DropdownMenu,
     DropdownItem,
     Dropdown
+
 } from 'reactstrap';
 
 class Timepicker extends Component {
@@ -19,9 +20,13 @@ class Timepicker extends Component {
     constructor(props) {
         super(props)
         this.dropdownTest = this.dropdownTest.bind(this)
+        // this.ClickPeriod = this.ClickPeriod.bind(this)
         this.state = {
             dropdownOpen: false,
-            showperiod: []
+            showperiod: [],
+            ShowPeriodOnSchedule: [],
+            Testadd: {},
+            i: 0
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -32,21 +37,37 @@ class Timepicker extends Component {
                 return response.json();
             })
             .then((myJson) => {
-                console.log(myJson)
                 this.setState({ showperiod: myJson })
-                console.log("Users", this.state.showperiod)
             });
     }
 
     toggle = () => {
-        const {dropdownOpen} = this.state
+        const { dropdownOpen } = this.state
         this.setState({ dropdownOpen: !dropdownOpen })
     }
 
     dropdownTest() {
-        console.log("test")
-        const{showperiod} = this.state
-        console.log(showperiod)
+        const { showperiod } = this.state
+    }
+
+    onClose = (e) => {
+        if (this.props.onClose != undefined) {
+            this.props.onClose(e)
+        }
+    }
+
+    ClickPeriod(event,i) {
+        console.log("Print :" + event)
+        this.setState({I: i})
+        // console.log("I : "+this.state.i)
+        // this.state.ShowPeriodOnSchedule([1])
+
+        this.setState({ShowPeriodOnSchedule: event},()=>{
+            console.log(this.state.ShowPeriodOnSchedule)
+            // console.log("I : "+this.state.i)
+            this.props.AddPeriod(this.state.ShowPeriodOnSchedule)
+        })
+        // console.log(this.state.ShowPeriodOnSchedule)
     }
 
 
@@ -55,11 +76,11 @@ class Timepicker extends Component {
             <div>
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down'>
                     <DropdownToggle caret>
-                        Dropdown
-        </DropdownToggle>
+                    </DropdownToggle>
                     <DropdownMenu>
-                        <DropdownItem header>Header</DropdownItem>
-                       {this.state.showperiod.map((e) => {return <DropdownItem onClick={this.dropdownTest}>{e.Period_Name + e.Period_Time_One + e.Period_Time_Two}</DropdownItem>})}
+                        {/* <DropdownItem header>Header</DropdownItem> */}
+                        {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two}</DropdownItem> })}
+
                         {/* <DropdownItem>Some Action</DropdownItem>
                         <DropdownItem disabled>Action (disabled)</DropdownItem>
                         <DropdownItem divider />
@@ -68,11 +89,17 @@ class Timepicker extends Component {
                         <DropdownItem>Quo Action</DropdownItem> */}
                     </DropdownMenu>
                 </Dropdown>
-       {console.log(this.state.showperiod)} 
+                {/* {console.log(this.state.showperiod)}  */}
 
             </div>
         )
     }
 }
 
-export default Timepicker ;
+export default Timepicker;
+// export function ClickPeriod(event);
+    // showSlides(slideIndex += n);
+    // export function ClickPeriod(event){
+    //     // ClickPeriod(event);
+    //     console.log(event)
+    // }

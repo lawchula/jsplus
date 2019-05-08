@@ -30,17 +30,17 @@ class Filter extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state.i)
-    console.log(this.state.period)
+    // console.log(this.state.i)
+    // console.log(this.state.period)
 
     fetch('http://localhost:8080/addperiod')
       .then((response) => {
         return response.json();
       })
       .then((myJson) => {
-        console.log(myJson)
+        // console.log(myJson)
         this.setState({ showPeriod: myJson })
-        console.log("Period", this.state.showPeriod)
+        // console.log("Period", this.state.showPeriod)
       });
   }
 
@@ -53,7 +53,7 @@ class Filter extends Component {
     }
   }
   remove = (key) => {
-    console.log(key)
+    // console.log(key)
     // this.setState({
     //   period : this.state.period.splice(key,1)
     // })
@@ -72,7 +72,7 @@ class Filter extends Component {
         periods
       }
     })
-    console.log('state', this.state.periods)
+    // console.log('state', this.state.periods)
 
   }
 
