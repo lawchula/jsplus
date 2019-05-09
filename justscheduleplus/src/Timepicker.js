@@ -14,6 +14,8 @@ import {
     Dropdown
 
 } from 'reactstrap';
+import error from './Images/error.png';
+import './Timepicker.css';
 
 class Timepicker extends Component {
 
@@ -26,7 +28,8 @@ class Timepicker extends Component {
             showperiod: [],
             ShowPeriodOnSchedule: [],
             Testadd: {},
-            i: 0
+            i: 0,
+            Visible: false
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -70,17 +73,21 @@ class Timepicker extends Component {
         // console.log(this.state.ShowPeriodOnSchedule)
     }
 
+    Test = () =>{
+        this.setState({Visible: false})
+    }
 
     render() {
         return (
-            <div>
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down'>
+            <div style={{zIndex:-1}}>
+                <img src={error} className='test' onClick = {this.Test}></img>
+                <div className='dropdown'>
+                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-10}}>
                     <DropdownToggle caret>
                     </DropdownToggle>
                     <DropdownMenu>
                         {/* <DropdownItem header>Header</DropdownItem> */}
-                        {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two}</DropdownItem> })}
-
+                        {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two} </DropdownItem> })}
                         {/* <DropdownItem>Some Action</DropdownItem>
                         <DropdownItem disabled>Action (disabled)</DropdownItem>
                         <DropdownItem divider />
@@ -89,8 +96,8 @@ class Timepicker extends Component {
                         <DropdownItem>Quo Action</DropdownItem> */}
                     </DropdownMenu>
                 </Dropdown>
+                </div>
                 {/* {console.log(this.state.showperiod)}  */}
-
             </div>
         )
     }

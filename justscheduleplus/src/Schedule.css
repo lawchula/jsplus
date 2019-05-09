@@ -2,10 +2,6 @@
 background-color: #66B9BF;
 height: 1000px;
 }
-.test{
-    margin-top: 0px; 
-    margin-left: 150px;
-}
 .gbutton{
     margin-top: 0px; 
     margin-left: 20px;
@@ -33,7 +29,7 @@ height: 1000px;
     background-color: white;
     margin-top: 30px;
     border: 1px solid black;
-  
+    overflow-x: hidden;
 }
 .fix{
     width: 200px;

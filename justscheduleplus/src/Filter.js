@@ -19,7 +19,7 @@ class Filter extends Component {
       showElement: false,
       i: 0,
       periods: [],
-      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00" },
+      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00" }
     }
   }
   onClose = (e) => {
@@ -169,7 +169,7 @@ class Filter extends Component {
                   <tbody style={{ backgroundColor: "#07889B", color: "white" }}>
                     {/* {showPeriod.length >= 0 ? ( this.state.showPeriod.map(event => {return <div>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two} </div> })) : ("fail")} */}
                     {showPeriod.map(event => { return <tr><td>{event.Period_Name}</td> <td> {event.Period_Time_One}</td> <td>{event.Period_Time_Two}</td></tr> })}
-                    {this.state.periods.map((event, key) => { return <tr><td>{event.periodName}</td> <td>{event.periodOne}</td> <td>{event.periodTwo}</td>  <td><img src={error} style={{ width: 15, height: 15, marginTop: 15, marginLeft: 40 }} onClick={() => this.remove(key)}></img></td> </tr> })}
+                    {this.state.periods.map((event, key) => { return <tr><td>{event.periodName}</td> <td>{event.periodOne}</td> <td>{event.periodTwo}</td>  <td>  <img src={error} style={{ width: 15, height: 15, marginTop: 15, marginLeft: 40 }} onClick={() => this.remove(key)}></img></td> </tr> })}
                   </tbody>
                 </Table>
                 <input style={{ marginLeft: 280, position: "absolute" }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />

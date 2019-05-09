@@ -29,6 +29,7 @@ import { array } from 'prop-types';
 class Schedule extends Component {
     constructor(props) {
         super(props)
+        this.getNumofDay = this.getNumofDay.bind(this)
         this.state = {
             user: [],
             day: [],
@@ -43,12 +44,14 @@ class Schedule extends Component {
             ShowPeriodAfterUserClick: [],
             dropdownshouldclose: false,
             TestShow: [],
-            dayTest: []
+            dayTest: [],
+            numofday: ['M','TU','W','TH','F','SA','SU']
         }
     }
     componentDidMount() {
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
+        this.getNumofDay(this.state.month,this.state.countday)
         //this.test(this.state.block.length)
         fetch('http://localhost:8080/users')
             .then((response) => {
@@ -103,14 +106,29 @@ class Schedule extends Component {
     // }
 
     getDaysInMonth = (month, year) => {
-        var date = new Date(year, month, 1);
+        var date = new Date(year, month,1);
         var days = [];
+        var numofday = [];
 
         while (date.getMonth() === month) {
-            days.push(new Date(date).toLocaleDateString("en-GB"));
-            date.setDate(date.getDate() + 1);
+            days.push(new Date(date).toLocaleDateString('en-GB').substring('0','2'));
+            numofday.push(new Date(date).getDay());
+            date.setDate(date.getDate() +1);
         }
         this.setState({ day: days })
+
+    }
+    
+    getNumofDay(month,day) {
+    var date = new Date(month,1);
+    while(date.getMonth() === month){
+        if(day.getDay() === 1){
+            return this.state.numofday[0]
+        }else{
+            return this.state.numofday[1]
+        }
+    }
+
     }
 
     setBlock = (month, year) => {
@@ -167,7 +185,7 @@ class Schedule extends Component {
                             <p className="stat"><b><i>STATISTIC</i></b></p>
                         </Col>
                         <Col md={8}>
-                            <Button color="btn btn-light" className="test" onClick={this.showPopup} style={{ color: '#E37222' }}><b>FILTER</b></Button>{' '}
+                            <Button color="btn btn-light" className="gbutton" onClick={this.showPopup} style={{ color: '#E37222' }}><b>FILTER</b></Button>{' '}
                             <Button color="btn btn-light" className="gbutton" style={{ color: '#E37222' }}><b>GENERATE</b></Button>{' '}
                             <Filter show={this.state.show} onClose={this.showPopup}>
                             </Filter>
@@ -189,12 +207,10 @@ class Schedule extends Component {
                         <tbody>
                             <tr>
                                 <th>NAME</th>
-                                {this.state.day.map(event => { return <th>{event}</th> })}
+                                {this.state.day.map(event => { return <th style={{fontSize:10}}>{event} </th> })}
                             </tr>
                             {this.state.user.map((event, x) => {
-                                return <tr className="test2" style={{ backgroundColor: ' #E37222' }}>{event.Name}
-
-
+                                return <tr className="test2" style={{ backgroundColor: ' #E37222',fontSize:13 }}>{event.Name}
                                     {this.state.block.map((e, y) => {
                                         return <td style={{ backgroundColor: 'white' }}
                                             onClick={() => this.SendMultidimension(x, y)}>
@@ -202,7 +218,7 @@ class Schedule extends Component {
                                                 <Timepicker AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y)} />}
                                             {Array.isArray(this.state.TestShow[`${x},${y}`])
                                                 &&
-                                                this.state.TestShow[`${x},${y}`].map(show => <div style={{ backgroundColor: 'red' }}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>)
+                                                this.state.TestShow[`${x},${y}`].map(show => <div style={{ backgroundColor: 'red',width:"auto",backgroundColor:"red",fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-8,marginRight:-8,marginBottom:25,marginTop:10 }}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>)
                                             }
                                         </td>
                                     })} </tr>
@@ -213,7 +229,9 @@ class Schedule extends Component {
                         </tbody>
                     </Table>
                 </Container>
+                {console.log("5 :"+this.state.dayTest)}
             </div>
+            
         );
     }
 }
