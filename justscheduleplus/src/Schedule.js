@@ -20,7 +20,7 @@ import {
 import { Container, Row, Col } from 'react-grid-system';
 import Filter from './Filter';
 import Timepicker from './Timepicker';
-import { array } from 'prop-types';
+import error from './Images/error.png';
 // import {ClickPeriod} from './Timepicker';
 // console.log(ClickPeriod);
 
@@ -185,28 +185,29 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr style={{ 'backgroundColor': '#07889B', 'color': 'white' }}>
-                                <th colSpan="32">Companyname : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <th colSpan="33">Companyname : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
                             </tr>
                             <tr style={{ 'backgroundColor': '#E37222', 'color': 'white' }}>
-                                <th colSpan="32">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })}</th>
+                                <th colSpan="33">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>NAME</th>
-                                {this.state.day.map((event) => { return <th style={{fontSize:9, backgroundColor: this.ShowDayColorOnSchedule(event)}}>{event} </th> })}
+                                <th className="name" colSpan="2">NAME</th>
+                                {this.state.day.map((event,i) => { return <th style={{backgroundColor: this.ShowDayColorOnSchedule(event)}} className="day">{event} </th> })}
                             </tr>
                             {this.state.user.map((event, x) => {
-                                return <tr className="test2" style={{ backgroundColor: ' #E37222',fontSize:13 }}>{event.Name}
+                                return <tr className="test2" style={{ backgroundColor: ' #E37222',fontSize:13 }}> <td colSpan="2">{event.Name}</td>
                                     {this.state.block.map((e, y) => {
-                                        return <td style={{ backgroundColor: 'white' }}
+                                        return <td style={{ backgroundColor: 'white'}}
                                             onClick={() => this.SendMultidimension(x, y)}>
                                             {this.state.showDropdown[0] === x && this.state.showDropdown[1] === y && !this.state.dropdownshouldclose &&
                                                 <Timepicker AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y)} />}
                                             {Array.isArray(this.state.TestShow[`${x},${y}`])
                                                 &&
-                                                this.state.TestShow[`${x},${y}`].map((show,i)=> <div style={{ width:"auto",backgroundColor: i === 0 ? "orange" : i===1 ? "red" : "white" ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-8,marginRight:-8,marginBottom:0,marginTop:3 }}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>)
-                                            }
+                                                this.state.TestShow[`${x},${y}`].map((show,i)=> <div style={{marginBottom:-15,marginTop:-8,marginRight:-10}}>
+                                                <div style={{ width:35,backgroundColor: i === 0 ? "orange" : i===1 ? "red" : "white" ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
+                                                <div><img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}}></img></div></div> )}
                                         </td>
                                     })} </tr>
                             })}

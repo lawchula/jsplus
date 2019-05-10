@@ -83,7 +83,7 @@ class Timepicker extends Component {
                 <img src={error} className='error' onClick={this.CloseDropdown}></img>
                 )}
                 {this.state.open && (
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-10}}>
+                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-13,marginLeft:-12.5}}>
                     <DropdownToggle caret>
                     </DropdownToggle>
                     <DropdownMenu>
