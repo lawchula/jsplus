@@ -16,6 +16,7 @@ import {
 } from 'reactstrap';
 import error from './Images/error.png';
 import './Timepicker.css';
+import Schedule from './Schedule';
 
 class Timepicker extends Component {
 
@@ -29,7 +30,9 @@ class Timepicker extends Component {
             ShowPeriodOnSchedule: [],
             Testadd: {},
             i: 0,
-            Visible: false
+            open: true,
+            closepicture: true
+
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -53,12 +56,6 @@ class Timepicker extends Component {
         const { showperiod } = this.state
     }
 
-    onClose = (e) => {
-        if (this.props.onClose != undefined) {
-            this.props.onClose(e)
-        }
-    }
-
     ClickPeriod(event,i) {
         console.log("Print :" + event)
         this.setState({I: i})
@@ -73,15 +70,19 @@ class Timepicker extends Component {
         // console.log(this.state.ShowPeriodOnSchedule)
     }
 
-    Test = () =>{
-        this.setState({Visible: false})
+    CloseDropdown = () =>{
+        this.setState({open: false})
+        this.setState({closepicture: false})
     }
 
     render() {
         return (
             <div style={{zIndex:-1}}>
-                <img src={error} className='test' onClick = {this.Test}></img>
                 <div className='dropdown'>
+                {this.state.closepicture && (
+                <img src={error} className='error' onClick={this.CloseDropdown}></img>
+                )}
+                {this.state.open && (
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-10}}>
                     <DropdownToggle caret>
                     </DropdownToggle>
@@ -96,17 +97,11 @@ class Timepicker extends Component {
                         <DropdownItem>Quo Action</DropdownItem> */}
                     </DropdownMenu>
                 </Dropdown>
+                )}
                 </div>
-                {/* {console.log(this.state.showperiod)}  */}
             </div>
         )
     }
 }
 
 export default Timepicker;
-// export function ClickPeriod(event);
-    // showSlides(slideIndex += n);
-    // export function ClickPeriod(event){
-    //     // ClickPeriod(event);
-    //     console.log(event)
-    // }

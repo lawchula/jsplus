@@ -29,7 +29,6 @@ import { array } from 'prop-types';
 class Schedule extends Component {
     constructor(props) {
         super(props)
-        this.getNumofDay = this.getNumofDay.bind(this)
         this.state = {
             user: [],
             day: [],
@@ -45,14 +44,16 @@ class Schedule extends Component {
             dropdownshouldclose: false,
             TestShow: [],
             dayTest: [],
-            numofday: ['M','TU','W','TH','F','SA','SU']
+            TestColor: []
         }
     }
     componentDidMount() {
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
-        this.getNumofDay(this.state.month,this.state.countday)
-        //this.test(this.state.block.length)
+        this.SelectDataFromDB()
+    }
+
+    SelectDataFromDB = () => {
         fetch('http://localhost:8080/users')
             .then((response) => {
                 return response.json();
@@ -76,61 +77,25 @@ class Schedule extends Component {
             .then((myJson) => {
                 this.setState({ department: myJson })
             });
+
     }
 
-    // SelectDataFromDB = () => {
-    //     fetch('http://localhost:8080/users')
-    //         .then((response) => {
-    //             return response.json();
-    //         })
-    //         .then((myJson) => {
-    //             this.setState({ user: myJson })
-    //         });
-
-    //     fetch('http://localhost:8080/company')
-    //         .then((response) => {
-    //             return response.json();
-    //         })
-    //         .then((myJson) => {
-    //             this.setState({ company: myJson })
-    //         });
-
-    //     fetch('http://localhost:8080/department')
-    //         .then((response) => {
-    //             return response.json();
-    //         })
-    //         .then((myJson) => {
-    //             this.setState({ department: myJson })
-    //         });
-
-    // }
 
     getDaysInMonth = (month, year) => {
         var date = new Date(year, month,1);
         var days = [];
         var numofday = [];
+        var TestColorAgain = [];
+        var TestShowday = [];
 
         while (date.getMonth() === month) {
-            days.push(new Date(date).toLocaleDateString('en-GB').substring('0','2'));
-            numofday.push(new Date(date).getDay());
+            TestShowday = new Date(date).toDateString().substr("0","3");
+            days.push(new Date(date).toDateString().substr("7","4")+TestShowday);
             date.setDate(date.getDate() +1);
         }
         this.setState({ day: days })
 
     }
-    
-    getNumofDay(month,day) {
-    var date = new Date(month,1);
-    while(date.getMonth() === month){
-        if(day.getDay() === 1){
-            return this.state.numofday[0]
-        }else{
-            return this.state.numofday[1]
-        }
-    }
-
-    }
-
     setBlock = (month, year) => {
         var count = new Date(year, month + 1, 0).getDate();
         var a = []
@@ -154,6 +119,28 @@ class Schedule extends Component {
         this.props.dropdownTest()
     }
 
+    ShowDayColorOnSchedule = (event) => {
+        var dayStr = event.substr(event.length - 3)
+        switch (dayStr) {
+            case 'Sat':
+                return "#9933FF"
+                // break;
+            case 'Sun':
+                return "#FF0000"
+            case 'Mon':
+                return "yellow"
+            case 'Tue':
+                return "pink"
+            case 'Wed':
+                return "#00CC00"
+            case 'Thu':
+                return "orange"
+            case 'Fri':
+                return "#99FFFF"
+                // break;
+        }
+    }
+
     AddPeriod = async (PeriodUserClick, x, y) => {
 
         this.setState({ dropdownshouldclose: true })
@@ -171,11 +158,11 @@ class Schedule extends Component {
         }
 
         this.setState({ TestShow: show })
-
     }
 
 
     render() {
+        
         return (
             <div className="Schedule">
                 <Header />
@@ -207,7 +194,7 @@ class Schedule extends Component {
                         <tbody>
                             <tr>
                                 <th>NAME</th>
-                                {this.state.day.map(event => { return <th style={{fontSize:10}}>{event} </th> })}
+                                {this.state.day.map((event) => { return <th style={{fontSize:9, backgroundColor: this.ShowDayColorOnSchedule(event)}}>{event} </th> })}
                             </tr>
                             {this.state.user.map((event, x) => {
                                 return <tr className="test2" style={{ backgroundColor: ' #E37222',fontSize:13 }}>{event.Name}
@@ -218,18 +205,14 @@ class Schedule extends Component {
                                                 <Timepicker AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y)} />}
                                             {Array.isArray(this.state.TestShow[`${x},${y}`])
                                                 &&
-                                                this.state.TestShow[`${x},${y}`].map(show => <div style={{ backgroundColor: 'red',width:"auto",backgroundColor:"red",fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-8,marginRight:-8,marginBottom:25,marginTop:10 }}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>)
+                                                this.state.TestShow[`${x},${y}`].map((show,i)=> <div style={{ width:"auto",backgroundColor: i === 0 ? "orange" : i===1 ? "red" : "white" ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-8,marginRight:-8,marginBottom:0,marginTop:3 }}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>)
                                             }
                                         </td>
                                     })} </tr>
-
-
-
                             })}
                         </tbody>
                     </Table>
                 </Container>
-                {console.log("5 :"+this.state.dayTest)}
             </div>
             
         );
