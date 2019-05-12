@@ -12,7 +12,6 @@ import {
     DropdownMenu,
     DropdownItem,
     Dropdown
-
 } from 'reactstrap';
 import error from './Images/error.png';
 import './Timepicker.css';
@@ -31,8 +30,7 @@ class Timepicker extends Component {
             Testadd: {},
             i: 0,
             open: true,
-            closepicture: true
-
+            closepicture: true,
         }
         this.toggle = this.toggle.bind(this)
     }
@@ -57,20 +55,20 @@ class Timepicker extends Component {
     }
 
     ClickPeriod(event,i) {
-        console.log("Print :" + event)
+        // console.log("Print :" + event)
         this.setState({I: i})
         // console.log("I : "+this.state.i)
         // this.state.ShowPeriodOnSchedule([1])
 
         this.setState({ShowPeriodOnSchedule: event},()=>{
-            console.log(this.state.ShowPeriodOnSchedule)
+            // console.log(this.state.ShowPeriodOnSchedule)
             // console.log("I : "+this.state.i)
             this.props.AddPeriod(this.state.ShowPeriodOnSchedule)
         })
         // console.log(this.state.ShowPeriodOnSchedule)
     }
 
-    CloseDropdown = () =>{
+     CloseDropdown = ()  =>{
         this.setState({open: false})
         this.setState({closepicture: false})
     }
@@ -83,7 +81,7 @@ class Timepicker extends Component {
                 <img src={error} className='error' onClick={this.CloseDropdown}></img>
                 )}
                 {this.state.open && (
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-13,marginLeft:-12.5}}>
+                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-13,marginLeft:-12.5}} size="sm">
                     <DropdownToggle caret>
                     </DropdownToggle>
                     <DropdownMenu>

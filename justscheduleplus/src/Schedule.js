@@ -44,7 +44,10 @@ class Schedule extends Component {
             dropdownshouldclose: false,
             TestShow: [],
             dayTest: [],
-            TestColor: []
+            TestColor: [],
+            edit: false,
+            disable: false
+            
         }
     }
     componentDidMount() {
@@ -112,7 +115,11 @@ class Schedule extends Component {
     }
 
     SendMultidimension(x, y) {
+        if(this.state.edit === false){
         this.setState({ showDropdown: [x, y], dropdownshouldclose: false })
+        }else{
+            this.setState({dropdownshouldclose: true})
+        }
     }
 
     dropdownTest = () => {
@@ -140,12 +147,33 @@ class Schedule extends Component {
                 // break;
         }
     }
+    showPeriodColorOnScedule = (show,i,x,y) =>{
+        console.log(show)
+        if(i === 0){
+            return "red"
+        }else if(i === 1){
+            return "yellow"
+        }else{
+            return "green"
+        }        
+
+    }
+    showButtonAfterEdit = () => {
+        const{edit} = this.state
+        this.setState({edit: !edit,disable: true})
+    }
+
+    finishEdit = () => {
+        const {edit} = this.state
+        this.setState({edit: !edit,disable: false})
+    }
 
     AddPeriod = async (PeriodUserClick, x, y) => {
 
         this.setState({ dropdownshouldclose: true })
         const show = { ...this.state.TestShow }
-        // const show = {}
+        var countarray = 0;
+
         const oldShow = show[`${x},${y}`]
         if (Array.isArray(oldShow)) {
             if (oldShow.findIndex(show => {
@@ -153,10 +181,21 @@ class Schedule extends Component {
             }) === -1)
                 show[`${x},${y}`] = [...oldShow, PeriodUserClick]
         } else {
-
             show[`${x},${y}`] = [PeriodUserClick]
         }
 
+        if(show[`${x},${y}`] > show[`${x},${y}`][0]){
+            if(show[`${x},${y}`][1].Period_Time_One < show[`${x},${y}`][0].Period_Time_One){
+            var a = show[`${x},${y}`][1]
+            show[`${x},${y}`][1] = show[`${x},${y}`][0]
+            show[`${x},${y}`][0] = a
+            this.setState({TestShow: show})
+            }else{
+                console.log(show)
+            }
+        }else{
+            console.log("")
+        }
         this.setState({ TestShow: show })
     }
 
@@ -185,7 +224,8 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr style={{ 'backgroundColor': '#07889B', 'color': 'white' }}>
-                                <th colSpan="33">Companyname : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <th colSpan="31">Companyname : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <td colSpan="2" style={{marginLeft:10}}><button onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
                             <tr style={{ 'backgroundColor': '#E37222', 'color': 'white' }}>
                                 <th colSpan="33">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })}</th>
@@ -201,18 +241,29 @@ class Schedule extends Component {
                                     {this.state.block.map((e, y) => {
                                         return <td style={{ backgroundColor: 'white'}}
                                             onClick={() => this.SendMultidimension(x, y)}>
-                                            {this.state.showDropdown[0] === x && this.state.showDropdown[1] === y && !this.state.dropdownshouldclose &&
-                                                <Timepicker AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y)} />}
+                                          {this.state.edit ===  false  ? 
+                                          this.state.showDropdown[0] === x && 
+                                          this.state.showDropdown[1] === y && 
+                                          !this.state.dropdownshouldclose &&
+                                                <Timepicker AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y) } /> : false }
                                             {Array.isArray(this.state.TestShow[`${x},${y}`])
                                                 &&
-                                                this.state.TestShow[`${x},${y}`].map((show,i)=> <div style={{marginBottom:-15,marginTop:-8,marginRight:-10}}>
-                                                <div style={{ width:35,backgroundColor: i === 0 ? "orange" : i===1 ? "red" : "white" ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
-                                                <div><img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}}></img></div></div> )}
+                                                this.state.TestShow[`${x},${y}`].map((show,i)=> 
+                                                <div style={{marginBottom:-15,marginTop:-8,marginRight:-10}}>
+                                                <div style={{ width:35,backgroundColor: this.showPeriodColorOnScedule(show,i) ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
+                                            {this.state.edit ? 
+                                            <div>
+                                                <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}}>
+                                                </img>
+                                            </div>
+                                            : <div style={{ width: 10, height: 10,marginTop:8,marginLeft:18}}></div> }</div> )}
                                         </td>
                                     })} </tr>
                             })}
                         </tbody>
                     </Table>
+                    {this.state.edit && <button onClick={this.finishEdit}>OK</button>}
+                            
                 </Container>
             </div>
             
