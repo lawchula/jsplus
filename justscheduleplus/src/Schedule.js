@@ -199,6 +199,15 @@ class Schedule extends Component {
         this.setState({ TestShow: show })
     }
 
+    DeletePeriodInSchedule(show, x, y) {
+
+        const DeletePeriod = this.state.TestShow[`${x},${y}`].filter(value => {
+            return value.Period_Name != show.Period_Name
+        })
+        this.state.TestShow[`${x},${y}`] = DeletePeriod;
+
+    }
+
 
     render() {
         
@@ -253,7 +262,7 @@ class Schedule extends Component {
                                                 <div style={{ width:35,backgroundColor: this.showPeriodColorOnScedule(show,i) ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
                                             {this.state.edit ? 
                                             <div>
-                                                <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}}>
+                                                <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}} onClick={() => this.DeletePeriodInSchedule(show, x, y)}>
                                                 </img>
                                             </div>
                                             : <div style={{ width: 10, height: 10,marginTop:8,marginLeft:18}}></div> }</div> )}

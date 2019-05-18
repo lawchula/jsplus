@@ -10,6 +10,8 @@ import { Button, Table, Dropdown,DropdownItem,DropdownMenu,DropdownToggle } from
 import TextField from '@material-ui/core/TextField';
 
 
+
+
 class Filter extends Component {
 
   constructor(props) {
@@ -157,7 +159,7 @@ class Filter extends Component {
                   </div>
                 </form>
                 {/* {this.state.periods.map((event) => {return <div>{}</div> })} */}
-                <Table responsive style={{ marginTop: 10 }}>
+                <Table responsive style={{ marginTop: 10,tableLayout:"fixed" }}>
                   <thead style={{ backgroundColor: "#E37222", color: "white", height: 200 }}>
                     <tr>
                       <th scope="col">Period Name</th>
@@ -168,8 +170,25 @@ class Filter extends Component {
                   </thead>
                   <tbody style={{ backgroundColor: "#07889B", color: "white" }}>
                     {/* {showPeriod.length >= 0 ? ( this.state.showPeriod.map(event => {return <div>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two} </div> })) : ("fail")} */}
-                    {showPeriod.map(event => { return <tr><td>{event.Period_Name}</td> <td> {event.Period_Time_One}</td> <td>{event.Period_Time_Two}</td><td><img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}></img></td> </tr> })}
-                    {this.state.periods.map((event, key) => { return <tr><td>{event.periodName}</td> <td>{event.periodOne}</td> <td>{event.periodTwo}</td>  <td><img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }} onClick={() => this.remove(key)}></img></td> </tr> })}
+                    {showPeriod.map(event => { 
+                      return <tr><td>{event.Period_Name}</td> <td> {event.Period_Time_One}</td> <td>{event.Period_Time_Two}</td><td><img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}></img></td></tr> })}
+                    {this.state.periods.map((event, key) => { 
+                      return <tr>
+                        <td>
+                        {event.periodName}
+                        </td> 
+                        <td>
+                        {event.periodOne}
+                          </td> 
+                          <td>
+                          {event.periodTwo}
+                          </td>
+                      <td>
+                        <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }} 
+                      onClick={() => this.remove(key)}></img>
+                      </td> 
+                      </tr> 
+                    })}
                   </tbody>
                 </Table>
                 <input style={{ marginLeft: 280, position: "absolute" }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />
