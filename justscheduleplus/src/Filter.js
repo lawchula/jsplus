@@ -6,8 +6,10 @@ import Schedule from './Schedule';
 import './Popup.css';
 import { Container, Row, Col } from 'react-grid-system';
 import error from './Images/error.png';
-import { Button, Table, Dropdown,DropdownItem,DropdownMenu,DropdownToggle } from 'reactstrap';
+import { Button, Table, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
+import InputColor from 'react-input-color';
+
 
 
 
@@ -21,7 +23,8 @@ class Filter extends Component {
       showElement: false,
       i: 0,
       periods: [],
-      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00" }
+      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00",color:"#ffffff" },
+      setcolor: " "
     }
   }
   onClose = (e) => {
@@ -70,32 +73,37 @@ class Filter extends Component {
     periods.push(period)
     this.setState({
       period: {
-        periodName: "", periodOne: "00:00", periodTwo: "00:00",
-        periods
+        periodName: "", periodOne: "00:00", periodTwo: "00:00",color: period.color
+        //periods
       }
     })
-    // console.log('state', this.state.periods)
-
+     console.log('state', this.state.periods)
   }
 
   handleChange = (event) => {
     event.preventDefault()
     let { period } = this.state
+    let {setcolor} = this.state
     period[event.target.name] = event.target.value
     this.setState({ period })
-
     // this.setState({period.[event.target.name]: event.target.value})
+  }
+
+  changeColor = (color) => {
+    var setcolor = color.hex
+    this.state.period["color"] = setcolor
+    color = "#ffffff"
   }
 
   onAfterInsertRow = () => {
     const Url = 'http://localhost:8080/period';
-  
+
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
-        period : this.state.periods
+        period: this.state.periods
       }),
       method: "POST"
     };
@@ -155,39 +163,59 @@ class Filter extends Component {
                         step: 300, // 5 min
                       }}
                     />
+                    {/* <input
+                      type="color"
+                      value={this.state.period.color}
+                      onChange={event => this.handleChange(event)}
+                      name="color"
+                    /> */}
+                    <InputColor initialHexColor={this.state.period.color} onChange={this.changeColor} />
                     <input style={{ width: 60, height: 40, marginTop: 5, marginLeft: 5 }} className="btn btn-primary" type="submit" value="Add" disabled={this.disablePeriod()} />
                   </div>
                 </form>
                 {/* {this.state.periods.map((event) => {return <div>{}</div> })} */}
-                <Table responsive style={{ marginTop: 10,tableLayout:"fixed" }}>
+                <Table responsive style={{ marginTop: 10, tableLayout: "fixed" }}>
                   <thead style={{ backgroundColor: "#E37222", color: "white", height: 200 }}>
                     <tr>
                       <th scope="col">Period Name</th>
                       <th scope="col">Start</th>
                       <th scope="col">End</th>
+                      <th scope="col">color</th>
                       <th scope="col">Edit</th>
                     </tr>
                   </thead>
                   <tbody style={{ backgroundColor: "#07889B", color: "white" }}>
                     {/* {showPeriod.length >= 0 ? ( this.state.showPeriod.map(event => {return <div>{event.Period_Name + event.Period_Time_One + event.Period_Time_Two} </div> })) : ("fail")} */}
-                    {showPeriod.map(event => { 
-                      return <tr><td>{event.Period_Name}</td> <td> {event.Period_Time_One}</td> <td>{event.Period_Time_Two}</td><td><img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}></img></td></tr> })}
-                    {this.state.periods.map((event, key) => { 
+                    {showPeriod.map(event => {
+                      return <tr><td>{event.Period_Name}</td> <td> {event.Period_Time_One}</td> <td>{event.Period_Time_Two}</td><td><img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}></img></td></tr>
+                    })}
+                    {this.state.periods.map((event, key) => {
                       return <tr>
                         <td>
-                        {event.periodName}
-                        </td> 
+                          {event.periodName}
+                        </td>
                         <td>
-                        {event.periodOne}
-                          </td> 
-                          <td>
+                          {event.periodOne}
+                        </td>
+                        <td>
                           {event.periodTwo}
-                          </td>
-                      <td>
-                        <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }} 
-                      onClick={() => this.remove(key)}></img>
-                      </td> 
-                      </tr> 
+                        </td>
+                        <td> 
+                          <div
+                          style={{
+                            width: 50,
+                            height: 50,
+                            marginBottom: 20,
+                            backgroundColor: event.color
+                          }}
+                        >
+                        </div>
+                        </td>
+                        <td>
+                          <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}
+                            onClick={() => this.remove(key)}></img>
+                        </td>
+                      </tr>
                     })}
                   </tbody>
                 </Table>
