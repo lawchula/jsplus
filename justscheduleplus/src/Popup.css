@@ -12,13 +12,13 @@
   }
   .popup_inner {
     position: absolute;
-    left: 15%;
+    left: 18%;
     right: 25%;
-    top: 20%;
+    top: 25%;
     bottom: 25%;
     margin: auto;
-    width: 70%;
-    height: 50%;
+    width: 950px;
+    height: "auto";
     background-color: "#66B9BF"; 
   }
   .Addbutton{
@@ -54,5 +54,21 @@
   }
   .InputPeriod{
     margin-bottom: 15px;
-    width: 100px;
+    width: 110px;
+    margin-Top: 0px;
+    border-radius: 25px ;
+    border:0px;
+    height: 30px;
   }
+  #TextField {
+    margin-top: 20px; 
+    margin-left: 5px; 
+    width: 110px; 
+    height: 30px; 
+    background-color:"white";
+    border-radius:25px;
+  }
+  .Test{
+    background-color:  "red"
+  }
+  

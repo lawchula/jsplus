@@ -135,15 +135,15 @@ class Schedule extends Component {
             case 'Sun':
                 return "#FF0000"
             case 'Mon':
-                return "yellow"
+                return "white"
             case 'Tue':
-                return "pink"
+                return "white"
             case 'Wed':
-                return "#00CC00"
+                return "#white"
             case 'Thu':
-                return "orange"
+                return "white"
             case 'Fri':
-                return "#99FFFF"
+                return "white"
                 // break;
         }
     }
@@ -259,7 +259,7 @@ class Schedule extends Component {
                                                 &&
                                                 this.state.TestShow[`${x},${y}`].map((show,i)=> 
                                                 <div style={{marginBottom:-15,marginTop:-8,marginRight:-10}}>
-                                                <div style={{ width:35,backgroundColor: this.showPeriodColorOnScedule(show,i) ,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
+                                                <div style={{ width:35,backgroundColor: "black",fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
                                             {this.state.edit ? 
                                             <div>
                                                 <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}} onClick={() => this.DeletePeriodInSchedule(show, x, y)}>
