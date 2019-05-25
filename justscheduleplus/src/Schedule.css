@@ -1,5 +1,5 @@
 .Schedule{
-background-color: #66B9BF;
+background-color: #66b9bf;
 height: 1000px;
 }
 .gbutton{
@@ -8,7 +8,7 @@ height: 1000px;
 }
 .stat{
     margin-top: 50px; 
-    margin-left: 980px;
+    margin-left: 63%;
     color: antiquewhite;
     font-size: 18px;
 }

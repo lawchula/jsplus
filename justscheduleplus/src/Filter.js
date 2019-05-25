@@ -23,7 +23,7 @@ class Filter extends Component {
       showElement: false,
       i: 0,
       periods: [],
-      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00", color: "#ffffff" },
+      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00", color: "#07889B" },
       setcolor: " ",
       edit: false
     }
@@ -128,24 +128,24 @@ class Filter extends Component {
         } */}
           <Container>
             <Row>
-              <Col md={11} style={{ backgroundColor: "white", color: "#E37222", height: "auto" }}>
-                <p style={{ marginTop: 5, fontSize: 20 }}>Filter</p>
+              <Col md={11} style={{ backgroundColor: "#F5F5F5", color: "#E37222", height: 40,fontWeight:"bold" }}>
+                <p style={{ marginTop: 5, fontSize: 20 }}>FILTER</p>
               </Col>
-              <Col md={1} style={{ backgroundColor: "white" }}>
+              <Col md={1} style={{ backgroundColor: "#F5F5F5" }}>
                 <img src={error} style={{ width: 25, height: 25, marginTop: 10 }} onClick={(e) => { this.onClose(e) }}></img>
               </Col>
             </Row>
 
             <Row>
 
-              <Col md={7} className="Period">
+              <Col md={12} className="Period">
                 <form onSubmit={(e) => { this.handleSubmit(e) }}>
-                  <p>Period name</p>
-                  <div style={{ display: 'flex', marginTop: 3 }}>
+                  {/* <p style={{color:"white",marginLeft:100,marginBottom:-5,marginTop:10}}>Period name</p> */}
+                  <div style={{ display: 'flex', marginTop: 20, marginLeft:100 }}>
 
-                    <input className="InputPeriod" type="text" name="periodName" value={this.state.period.periodName} onChange={(event => this.handleChange(event))}></input>
+                    <input className="InputPeriod" type="text" name="periodName" placeholder="period name" value={this.state.period.periodName} onChange={(event => this.handleChange(event))}></input>
 
-                    <TextField style={{ marginTop: 10, marginLeft: 5, width: 110, height: 30, backgroundColor: "white", borderRadius: 25 }}
+                    <TextField style={{ marginTop: 0, marginLeft: 10, width: 110, height: 30, backgroundColor: "white", borderRadius:5 }}
                       id="time" name="periodOne" type="time" value={this.state.period.periodOne}
                       onChange={(event => this.handleChange(event))}
                       variant="outlined"
@@ -158,12 +158,12 @@ class Filter extends Component {
                       }}
                     />
 
-                    <span style={{ marginLeft: 5, marginTop: 20 }}> - </span>
+                    <span style={{ marginLeft: 5, marginTop: 0, color:"white" }}> - </span>
 
-                    <TextField style={{ marginTop: 20, marginLeft: 5, width: 110, height: 30, backgroundColor: "white", borderRadius: 25 }}
+                    <TextField style={{ marginTop: 0, marginLeft: 5, width: 110, height: 30, backgroundColor: "white",borderRadius:5}}
                       id="time" name="periodTwo" type="time" value={this.state.period.periodTwo}
                       onChange={(event => this.handleChange(event))}
-                      variant="standard"
+                      variant="outlined"
                       InputProps={{
                         shrink: true,
                         style: { height: 30, width: 110 }
@@ -173,31 +173,31 @@ class Filter extends Component {
                       }}
                     />
 
-                    <InputColor initialHexColor={this.state.period.color} onChange={this.changeColor} style={{ marginTop: 22, marginLeft: 10 }} />
+                    <InputColor initialHexColor={this.state.period.color} onChange={this.changeColor} style={{ marginTop: 0, marginLeft: 20}} />
 
-                    <input style={{ width: 60, height: 40, marginTop: 10, marginLeft: 30 }} className="btn btn-primary" type="submit" value="Add" disabled={this.disablePeriod()} />
+                    <input style={{ width: 60, height: 40, marginTop: -5, marginLeft: 20}} className="btn btn-primary" type="submit" value="Add" disabled={this.disablePeriod()} />
                   </div>
                 </form>
 
-                <Table responsive style={{ marginTop: 10, tableLayout: "fixed", border: 0 }}>
-                  <thead style={{ backgroundColor: "#E37222", color: "white", height: 200 }}>
+                <Table responsive style={{ marginTop: 30, tableLayout: "fixed", border: 0, width:650,margin:"auto" }}>
+                  <thead style={{ backgroundColor: "#07889b", color: "white", height: 200 }}>
                     <tr>
-                      <td scope="col" style={{ fontSize: 12 }}>Period Name</td>
-                      <td scope="col" style={{ fontSize: 12 }}>Start</td>
-                      <td scope="col" style={{ fontSize: 12 }}>End</td>
-                      <td scope="col" style={{ fontSize: 12, }}>color</td>
-                      <td scope="col" style={{ fontSize: 12, }}>remove</td>
+                      <td scope="col" style={{ fontSize: 14,fontWeight:"bold"  }}>Period Name</td>
+                      <td scope="col" style={{ fontSize: 14,fontWeight:"bold" }}>Start</td>
+                      <td scope="col" style={{ fontSize: 14,fontWeight:"bold" }}>End</td>
+                      <td scope="col" style={{ fontSize: 14,fontWeight:"bold" }}>color</td>
+                      <td scope="col" style={{ fontSize: 14,fontWeight:"bold"}}>remove</td>
                     </tr>
                   </thead>
-                  <tbody style={{ backgroundColor: "#07889B", color: "white" }}>
+                  <tbody style={{ backgroundColor: "#E37222", color: "white" }}>
 
                     {showPeriod.map(event => {
                       return <tr>
-                        <td>{event.Period_Name}</td>
-                        <td>{event.Period_Time_One}</td>
-                        <td>{event.Period_Time_Two}</td>
+                        <td style={{ fontSize: 14,fontWeight:"bold" }}>{event.Period_Name}</td>
+                        <td style={{ fontSize: 14,fontWeight:"bold"  }}> {event.Period_Time_One + " น."}</td>
+                        <td style={{ fontSize: 14,fontWeight:"bold"  }}>{event.Period_Time_Two + " น."}</td>
                         <td>
-                        <div style={{ width: 30, height: 30, marginBottom: 20, backgroundColor: event.Period_Color, borderRadius: 25 }}> </div></td>
+                        <div style={{ width: 20, height: 20, marginBottom: 20, backgroundColor: event.Period_Color, borderRadius: 25 }}> </div></td>
                         <td>
                           <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}></img>
                         </td>
@@ -205,30 +205,27 @@ class Filter extends Component {
                     })}
 
                     {this.state.periods.map((event, key) => {
-                      return <tr>
-                        <td>{event.periodName}</td>
-                        <td>{event.periodOne}</td>
-                        <td>{event.periodTwo}</td>
-                        <td>{event.color}</td>
+                      return <tr style={{backgroundColor:"#eeaa7b"}}>
+                        <td style={{ fontSize: 14,fontWeight:"bold" }}>{event.periodName}</td>
+                        <td style={{ fontSize: 14,fontWeight:"bold" }}>{event.periodOne + " น."}</td>
+                        <td style={{ fontSize: 14,fontWeight:"bold" }}>{event.periodTwo + " น."}</td>
                         <td>
-                          <div style={{ width: 30, height: 30, marginBottom: 20, backgroundColor: event.color, borderRadius: 25 }}> </div>
+                          <div style={{ width: 20, height: 20, marginBottom: 20, backgroundColor: event.color, borderRadius: 25 }}> </div>
                         </td>
                         <td>
                           <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}
                             onClick={() => this.remove(key)}></img>
-                          <button onClick={this.clickEdit}>edit</button>
                         </td>
                       </tr>
                     })}
                   </tbody>
                 </Table>
-                <input style={{ marginLeft: 280 }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />
+                <input style={{ marginLeft: 600 ,position:"static",marginBottom:10,marginTop:10 }} className="btn btn-primary" onClick={() => this.onAfterInsertRow()} type="submit" value="Submit" />
               </Col>
-
-              <Col md={5} style={{ backgroundColor: "#07889B", height: 372 }}>
+              {/* <Col md={0} style={{ backgroundColor: "#07889B", height: 372 }}>
                 <p style={{ marginTop: 70, color: "white" }} className="Advice">JS+</p>
                 <p className="Advice2" >Create your own period time for work schedule</p>
-              </Col>
+              </Col> */}
 
             </Row>
           </Container>

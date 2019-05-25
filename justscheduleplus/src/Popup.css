@@ -13,11 +13,11 @@
   .popup_inner {
     position: absolute;
     left: 18%;
-    right: 25%;
-    top: 25%;
+    right: 20%;
+    top: 20%;
     bottom: 25%;
     margin: auto;
-    width: 950px;
+    width: 750px;
     height: "auto";
     background-color: "#66B9BF"; 
   }
@@ -49,14 +49,14 @@
       margin-top: 0px;
   }
   .Period{
-    background-color: #66B9BF;
+    background-color:#66b9bf;
     height: auto;
   }
   .InputPeriod{
     margin-bottom: 15px;
     width: 110px;
     margin-Top: 0px;
-    border-radius: 25px ;
+    border-radius: 5px ;
     border:0px;
     height: 30px;
   }

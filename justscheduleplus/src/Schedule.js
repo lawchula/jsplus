@@ -130,10 +130,10 @@ class Schedule extends Component {
         var dayStr = event.substr(event.length - 3)
         switch (dayStr) {
             case 'Sat':
-                return "#9933FF"
+                return "#eeaa7b"
                 // break;
             case 'Sun':
-                return "#FF0000"
+                return "#eeaa7b"
             case 'Mon':
                 return "white"
             case 'Tue':
@@ -147,6 +147,15 @@ class Schedule extends Component {
                 // break;
         }
     }
+
+    getNameofMonth = (month) => {
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+]; 
+     return monthNames[month]
+    }
+
+
     showPeriodColorOnScedule = (show,i,x,y) =>{
         console.log(show)
         if(i === 0){
@@ -232,12 +241,14 @@ class Schedule extends Component {
 
                     <Table bordered responsive className="tests">
                         <thead>
-                            <tr style={{ 'backgroundColor': '#07889B', 'color': 'white' }}>
-                                <th colSpan="31">Companyname : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
-                                <td colSpan="2" style={{marginLeft:10}}><button onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
+                            <tr style={{ 'backgroundColor': '#07889b', 'color': 'white' }}>
+                                <th colSpan="16">Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <th colSpan="15">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> }) } </th>
+                                {/* <Button color="btn btn-light" onClick={this.showButtonAfterEdit} disabled={this.state.disable} style={{marginLeft:400,color: '#E37222',fontSize:20}}>Edit</Button> </th> */}
+                                <td colSpan="2" style={{marginLeft:10}}><button style={{backgroundColor:"white",color:"#E37222",border:0,borderRadius:5,fontWeight:"bold",marginLeft:7}} onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
-                            <tr style={{ 'backgroundColor': '#E37222', 'color': 'white' }}>
-                                <th colSpan="33">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })}</th>
+                            <tr style={{ 'backgroundColor': '#E37222', 'color': 'white',textAlign:"center" }}>
+                                <th colSpan="33">{this.getNameofMonth(this.state.month)+"  "+this.state.year} </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,7 +257,7 @@ class Schedule extends Component {
                                 {this.state.day.map((event,i) => { return <th style={{backgroundColor: this.ShowDayColorOnSchedule(event)}} className="day">{event} </th> })}
                             </tr>
                             {this.state.user.map((event, x) => {
-                                return <tr className="test2" style={{ backgroundColor: ' #E37222',fontSize:13 }}> <td colSpan="2">{event.Name}</td>
+                                return <tr className="test2" style={{ backgroundColor: 'white',fontSize:13,color:"black"}}> <td colSpan="2">{event.Name}</td>
                                     {this.state.block.map((e, y) => {
                                         return <td style={{ backgroundColor: 'white'}}
                                             onClick={() => this.SendMultidimension(x, y)}>
@@ -259,7 +270,7 @@ class Schedule extends Component {
                                                 &&
                                                 this.state.TestShow[`${x},${y}`].map((show,i)=> 
                                                 <div style={{marginBottom:-15,marginTop:-8,marginRight:-10}}>
-                                                <div style={{ width:35,backgroundColor: "black",fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
+                                                <div style={{ width:35,backgroundColor: "red",fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0,color:"white"}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
                                             {this.state.edit ? 
                                             <div>
                                                 <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}} onClick={() => this.DeletePeriodInSchedule(show, x, y)}>
@@ -271,8 +282,10 @@ class Schedule extends Component {
                             })}
                         </tbody>
                     </Table>
-                    {this.state.edit && <button onClick={this.finishEdit}>OK</button>}
-                            
+                    <div style={{display:"flex"}}>
+                    {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1300,marginTop:20,}} onClick={this.finishEdit}><b>OK</b></Button>}
+                    <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1300,marginTop:20 }}><b>SAVE</b></Button>{' '}
+                    </div>
                 </Container>
             </div>
             
