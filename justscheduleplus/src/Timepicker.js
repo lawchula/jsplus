@@ -68,19 +68,12 @@ class Timepicker extends Component {
         // console.log(this.state.ShowPeriodOnSchedule)
     }
 
-     CloseDropdown = ()  =>{
-        this.setState({open: false})
-        this.setState({closepicture: false})
-    }
-
     render() {
-        return (
+        return this.state.open ?
+        (
             <div style={{zIndex:-1}}>
                 <div className='dropdown'>
-                {this.state.closepicture && (
-                <img src={error} className='error' onClick={this.CloseDropdown}></img>
-                )}
-                {this.state.open && (
+                <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img>
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-13,marginLeft:-12.5}} size="sm">
                     <DropdownToggle caret>
                     </DropdownToggle>
@@ -95,10 +88,9 @@ class Timepicker extends Component {
                         <DropdownItem>Quo Action</DropdownItem> */}
                     </DropdownMenu>
                 </Dropdown>
-                )}
                 </div>
             </div>
-        )
+        ) : null;
     }
 }
 

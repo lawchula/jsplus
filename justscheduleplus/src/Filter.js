@@ -11,9 +11,6 @@ import TextField from '@material-ui/core/TextField';
 import InputColor from 'react-input-color';
 
 
-
-
-
 class Filter extends Component {
 
   constructor(props) {
@@ -23,14 +20,24 @@ class Filter extends Component {
       showElement: false,
       i: 0,
       periods: [],
-      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00", color: "#07889B" },
+      period: { periodName: "", periodOne: "00:00", periodTwo: "00:00", color: "#ffffff" },
       setcolor: " ",
-      edit: false
+      edit: false,
+      DeletPeriod: []
     }
   }
 
   componentDidMount() {
+    this.getPeriods();
+  }
 
+  onClose = (e) => {
+    if (this.props.onClose != undefined) {
+      this.props.onClose(e)
+    }
+  }
+
+  getPeriods = () => {
     fetch('http://localhost:8080/showperiod')
       .then((response) => {
         return response.json();
@@ -38,12 +45,6 @@ class Filter extends Component {
       .then((myJson) => {
         this.setState({ showPeriod: myJson })
       });
-  }
-
-  onClose = (e) => {
-    if (this.props.onClose != undefined) {
-      this.props.onClose(e)
-    }
   }
 
   disablePeriod = () => {
@@ -54,6 +55,7 @@ class Filter extends Component {
       return false
     }
   }
+
   remove = (key) => {
     this.state.periods.splice(key, 1)
     this.forceUpdate()
@@ -84,17 +86,8 @@ class Filter extends Component {
     this.state.period["color"] = setcolor
   }
 
-  // clickEdit = () => {
-  //   this.setState({ edit: true })
-  // }
-
-  // fianishEdit = () => {
-  //   this.setState({ edit: false })
-  // }
-
   onAfterInsertRow = () => {
     const Url = 'http://localhost:8080/period';
-    console.log(this.state.periods)
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
@@ -105,13 +98,36 @@ class Filter extends Component {
       method: "POST"
     };
     fetch(Url, othepram)
-      .then(data => { return data.json() })
-      .then(res => { console.log(res) })
+      .then(res => { 
+        this.setState({ periods: [] })
+        this.getPeriods();
+      })
       .catch(error => console.log(error))
   }
 
+  DeletePeriodFromDB = (event) => {
+    const Url = 'http://localhost:8080/deleteperiod';
+    console.log(event)
 
-
+    const othepram = {
+        headers: {
+            "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+            DeletePeriod: event
+        }),
+        method: "POST"
+    };
+    fetch(Url, othepram)
+        .then(data => { return data.json() })
+        .then(res => { 
+          let periods = this.state.showPeriod.filter(period => {
+            return period.Period_ID != event.Period_ID;
+          });
+          this.setState({ showPeriod: periods })
+        })
+        .catch(error => console.log(error))
+  }
 
   render() {
     if (!this.props.show) {
@@ -199,7 +215,7 @@ class Filter extends Component {
                         <td>
                         <div style={{ width: 20, height: 20, marginBottom: 20, backgroundColor: event.Period_Color, borderRadius: 25 }}> </div></td>
                         <td>
-                          <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }}></img>
+                          <img src={error} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 15 }} onClick={() => this.DeletePeriodFromDB(event)}></img>
                         </td>
                       </tr>
                     })}
