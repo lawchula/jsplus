@@ -305,11 +305,11 @@ class Schedule extends Component {
                         </thead>
                         <tbody>
                             <tr>
-                                <th className="name" colSpan="2">NAME</th>
+                                <th className="name"  colSpan="2"  style={{ backgroundColor: '#eeaa7b'}}>NAME</th>
                                 {this.state.day.map((event,i) => { return <th style={{backgroundColor: this.ShowDayColorOnSchedule(event)}} className="day">{event} </th> })}
                             </tr>
                             {this.state.user.map((event, x) => {
-                                return <tr className="test2" style={{ backgroundColor: 'white',fontSize:13,color:"black"}}> <td colSpan="2">{event.Name}</td>
+                                return <tr className="test2" style={{ backgroundColor: '#eeaa7b',fontSize:13,color:"black",fontWeight:'bold'}}> <td colSpan="2">{event.Name}</td>
                                     {this.state.block.map((e, y) => {
                                         return <td style={{ backgroundColor: 'white'}}
                                             onClick={() => this.SendMultidimension(x, y)}>
