@@ -38,7 +38,7 @@ class Filter extends Component {
   }
 
   getPeriods = () => {
-    fetch('http://localhost:8080/showperiod')
+    fetch('http://3.19.69.65:8080/showperiod')
       .then((response) => {
         return response.json();
       })
@@ -87,7 +87,7 @@ class Filter extends Component {
   }
 
   onAfterInsertRow = () => {
-    const Url = 'http://localhost:8080/period';
+    const Url = 'http://3.19.69.65:8080/period';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
@@ -107,7 +107,7 @@ class Filter extends Component {
 
   DeletePeriodFromDB = (event) => {
     if(!window.confirm("Do you want to delete this period!!"))return
-    const Url = 'http://localhost:8080/deleteperiod';
+    const Url = 'http://3.19.69.65:8080/deleteperiod';
     console.log(event)
 
     const othepram = {

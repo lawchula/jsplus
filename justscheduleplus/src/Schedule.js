@@ -56,7 +56,7 @@ class Schedule extends Component {
     }
 
     SelectDataFromDB = () => {
-        fetch('http://localhost:8080/users')
+        fetch('http://3.19.69.65:8080/users')
             .then((response) => {
                 return response.json();
             })
@@ -64,7 +64,7 @@ class Schedule extends Component {
                 this.setState({ user: myJson })
             });
 
-        fetch('http://localhost:8080/company')
+        fetch('http://3.19.69.65:8080/company')
             .then((response) => {
                 return response.json();
             })
@@ -72,7 +72,7 @@ class Schedule extends Component {
                 this.setState({ company: myJson })
             });
 
-        fetch('http://localhost:8080/department')
+        fetch('http://3.19.69.65:8080/department')
             .then((response) => {
                 return response.json();
             })
@@ -85,7 +85,7 @@ class Schedule extends Component {
     }
 
     getSchedules = () => {
-        fetch('http://localhost:8080/showschedule')
+        fetch('http://3.19.69.65/showschedule')
             .then((response) => {
                 return response.json();
             })
@@ -219,7 +219,7 @@ class Schedule extends Component {
     }
 
     InsertPeriodtoSchedule = () => {
-        const Url = 'http://localhost:8080/schedule';
+        const Url = 'http://3.19.69.65:8080/schedule';
         console.log(this.state.TestShow)
 
         const othepram = {
@@ -247,7 +247,7 @@ class Schedule extends Component {
 
     DeletePeriodFromDB = (periodinschedule) => {
         if(!window.confirm("Do you want to delete this period!!"))return
-        const Url = 'http://localhost:8080/schedule/delete';
+        const Url = 'http://3.19.69.65/schedule/delete';
         // console.log(this.state.TestShow)
         console.log(periodinschedule)
 

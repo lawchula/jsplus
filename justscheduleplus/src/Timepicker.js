@@ -36,7 +36,7 @@ class Timepicker extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/showperiod')
+        fetch('http://3.19.69.65:8080/showperiod')
             .then((response) => {
                 return response.json();
             })
@@ -81,12 +81,6 @@ class Timepicker extends Component {
                     <DropdownMenu>
                         {/* <DropdownItem header>Header</DropdownItem> */}
                         {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + " " + event.Period_Time_One + " - " + event.Period_Time_Two} </DropdownItem> })}
-                        {/* <DropdownItem>Some Action</DropdownItem>
-                        <DropdownItem disabled>Action (disabled)</DropdownItem>
-                        <DropdownItem divider />
-                        <DropdownItem>Foo Action</DropdownItem>
-                        <DropdownItem>Bar Action</DropdownItem>
-                        <DropdownItem>Quo Action</DropdownItem> */}
                     </DropdownMenu>
                 </Dropdown>
                 <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>
