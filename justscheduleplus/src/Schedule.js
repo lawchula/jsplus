@@ -85,7 +85,7 @@ class Schedule extends Component {
     }
 
     getSchedules = () => {
-        fetch('http://3.19.69.65/showschedule')
+        fetch('http://3.19.69.65:8080/showschedule')
             .then((response) => {
                 return response.json();
             })
@@ -247,7 +247,7 @@ class Schedule extends Component {
 
     DeletePeriodFromDB = (periodinschedule) => {
         if(!window.confirm("Do you want to delete this period!!"))return
-        const Url = 'http://3.19.69.65/schedule/delete';
+        const Url = 'http://3.19.69.65:8080/schedule/delete';
         // console.log(this.state.TestShow)
         console.log(periodinschedule)
 
