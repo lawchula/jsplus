@@ -53,35 +53,38 @@ class Timepicker extends Component {
         const { showperiod } = this.state
     }
 
-    ClickPeriod(event,i) {
-        this.setState({I: i})
+    ClickPeriod(event, i) {
+        this.setState({ I: i })
 
-        this.setState({ShowPeriodOnSchedule: event},()=>{
+        this.setState({ ShowPeriodOnSchedule: event }, () => {
             this.props.AddPeriod(this.state.ShowPeriodOnSchedule)
         })
     }
 
     render() {
-        return this.state.open ?
-        (
+        return (
             <div>
-                <div className='dropdown'>
-                <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
-                <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img>
-                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-12,marginLeft:-13}} size="sm">
-                    <DropdownToggle caret>
-                    </DropdownToggle>
-                    <DropdownMenu>
-                        {/* <DropdownItem header>Header</DropdownItem> */}
-                        {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + " " + event.Period_Time_One + " - " + event.Period_Time_Two} </DropdownItem> })}
-                    </DropdownMenu>
-                </Dropdown>
-                <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>
-                </div>
-                </div>
-            // </div>
-        ) : null;
+                {this.state.open ?
+                    (
+                        <div className='dropdown'>
+                            <img src={error} className='error' ></img>
+                            <div style={{ marginBottom: -15, marginTop: -10, marginRight: -10 }}>
+                                <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img>
+                                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
+                                    <DropdownToggle caret>
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        {/* <DropdownItem header>Header</DropdownItem> */}
+                                        {this.state.showperiod.map((event, i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + " " + event.Period_Time_One + " - " + event.Period_Time_Two} </DropdownItem> })}
+                                    </DropdownMenu>
+                                </Dropdown>
+                                <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>
+                            </div>
+                        </div>
+                    ) : (<div></div>)
+                }
+            </div>
+        )
     }
 }
-
 export default Timepicker;
