@@ -348,8 +348,8 @@ class Schedule extends Component {
                         </tbody>
                     </Table>
                     <div style={{display:"flex"}}>
-                    {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1300,marginTop:20,}} onClick={this.finishEdit}><b>OK</b></Button>}
-                    <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20,marginBottom:150 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
+                    {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20}} onClick={this.finishEdit}><b>OK</b></Button>}
+                    <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
                     </div>
                 </Container>
             </div>

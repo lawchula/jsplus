@@ -22,7 +22,6 @@ class Timepicker extends Component {
     constructor(props) {
         super(props)
         this.dropdownTest = this.dropdownTest.bind(this)
-        // this.ClickPeriod = this.ClickPeriod.bind(this)
         this.state = {
             dropdownOpen: false,
             showperiod: [],
@@ -55,25 +54,19 @@ class Timepicker extends Component {
     }
 
     ClickPeriod(event,i) {
-        // console.log("Print :" + event)
         this.setState({I: i})
-        // console.log("I : "+this.state.i)
-        // this.state.ShowPeriodOnSchedule([1])
 
         this.setState({ShowPeriodOnSchedule: event},()=>{
-            // console.log(this.state.ShowPeriodOnSchedule)
-            // console.log("I : "+this.state.i)
             this.props.AddPeriod(this.state.ShowPeriodOnSchedule)
         })
-        // console.log(this.state.ShowPeriodOnSchedule)
     }
 
     render() {
         return this.state.open ?
         (
-            <div style={{zIndex:-1}}>
+            <div>
                 <div className='dropdown'>
-                {/* <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}> */}
+                <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
                 <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img>
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-12,marginLeft:-13}} size="sm">
                     <DropdownToggle caret>
@@ -83,7 +76,7 @@ class Timepicker extends Component {
                         {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + " " + event.Period_Time_One + " - " + event.Period_Time_Two} </DropdownItem> })}
                     </DropdownMenu>
                 </Dropdown>
-                {/* <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div> */}
+                <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>
                 </div>
                 </div>
             // </div>
