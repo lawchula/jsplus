@@ -67,7 +67,6 @@ class Timepicker extends Component {
                 {this.state.open ?
                     (
                         <div className='dropdown'>
-                            <img src={error} className='error' ></img>
                             <div style={{ marginBottom: -15, marginTop: -10, marginRight: -10 }}>
                                 <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img>
                                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
