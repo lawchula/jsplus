@@ -106,6 +106,7 @@ class Filter extends Component {
   }
 
   DeletePeriodFromDB = (event) => {
+    if(!window.confirm("Do you want to delete this period!!"))return
     const Url = 'http://localhost:8080/deleteperiod';
     console.log(event)
 
@@ -125,6 +126,7 @@ class Filter extends Component {
             return period.Period_ID != event.Period_ID;
           });
           this.setState({ showPeriod: periods })
+          this.props.getSchedule();
         })
         .catch(error => console.log(error))
   }

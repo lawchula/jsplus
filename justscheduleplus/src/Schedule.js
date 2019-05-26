@@ -150,10 +150,10 @@ class Schedule extends Component {
         var dayStr = event.substr(event.length - 3)
         switch (dayStr) {
             case 'Sat':
-                return "#9933FF"
+                return "#eeaa7b"
             // break;
             case 'Sun':
-                return "#FF0000"
+                return "#eeaa7b"
         }
     }
 
@@ -169,11 +169,24 @@ class Schedule extends Component {
 
     AddPeriod = async (PeriodUserClick, x, y, event, e) => {
         this.CloseDropdown();
+        
+        const checkSelectedPeriod = this.state.selectSchedule.findIndex(period => {
+            return period.Period_ID == PeriodUserClick.Period_ID &&
+                   period.User_ID == event.User_ID &&
+                   period.Date == e
+        })
+
+        if(checkSelectedPeriod > -1) {
+            alert('Selected')
+            return;
+        }
 
         // const schedules = this.state.TestShow;
 
         const show = { ...this.state.TestShow }
         var countarray = 0;
+
+        
 
         const oldShow = show[`${event.User_ID},${e}`]
         if (Array.isArray(oldShow)) {
@@ -232,6 +245,30 @@ class Schedule extends Component {
         this.setState({ showDropdown: -1, dropdownshouldclose: true })
     }
 
+    DeletePeriodFromDB = (periodinschedule) => {
+        if(!window.confirm("Do you want to delete this period!!"))return
+        const Url = 'http://localhost:8080/schedule/delete';
+        // console.log(this.state.TestShow)
+        console.log(periodinschedule)
+
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({
+                DeletePeriodDB : periodinschedule
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram)
+            .then(data => { return data.json() })
+            .then(res => {
+                console.log(res)
+                // this.setState({ TestShow: [] })
+                this.getSchedules();
+            })
+            .catch(error => console.log(error))
+    }
 
     render() {
         
@@ -246,7 +283,7 @@ class Schedule extends Component {
                         <Col md={8}>
                             <Button color="btn btn-light" className="gbutton" onClick={this.showPopup} style={{ color: '#E37222' }}><b>FILTER</b></Button>{' '}
                             <Button color="btn btn-light" className="gbutton" style={{ color: '#E37222' }}><b>GENERATE</b></Button>{' '}
-                            <Filter show={this.state.show} onClose={this.showPopup}>
+                            <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
                             </Filter>
                         </Col>
                         <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
@@ -257,8 +294,8 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr style={{ 'backgroundColor': '#07889b', 'color': 'white' }}>
-                                <th colSpan="16">Company : {this.state.company.map(event => { return <h1>{event.Company_Name}</h1> })}</th>
-                                <th colSpan="15">Department : {this.state.department.map(event => { return <h1>{event.Department_Name}</h1> }) } </th>
+                                <th colSpan="16" >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <th colSpan="15">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> }) } </th>
                                 {/* <Button color="btn btn-light" onClick={this.showButtonAfterEdit} disabled={this.state.disable} style={{marginLeft:400,color: '#E37222',fontSize:20}}>Edit</Button> </th> */}
                                 <td colSpan="2" style={{marginLeft:10}}><button style={{backgroundColor:"white",color:"#E37222",border:0,borderRadius:5,fontWeight:"bold",marginLeft:7}} onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
@@ -278,7 +315,16 @@ class Schedule extends Component {
                                             onClick={() => this.SendMultidimension(x, y)}>
                                                 {this.state.selectSchedule.map(periodinschedule => {
                                                 if (event.User_ID == periodinschedule.User_ID && periodinschedule.Date == e)
-                                                    return <tr style={{ backgroundColor: periodinschedule.Period_Color }}><td>{periodinschedule.Period_Time_One + "-" + periodinschedule.Period_Time_Two}</td></tr>
+                                                    return   <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
+                                                             <div style={{ backgroundColor: periodinschedule.Period_Color,width:35,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0,color:"white" }}>{periodinschedule.Period_Time_One + "-" + periodinschedule.Period_Time_Two}</div>
+                                                             <div style={{ width: 10, height: 10,marginTop:8,marginLeft:18}}>
+                                                             {this.state.edit ?
+                                                        <div>
+                                                            <img src={error} style={{ width: 10, height: 10, marginTop: -90, marginLeft: 0 }} onClick={() => this.DeletePeriodFromDB(periodinschedule)}>
+                                                            </img>
+                                                        </div>
+                                                        : <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>}</div> 
+                                                             </div>
                                             })}
                                           {this.state.edit ===  false  ? 
                                           this.state.showDropdown[0] === x && 
@@ -288,11 +334,11 @@ class Schedule extends Component {
                                             {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
                                                 &&
                                                 this.state.TestShow[`${event.User_ID},${e}`].map((show)=> 
-                                                <div style={{marginBottom:-15,marginTop:-8,marginRight:-10}}>
+                                                <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
                                                 <div style={{ width:35,backgroundColor: show.Period_Color,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0,color:"white"}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
                                             {this.state.edit ? 
                                             <div>
-                                                <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}} onClick={() => this.DeletePeriodInSchedule(show, x, y)}>
+                                                <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}} onClick={() => this.DeletePeriodInSchedule(show, event,e)}>
                                                 </img>
                                             </div>
                                             : <div style={{ width: 10, height: 10,marginTop:8,marginLeft:18}}></div> }</div> )}
