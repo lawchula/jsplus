@@ -73,8 +73,8 @@ class Timepicker extends Component {
         (
             <div style={{zIndex:-1}}>
                 <div className='dropdown'>
-                <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
-                {/* <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img> */}
+                {/* <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}> */}
+                <img src={error} className='error' onClick={() => this.props.CloseDropdown()}></img>
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{marginTop:-12,marginLeft:-13}} size="sm">
                     <DropdownToggle caret>
                     </DropdownToggle>
@@ -83,10 +83,10 @@ class Timepicker extends Component {
                         {this.state.showperiod.map((event,i) => { return <DropdownItem onClick={() => this.ClickPeriod(event)}>{event.Period_Name + " " + event.Period_Time_One + " - " + event.Period_Time_Two} </DropdownItem> })}
                     </DropdownMenu>
                 </Dropdown>
-                <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>
+                {/* <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div> */}
                 </div>
                 </div>
-            </div>
+            // </div>
         ) : null;
     }
 }
