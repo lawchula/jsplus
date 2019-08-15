@@ -13,7 +13,7 @@ class Register extends Component{
     }
     
     onClose = (e) => {
-      if (this.props.onClose != undefined) {
+      if (this.props.onClose !== undefined) {
         this.props.onClose(e)
       }
     }

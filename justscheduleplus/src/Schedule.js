@@ -1,22 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './Css/App.css';
 import Header from './Header';
 import './Css/Schedule.css';
 import { Button, Table, Dropdown } from 'reactstrap';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
-} from 'reactstrap';
 import { Container, Row, Col } from 'react-grid-system';
 import Filter from './Filter';
 import Timepicker from './Timepicker';
@@ -56,7 +42,7 @@ class Schedule extends Component {
     }
 
     SelectDataFromDB = () => {
-        fetch('http://3.19.69.65:8080/users')
+        fetch('http://localhost:8080/users')
             .then((response) => {
                 return response.json();
             })
@@ -64,7 +50,7 @@ class Schedule extends Component {
                 this.setState({ user: myJson })
             });
 
-        fetch('http://3.19.69.65:8080/company')
+        fetch('http://localhost:8080/company')
             .then((response) => {
                 return response.json();
             })
@@ -72,7 +58,7 @@ class Schedule extends Component {
                 this.setState({ company: myJson })
             });
 
-        fetch('http://3.19.69.65:8080/department')
+        fetch('http://localhost:8080/department')
             .then((response) => {
                 return response.json();
             })
@@ -85,7 +71,7 @@ class Schedule extends Component {
     }
 
     getSchedules = () => {
-        fetch('http://3.19.69.65:8080/showschedule')
+        fetch('http://localhost:8080/showschedule')
             .then((response) => {
                 return response.json();
             })
@@ -219,7 +205,7 @@ class Schedule extends Component {
     }
 
     InsertPeriodtoSchedule = () => {
-        const Url = 'http://3.19.69.65:8080/schedule';
+        const Url = 'http://localhost:8080/schedule';
         console.log(this.state.TestShow)
 
         const othepram = {
@@ -247,7 +233,7 @@ class Schedule extends Component {
 
     DeletePeriodFromDB = (periodinschedule) => {
         if(!window.confirm("Do you want to delete this period!!"))return
-        const Url = 'http://3.19.69.65:8080/schedule/delete';
+        const Url = 'http://localhost:8080/schedule/delete';
         // console.log(this.state.TestShow)
         console.log(periodinschedule)
 
@@ -276,21 +262,19 @@ class Schedule extends Component {
             <div className="Schedule">
                 <Header />
                 <Container className="Schedule" fluid>
-                    <Row>
-                        <Col md={12}>
-                            <p className="stat"><b><i>STATISTIC</i></b></p>
-                        </Col>
-                        <Col md={8}>
+                    <div style={{float:'right'}}>
+                        <p className="stat"><b><i>STATISTIC</i></b></p>
+                        <div style={{position:'absolute',left:'0',marginLeft:20}}>
                             <Button color="btn btn-light" className="gbutton" onClick={this.showPopup} style={{ color: '#E37222' }}><b>FILTER</b></Button>{' '}
-                            <Button color="btn btn-light" className="gbutton" style={{ color: '#E37222' }}><b>GENERATE</b></Button>{' '}
                             <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
                             </Filter>
-                        </Col>
-                        <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
-                        <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
-                        <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
-                    </Row>
-
+                        </div>
+                            <div style={{marginRight:10}}> 
+                                <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
+                                <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
+                                <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
+                            </div>
+                        </div>
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr style={{ 'backgroundColor': '#07889b', 'color': 'white' }}>
@@ -347,9 +331,9 @@ class Schedule extends Component {
                             })}
                         </tbody>
                     </Table>
-                    <div style={{display:"flex"}}>
-                    {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20}} onClick={this.finishEdit}><b>OK</b></Button>}
-                    <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
+                    <div style={{display:"flex",float:'right'}}>
+                    {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222',marginRight:10,marginTop:20}} onClick={this.finishEdit}><b>OK</b></Button>}
+                    <Button color="btn btn-light" style={{ color: '#E37222',marginTop:20,marginRight:10}} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
                     </div>
                 </Container>
             </div>

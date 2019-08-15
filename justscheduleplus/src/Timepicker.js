@@ -1,21 +1,8 @@
 import React, { Component } from 'react';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    Dropdown
-} from 'reactstrap';
+import {DropdownToggle,DropdownMenu,DropdownItem,Dropdown} from 'reactstrap';
 import error from './Images/error.png';
 import './Css/Timepicker.css';
-import Schedule from './Schedule';
+
 
 class Timepicker extends Component {
 
@@ -35,7 +22,7 @@ class Timepicker extends Component {
     }
 
     componentDidMount() {
-        fetch('http://3.19.69.65:8080/showperiod')
+        fetch('http://localhost:8080/showperiod')
             .then((response) => {
                 return response.json();
             })

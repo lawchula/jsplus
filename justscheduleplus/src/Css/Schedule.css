@@ -1,20 +1,17 @@
 .Schedule{
 background-color: #66b9bf;
-height: 1050px;
-}
-.gbutton{
-    margin-top: 0px; 
-    margin-left: 20px;
+height: 100vh;
+width: auto;
 }
 .stat{
-    margin-top: 50px; 
-    margin-left: 71%;
     color: antiquewhite;
+    margin-top: 50px;
     font-size: 18px;
 }
 .p1{
     margin-left: 50px ;
     color: #E37222;
+    
 }
 .p2{
     margin-left: 40px;
@@ -29,8 +26,8 @@ height: 1050px;
     background-color: white;
     margin-top: 30px;
     border: 1px solid black;
-    overflow-x: hidden;
-    table-layout: fixed;
+    overflow-x: auto;
+    /* table-layout: fixed; */
 }
 .fix{
     width: 200px;
