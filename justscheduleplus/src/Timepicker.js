@@ -14,7 +14,7 @@ import {
     Dropdown
 } from 'reactstrap';
 import error from './Images/error.png';
-import './Timepicker.css';
+import './Css/Timepicker.css';
 import Schedule from './Schedule';
 
 class Timepicker extends Component {

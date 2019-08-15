@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './Css/App.css';
 import Header from './Header';
-import './Schedule.css';
+import './Css/Schedule.css';
 import { Button, Table, Dropdown } from 'reactstrap';
 import {
     Collapse,

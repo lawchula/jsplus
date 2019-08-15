@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './Css/App.css';
 import Header from './Header';
 import Schedule from './Schedule';
-import './Popup.css';
+import './Css/Popup.css';
 import { Container, Row, Col } from 'react-grid-system';
 import error from './Images/error.png';
 import { Button, Table, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
