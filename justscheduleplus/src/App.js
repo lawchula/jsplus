@@ -12,8 +12,8 @@ class App extends Component {
     return (
       <div className="App">
       <Schedule/> 
-       {/* <TestComponent2/> */}
-       {/* <Login/> */}
+      {/* <TestComponent2/> 
+       {/* <Login/> <TestComponent2/> */}
       </div>
     );
   }

@@ -26,7 +26,7 @@ class Register extends Component{
 
         return(
            <div className="register-popup">
-             <div className="register-popup_inner">
+             <div className="register-popup_inner">  
                <div className="regis-header">
                     <span className="header-text1">Regis</span>
                     <span className="header-text2">ter</span>
