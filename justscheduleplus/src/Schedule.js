@@ -1,23 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './Css/App.css';
 import Header from './Header';
-import './Schedule.css';
-import { Button, Table, Dropdown } from 'reactstrap';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
-} from 'reactstrap';
-import { Container, Row, Col } from 'react-grid-system';
+import './Css/Schedule.css';
+import { Button, Table } from 'reactstrap';
+import { Container } from 'react-grid-system';
 import Filter from './Filter';
 import Timepicker from './Timepicker';
 import error from './Images/error.png';
@@ -56,7 +42,7 @@ class Schedule extends Component {
     }
 
     SelectDataFromDB = () => {
-        fetch('http://3.19.69.65:8080/users')
+        fetch('http://localhost:8080/users')
             .then((response) => {
                 return response.json();
             })
@@ -64,7 +50,7 @@ class Schedule extends Component {
                 this.setState({ user: myJson })
             });
 
-        fetch('http://3.19.69.65:8080/company')
+        fetch('http://localhost:8080/company')
             .then((response) => {
                 return response.json();
             })
@@ -72,7 +58,7 @@ class Schedule extends Component {
                 this.setState({ company: myJson })
             });
 
-        fetch('http://3.19.69.65:8080/department')
+        fetch('http://localhost:8080/department')
             .then((response) => {
                 return response.json();
             })
@@ -85,7 +71,7 @@ class Schedule extends Component {
     }
 
     getSchedules = () => {
-        fetch('http://3.19.69.65:8080/showschedule')
+        fetch('http://localhost:8080/showschedule')
             .then((response) => {
                 return response.json();
             })
@@ -219,7 +205,7 @@ class Schedule extends Component {
     }
 
     InsertPeriodtoSchedule = () => {
-        const Url = 'http://3.19.69.65:8080/schedule';
+        const Url = 'http://localhost:8080/schedule';
         console.log(this.state.TestShow)
 
         const othepram = {
@@ -247,7 +233,7 @@ class Schedule extends Component {
 
     DeletePeriodFromDB = (periodinschedule) => {
         if(!window.confirm("Do you want to delete this period!!"))return
-        const Url = 'http://3.19.69.65:8080/schedule/delete';
+        const Url = 'http://localhost:8080/schedule/delete';
         // console.log(this.state.TestShow)
         console.log(periodinschedule)
 
@@ -276,96 +262,90 @@ class Schedule extends Component {
             <div className="Schedule">
                 <Header />
                 <Container className="Schedule" fluid>
-                    <Row>
-                        <Col md={12}>
-                            <p className="stat"><b><i>STATISTIC</i></b></p>
-                        </Col>
-                        <Col md={8}>
+                    <div className="before-schedule">
+                        <p className="stat"><b><i>STATISTIC</i></b></p>
+                        <div className="stat-schedule">
                             <Button color="btn btn-light" className="gbutton" onClick={this.showPopup} style={{ color: '#E37222' }}><b>FILTER</b></Button>{' '}
-                            <Button color="btn btn-light" className="gbutton" style={{ color: '#E37222' }}><b>GENERATE</b></Button>{' '}
                             <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
                             </Filter>
-                        </Col>
-                        <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
-                        <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
-                        <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
-                    </Row>
-
+                        </div>
+                            <div id="filter"> 
+                                <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
+                                <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
+                                <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
+                            </div>
+                        </div>
                     <Table bordered responsive className="tests">
                         <thead>
-                            <tr style={{ 'backgroundColor': '#07889b', 'color': 'white' }}>
+                            <tr id="tr1">
                                 <th colSpan="16" >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
                                 <th colSpan="15">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> }) } </th>
-                                {/* <Button color="btn btn-light" onClick={this.showButtonAfterEdit} disabled={this.state.disable} style={{marginLeft:400,color: '#E37222',fontSize:20}}>Edit</Button> </th> */}
-                                <td colSpan="2" style={{marginLeft:10}}><button style={{backgroundColor:"white",color:"#E37222",border:0,borderRadius:5,fontWeight:"bold",marginLeft:7}} onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
+                                <td colSpan="2" style={{marginLeft:10}}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
-                            <tr style={{ 'backgroundColor': '#E37222', 'color': 'white',textAlign:"center" }}>
+                            <tr id="tr2">
                                 <th colSpan="33">{this.getNameofMonth(this.state.month)+"  "+this.state.year} </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th className="name"  colSpan="2"  style={{ backgroundColor: '#eeaa7b'}}>NAME</th>
+                                <th className="name"  colSpan="2" id="name-schedule">NAME</th>
                                 {this.state.day.map((event,i) => { return <th style={{backgroundColor: this.ShowDayColorOnSchedule(event)}} className="day">{event} </th> })}
                             </tr>
                             {this.state.user.map((event, x) => {
-                                return <tr className="test2" style={{ backgroundColor: '#eeaa7b',fontSize:13,color:"black",fontWeight:'bold'}}> <td colSpan="2">{event.Name}</td>
-                                    {this.state.block.map((e, y) => {
-                                        return <td style={{ backgroundColor: 'white'}}
-                                            onClick={() => this.SendMultidimension(x, y)}>
+                                return <tr className="test2"> 
+                                             {/* เอาค่า username มาแสดง*/}
+                                            <td colSpan="2">{event.Name}</td>
+                                                {/* เอาค่าวันที่มา set เป็นช่อง */}
+                                                {this.state.block.map((e, y) => {
+                                                    return <td style={{ backgroundColor: 'white'}}onClick={() => this.SendMultidimension(x, y)}>
+                                                {/* เอาค่า period จาก db มาแสดง */}
                                                 {this.state.selectSchedule.map(periodinschedule => {
-                                                if (event.User_ID == periodinschedule.User_ID && periodinschedule.Date == e)
-                                                    return   <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
-                                                             <div style={{ backgroundColor: periodinschedule.Period_Color,width:35,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0,color:"white" }}>{periodinschedule.Period_Time_One + "-" + periodinschedule.Period_Time_Two}</div>
-                                                             <div style={{ width: 10, height: 10,marginTop:8,marginLeft:18}}>
-                                                             {this.state.edit ?
-                                                        <div>
-                                                            <img src={error} style={{ width: 10, height: 10, marginTop: -90, marginLeft: 0 }} onClick={() => this.DeletePeriodFromDB(periodinschedule)}>
-                                                            </img>
-                                                        </div>
-                                                        : <div style={{ width: 10, height: 10, marginTop: 8, marginLeft: 18 }}></div>}</div> 
-                                                             </div>
-                                            })}
-                                          {this.state.edit ===  false  ? 
-                                          this.state.showDropdown[0] === x && 
-                                          this.state.showDropdown[1] === y && 
-                                          !this.state.dropdownshouldclose &&
-                                                <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y,event,e) } /> : false }
-                                            {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
+                                                    if (event.User_ID == periodinschedule.User_ID && periodinschedule.Date == e)
+                                                        return   <div id="period-container">
+                                                                    <div style={{ backgroundColor: periodinschedule.Period_Color}} id="period-time">{periodinschedule.Period_Time_One + "-" + periodinschedule.Period_Time_Two}</div>
+                                                                        <div id="edit">
+                                                                        {this.state.edit ?
+                                                                            <div>
+                                                                                <img src={error} id="edit-icon" onClick={() => this.DeletePeriodFromDB(periodinschedule)}></img>
+                                                                            </div>
+                                                                        : 
+                                                                            <div id="wtf"></div>}
+                                                                        </div> 
+                                                                    </div>
+                                                })}
+                                                {/* เรียกปุ่ม dropdown มา set เวลาลง ตาราง  */}
+                                                {this.state.edit ===  false  ? 
+                                                this.state.showDropdown[0] === x && 
+                                                this.state.showDropdown[1] === y && 
+                                                !this.state.dropdownshouldclose &&
+                                                    <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y,event,e) } /> 
+                                                : 
+                                                    false }
+                                                {/* เอาค่า period จาก state มาแสดง */}
+                                                {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
                                                 &&
                                                 this.state.TestShow[`${event.User_ID},${e}`].map((show)=> 
-                                                <div style={{marginBottom:-15,marginTop:-10,marginRight:-10}}>
-                                                <div style={{ width:35,backgroundColor: show.Period_Color,fontSize:9,borderRadius:5,paddingLeft:2,marginLeft:-10,marginRight:0,marginTop:3,marginBottom:0,color:"white"}}>{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
-                                            {this.state.edit ? 
-                                            <div>
-                                                <img src={error} style={{ width: 10, height: 10,marginTop:-73,marginLeft:18}} onClick={() => this.DeletePeriodInSchedule(show, event,e)}>
-                                                </img>
-                                            </div>
-                                            : <div style={{ width: 10, height: 10,marginTop:8,marginLeft:18}}></div> }</div> )}
-                                        </td>
-                                    })} </tr>
-                            })}
+                                                <div id="period-container">
+                                                    <div style={{ width:35,backgroundColor: show.Period_Color}} id="period-time">{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
+                                                {this.state.edit ? 
+                                                    <div>
+                                                        <img src={error} id="edit-icon2" onClick={() => this.DeletePeriodInSchedule(show, event,e)}></img>
+                                                    </div>
+                                                : 
+                                                    <div id="wtf"></div> }
+                                                </div> )}
+                                            </td> })} 
+                                        </tr>})}
                         </tbody>
                     </Table>
-                    <div style={{display:"flex"}}>
-                    {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20}} onClick={this.finishEdit}><b>OK</b></Button>}
-                    <Button color="btn btn-light" style={{ color: '#E37222', marginLeft:1200,marginTop:20 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
+                    <div style={{display:"flex",float:'right'}}>
+                        {this.state.edit &&  <Button color="btn btn-light" style={{ color: '#E37222',marginRight:10,marginTop:20}} onClick={this.finishEdit}><b>OK</b></Button>}
+                        <Button color="btn btn-light" style={{ color: '#E37222',marginTop:20,marginRight:10}} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
                     </div>
-                </Container>
-            </div>
-            
+            </Container>
+            </div>   
         );
     }
 }
 
 export default Schedule;
-
-
-
-
-
-
-// var user = {
-//     test1love:[{30:"Morning"},{21:"Night"}]
-
-// }

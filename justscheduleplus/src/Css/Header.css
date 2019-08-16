@@ -1,0 +1,41 @@
+.JS{
+ color: #07889B;
+ font-size: 35px;
+}
+.Plus{
+    color: #E37222;
+    font-size: 35px;
+}
+.button1{
+    background-color: #E37222;
+    color: white;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-bottom: 3%;
+}
+#first-header{
+    display:flex;
+    position: absolute;
+    left:100px;
+    font-weight: bold;  
+}
+#second-header{
+    color:#07889B;
+    font-size:13.5px;
+    margin-top:7%; 
+    font-weight: bold;           
+}
+@media only screen and (max-width: 575px) {
+    #first-header{
+        display:flex;
+        position:absolute;
+        left:20px;
+        flex-direction: column;
+    }
+    #second-header{
+        color:#07889B;
+        font-size:12.5px;
+        margin-top:2%;
+        border: none !important;            
+    }
+}

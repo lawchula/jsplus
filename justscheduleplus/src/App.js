@@ -1,18 +1,19 @@
-import React, { Component } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import Header from "./Header";
-import Schedule from "./Schedule";
-import Filter from "./Filter";
-import Timepicker from "./Timepicker";
-import TestComponent from "./TestComponent";
-import Home from "./Home";
+import React, { Component } from 'react';
+import './Css/App.css';
+import TestComponent2 from './TestComponent2';
+import Schedule from './Schedule';
+
+
+
+
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Home />
+      <Schedule/> 
+      {/* <TestComponent2/> 
+       {/* <Login/> <TestComponent2/> */}
       </div>
     );
   }

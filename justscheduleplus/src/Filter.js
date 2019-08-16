@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Header from './Header';
-import Schedule from './Schedule';
-import './Popup.css';
+import './Css/App.css';
+import './Css/Popup.css';
 import { Container, Row, Col } from 'react-grid-system';
 import error from './Images/error.png';
-import { Button, Table, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import {Table} from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
 import InputColor from 'react-input-color';
 
@@ -38,7 +35,7 @@ class Filter extends Component {
   }
 
   getPeriods = () => {
-    fetch('http://3.19.69.65:8080/showperiod')
+    fetch('http://localhost:8080/showperiod')
       .then((response) => {
         return response.json();
       })
@@ -87,7 +84,7 @@ class Filter extends Component {
   }
 
   onAfterInsertRow = () => {
-    const Url = 'http://3.19.69.65:8080/period';
+    const Url = 'http://localhost:8080/period';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
@@ -107,7 +104,7 @@ class Filter extends Component {
 
   DeletePeriodFromDB = (event) => {
     if(!window.confirm("Do you want to delete this period!!"))return
-    const Url = 'http://3.19.69.65:8080/deleteperiod';
+    const Url = 'http://localhost:8080/deleteperiod';
     console.log(event)
 
     const othepram = {
