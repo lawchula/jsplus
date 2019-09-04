@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-
-import "./Css/App.css";
 import Header from "./Header";
-import "./Home.css";
+import "./Css/Home.css";
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
+import coverimg from './Images/coverimg.png'
 
 class Home extends Component {
   constructor(props) {
@@ -10,58 +11,52 @@ class Home extends Component {
     this.state = {};
   }
 
+  componentDidMount(){
+    AOS.init({
+      duration : 2500
+    })
+  }
+
   render() {
     return (
       <div className="Home">
         <Header />
-        <row>
+      
           <div className="headhome">
-            <div className="col-6  headtext">
-              <p className="p-1">WE ARE SCHEDULE MANAGEMENT WEBSITE</p>
-
-              <p className="p-2">MAKE YOUR LIFE EASIER</p>
-
-              <p className="p-3">GET START NOW!</p>
-
+            <div className="col-xl-7 col-12 .col-sm-12  headtext" style={{display:'flex',flexDirection:'column'}}>
+              <span className="p-1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
+              <span className="p-2">MAKE YOUR LIFE EASIER</span>
+              <span className="p-3">GET STARTED NOW!</span>
               <div className="headbutt ">
-                <button className="signinbutt">
-                  <p className="p-4">sign-in</p>
-                </button>
-                <button className="regisbutt">
-                  <p className="p-4">register</p>
-                </button>
+                <button className="signinbutt">Sign In</button>
+                <button className="regisbutt">Sign Up</button>
               </div>
             </div>
-            <div className="col-6 headpic d-flex">
+            <div className="col-sm-5 headpic d-flex" style={{backgroundColor:'#07889b',height:330}}>
               <img
-                src="https://i.ibb.co/Q90F1Yn/mnghome.png"
+                src={coverimg}
                 className="managePic"
               />
             </div>
           </div>
-        </row>
         <row>
-          <p className="logotext d-flex">
-            <b>JUST SCHEDULE </b>
-            <p className="logotext2">
-              {" "}
-              <b>PLUS</b>
-            </p>
-          </p>
+            <div className="logotext">
+              <span className="logotext1">JUST SCHEDULE</span>
+              <span className="logotext2">PLUS </span>
+            </div>
         </row>
         <row>
           <div className="description">
             <div className="roledes">
-              <div className="col-0.5 " />
-              <div className="role1des col-5 ">
-                <img
+              <div data-aos='fade-right' className="role1pic col-6 ">
+                {/* <img
                   src="https://i.ibb.co/7QkNCbV/staff.png"
                   className="staffpic"
-                />
+                /> */}
+                  <img src='https://www.transamericacenter.org/images/default-source/employer-research-images/tcrs_employer_16th_web_image.png?sfvrsn=7f695d9b_2' className='staffpic'/>
               </div>
-              <div className="role1pic col-6 ">
+              <div data-aos='fade-left' className="role1des col-6 ">
                 <p className="p-title">STAFF</p>
-
                 <p className="p-6">
                   {" "}
                   <img
@@ -87,12 +82,11 @@ class Home extends Component {
                   View work statistic
                 </p>
               </div>
-              <div className="col-0.5 " />
+            
             </div>
             <br />
             <div className="roledes">
-              <div className="col-0.5 " />
-              <div className="role2des col-6 ">
+              <div data-aos="fade-right" className="role2des col-6">
                 <p className="p-title">MANAGER</p>
                 <p className="p-6">
                   {" "}
@@ -121,24 +115,22 @@ class Home extends Component {
                 </p>
               </div>
 
-              <div className="role2pic col-5 ">
+              <div data-aos='fade-left' className="role2pic col-6 ">
                 <img
                   src="https://i.ibb.co/MBD4dNM/manager.jpg"
                   className="managerpic"
                 />
               </div>
-              <div className="col-0.5 " />
             </div>
             <br />
             <div className="roledes">
-              <div className="col-0.5 " />
-              <div className="role3des col-5 ">
+              <div data-aos='fade-right' className="role3des col-6 ">
                 <img
                   src="https://i.ibb.co/SsXrhJJ/adm.jpg"
                   className="admpic"
                 />
               </div>
-              <div className="role3pic col-6 ">
+              <div data-aos='fade-left' className="role3pic col-6 ">
                 <p className="p-title">ADMINISTRATOR</p>
                 <p className="p-6">
                   {" "}
@@ -174,7 +166,6 @@ class Home extends Component {
                   excel
                 </p>
               </div>
-              <div className="col-0.5 " />
             </div>
           </div>
         </row>
@@ -183,10 +174,10 @@ class Home extends Component {
 
         <div className="footer">
           <div className="col-8 d-flex ftext1">
-            <p>123</p>
+                
           </div>
           <div className="col-4  ftext2" />
-          <p>123</p>
+         
         </div>
       </div>
     );

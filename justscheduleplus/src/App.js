@@ -4,6 +4,9 @@ import './Css/App.css';
 import TestComponent2 from './TestComponent2';
 import Home from './Home';
 import Schedule from './Schedule';
+import Home from './Home';
+import CreateCompany from './CreateCompany';
+import Department from './Department';
 
 
 
