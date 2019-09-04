@@ -1,0 +1,60 @@
+.department-container{
+    /* background-image:linear-gradient(#07889b,#66b9bf); */
+    background-color:#fafafb; 
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+.company-description{
+    background-image:linear-gradient(#07889b,#66b9bf);
+    height: 100vh;
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-top: 30px;
+    font-family: Helvetica;
+    color: white;
+    font-weight: 600;
+}
+.company-pictures{
+    width:150px;
+    height: 150px;
+    border: 1px solid #bdc7d8;
+    border-radius: 100px;
+    margin-left: 27px;
+}
+.description{
+    margin-left: 15px;
+    margin-top: 10px;
+}
+.second-description{
+    margin-left: 15px;
+    margin-top: 10px;
+    font-weight: lighter;
+}
+.department{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    color:#848d95;
+}
+.create-department{
+    width:150px;
+    height: 150px;
+    border:2px solid #bdc7d8;
+    border-radius: 100px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    padding-top: 57px;
+}
+.create-department-container{
+    margin-top: 20px;
+    margin-left: 40px;
+    font-family: Helvetica;
+    color: white;
+    /* font-weight: lighter; */
+    height: auto;
+    color: #848d95;
+}
