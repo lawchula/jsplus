@@ -13,7 +13,7 @@ class TestComponent2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: false,
+      showLogin: false,
       showregis: false,
       showcompany: false
     }
@@ -28,7 +28,7 @@ class TestComponent2 extends Component {
 
   showLogin = () => {
     this.setState({
-      show: !this.state.show
+      showLogin: !this.state.showLogin
     })
   }
 
