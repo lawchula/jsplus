@@ -1,74 +1,99 @@
 .popup {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    z-index: 3;
-    background-color: rgba(0,0,0, 0.5);
-  }
-  .popup_inner {
-    position: absolute;
-    left: 18%;
-    right: 20%;
-    top: 20%;
-    bottom: 25%;
-    margin: auto;
-    width: 750px;
-    height: "auto";
-    background-color: #66B9BF; 
-  }
-  .Addbutton{
-   margin-left: 285px;
-   margin-top: 20px;
-  }
-  .Filter{
-    margin-left: 20px;
-    margin-top: 25px;
-    color: white;
-    background-color: #E37222; 
-    width: 80px;
-    height: 30px;
-    border-radius: 20px;
-  }
-  .Advice{
-      color: white;
-      text-align: center;
-      font-size: 65px;
-      background-color: "#66B9BF";
-      height: auto;
-      
-  }
-  .Advice2{
-      font-size: 20px;
-      color: white;
-      text-align: center;
-      margin-top: 0px;
-  }
-  .Period{
-    background-color:#66b9bf;
-    height: auto;
-  }
-  .InputPeriod{
-    margin-bottom: 15px;
-    width: 110px;
-    margin-Top: 0px;
-    border-radius: 5px ;
-    border:0px;
-    height: 30px;
-  }
-  #TextField {
-    margin-top: 20px; 
-    margin-left: 5px; 
-    width: 110px; 
-    height: 30px; 
-    background-color:"white";
-    border-radius:25px;
-  }
-  .Test{
-    background-color:  "red"
-  }
-  
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.popup_inner {
+  position: absolute;
+  left: 18%;
+  right: 20%;
+  top: 20%;
+  bottom: 25%;
+  margin: auto;
+  width: 750px;
+  height: "auto";
+  background-color: #fafafb;
+}
+.Addbutton {
+  margin-left: 285px;
+  margin-top: 20px;
+}
+.Filter {
+  margin-left: 20px;
+  margin-top: 25px;
+  color: white;
+  background-color: #e37222;
+  width: 80px;
+  height: 30px;
+  border-radius: 20px;
+}
+.Advice {
+  color: white;
+  text-align: center;
+  font-size: 65px;
+  background-color: "#66B9BF";
+  height: auto;
+}
+.Advice2 {
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  margin-top: 0px;
+}
+.Period {
+  background-color: #fafafb;
+  height: auto;
+}
+.InputPeriod {
+  margin-bottom: 15px;
+  width: 110px;
+  margin-top: 0px;
+  border-radius: 5px;
+  border: 0px;
+  height: 30px;
+}
+#TextField {
+  margin-top: 20px;
+  margin-left: 5px;
+  width: 110px;
+  height: 30px;
+  background-color: "white";
+  border-radius: 25px;
+}
+.Test {
+  background-color: "red";
+}
+.css-gmziuu-InputColor {
+  border-radius: 100px;
+}
+.headimg {
+  background-image: linear-gradient(#07889b, #66b9bf);
+  height: 80px;
+}
+.addbutt {
+  background-image: linear-gradient(#a7a7a7, orange, #eeaa7b);
+}
+.btn-primary {
+  background-image: linear-gradient(#ff8c00, orange, #eeaa7b);
+  border: none;
+}
+.submitbutt {
+  background-image: linear-gradient(#07889b, #66b9bf);
+  border: 1px solid #07889b;
+}
+.headline {
+  background-color: white;
+  width: 70px;
+}
+.td1 {
+  background-image: linear-gradient(#ff8c00, orange, #eeaa7b);
+  border: 1px solid white;
+  text-align: center;
+}
