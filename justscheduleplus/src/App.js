@@ -6,6 +6,9 @@ import Schedule from './Schedule';
 import Home from './Home';
 import CreateCompany from './CreateCompany';
 import Department from './Department';
+import Register from './Register';
+import Login from './Login';
+import CreateDepartment from './CreateDepartment';
 
 
 
@@ -15,13 +18,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Router>
+        {/* <Router>
           <Route exact path="/" component = {TestComponent2} />
           <Route path = "/Schedule" component = {Schedule} />
-        </Router>
+        </Router> */}
       {/* <Schedule/>  */}
-      {/* { <TestComponent2/> } */}
+      { <TestComponent2/> }
        {/* <Login/> <TestComponent2/> */}
+       {/* <Register/> */}
+       {/* <Home></Home> */}
+       {/* <Department></Department> */}
+       {/* <CreateDepartment></CreateDepartment> */}
       </div>
     );
   }

@@ -80,20 +80,20 @@ class Register extends Component {
           </div>
           <form name="form" onSubmit={this.handleSubmit}>
             <div className="register-container">
-              <input placeholder="Email or Username" type="text" className="form-control" name="username" value={user.username} onChange={this.handleChange} />
+              <input placeholder="Email or Username" type="text" className="username" name="username" value={user.username} onChange={this.handleChange} />
               {submitted && !user.username &&
                 <div className="help-block">Username is required</div>
               }
-              <input placeholder="Password" type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
+              <input placeholder="Password" type="password" className="password" name="password" value={user.password} onChange={this.handleChange} />
               {submitted && !user.password &&
                 <div className="help-block">Password is required</div>
               }
-              <input placeholder="ConfirmPassword" type="password" className="form-control" name="confirmPass" value={user.confirmPass} onChange={this.handleChange} />
+              <input placeholder="ConfirmPassword" type="password" className="password" name="confirmPass" value={user.confirmPass} onChange={this.handleChange} />
               {submitted && user.confirmPass != user.password &&
                 <div className="help-block">Password is not same</div>
               }
+               <button type="submit" className="signup">Sign Up</button>
             </div>
-            <button type="submit" className="signup">Sign Up</button>
           </form>
           <div className="regis-footer">
             <div>

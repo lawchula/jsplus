@@ -53,9 +53,21 @@ class Login extends React.Component {
     });
   }
 
+  onClose = (e) => {
+    if (this.props.onClose !== undefined) {
+      this.props.onClose(e)
+    }
+  }
+
   render() {
+    
+    if (!this.props.show) {
+      return null;
+    }
+
     const { loggingIn } = this.props;
     const { username, password, submitted } = this.state;
+    
     return (
       <div className="login-popup">
         <div className="login-popup_inner">
