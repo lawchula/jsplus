@@ -4,6 +4,7 @@ import './Css/CreateDepartment.css';
 import * as firebase from 'firebase';
 import ApiKeys from './ApiKeys';
 
+// เหลือ company_id ที่เป็น forienkey รอเตยส่งค่ามาให้
 class CreateDepartment extends Component{
 
     constructor(props){
@@ -87,7 +88,7 @@ class CreateDepartment extends Component{
         if(department.departmentName == "" || department.departmentTel == ""){
           this.setState({validate: 'This field is requried'})
         }else{
-            const Url = 'http://localhost:8080/company/insert';
+            const Url = 'http://localhost:8080/department/insert';
             const othepram = {
                 headers: {
                     "content-type": "application/json; charset=UTF-8"

@@ -9,6 +9,7 @@ import Department from './Department';
 import Register from './Register';
 import Login from './Login';
 import CreateDepartment from './CreateDepartment';
+import User from './User';
 
 
 
@@ -23,8 +24,8 @@ class App extends Component {
           <Route path = "/Schedule" component = {Schedule} />
         </Router> */}
       {/* <Schedule/>  */}
-      { <TestComponent2/> }
-       {/* <Login/> <TestComponent2/> */}
+      <User></User>
+       {/* <TestComponent2/> */}
        {/* <Register/> */}
        {/* <Home></Home> */}
        {/* <Department></Department> */}
