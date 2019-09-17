@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Css/Login.css";
 import error from './Images/error.png';
+import * as jwt_decode from 'jwt-decode';
 
 
 class Login extends React.Component {
@@ -31,6 +32,7 @@ class Login extends React.Component {
     // if (username && password) {
     //     this.props.login(username, password);
     // }
+    
     const Url = 'http://localhost:8080/users/authenticate';
     const othepram = {
       headers: {
@@ -45,11 +47,16 @@ class Login extends React.Component {
     fetch(Url,othepram)
     .then(res => res.json())
     .then(json => {
-      console.log(json)
       localStorage.setItem('tk', json.tk);
-      localStorage.setItem('name', json.name)
-      // var token = localStorage.getItem('tk')
-      // console.log(token)
+      var token = localStorage.getItem('tk')
+
+      if(token != "undefined"){
+        var decoded = jwt_decode(token);
+        // console.log(decoded)
+        if(token != null){
+          window.location.href = "http://localhost:3000/Schedule";
+        }
+      }
     });
   }
 
