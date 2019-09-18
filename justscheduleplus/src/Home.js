@@ -2,18 +2,34 @@ import React, { Component } from "react";
 import Header from "./Header";
 import "./Css/Home.css";
 import AOS from 'aos';
-import 'aos/dist/aos.css'; 
+import Login from './Login';
+import Register from './Register';
+import 'aos/dist/aos.css';
 import coverimg from './Images/coverimg.png'
 
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showLogin: false,
+      showregis: false,
+    };
+  }
+  showLogin = () => {
+    this.setState({
+      showLogin: !this.state.showLogin
+    })
   }
 
-  componentDidMount(){
+  showRegister = () => {
+    this.setState({
+      showregis: !this.state.showregis
+    })
+  }
+
+  componentDidMount() {
     AOS.init({
-      duration : 2500
+      duration: 2500
     })
   }
 
@@ -21,29 +37,31 @@ class Home extends Component {
     return (
       <div className="Home">
         <Header />
-      
-          <div className="headhome">
-            <div className="col-xl-7 col-12 .col-sm-12  headtext" style={{display:'flex',flexDirection:'column'}}>
-              <span className="p-1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
-              <span className="p-2">MAKE YOUR LIFE EASIER</span>
-              <span className="p-3">GET STARTED NOW!</span>
-              <div className="headbutt ">
-                <button className="signinbutt">Sign In</button>
-                <button className="regisbutt">Sign Up</button>
-              </div>
-            </div>
-            <div className="col-sm-5 headpic d-flex" style={{backgroundColor:'#07889b',height:330}}>
-              <img
-                src={coverimg}
-                className="managePic"
-              />
+
+        <div className="headhome">
+          <div className="col-xl-7 col-12 .col-sm-12  headtext" style={{ display: 'flex', flexDirection: 'column' }}>
+            <span className="p-1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
+            <span className="p-2">MAKE YOUR LIFE EASIER</span>
+            <span className="p-3">GET STARTED NOW!</span>
+            <div className="headbutt ">
+              <button onClick={this.showLogin} className="signinbutt">Sign In</button>
+              <button onClick={this.showRegister} className="regisbutt">Sign Up</button>
             </div>
           </div>
+          <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
+        <Register show={this.state.showregis} onClose={this.showRegister}></Register>
+          <div className="col-sm-5 headpic d-flex" style={{ backgroundColor: '#07889b', height: 330 }}>
+            <img
+              src={coverimg}
+              className="managePic"
+            />
+          </div>
+        </div>
         <row>
-            <div className="logotext">
-              <span className="logotext1">JUST SCHEDULE</span>
-              <span className="logotext2">PLUS </span>
-            </div>
+          <div className="logotext">
+            <span className="logotext1">JUST SCHEDULE</span>
+            <span className="logotext2">PLUS </span>
+          </div>
         </row>
         <row>
           <div className="description">
@@ -53,7 +71,7 @@ class Home extends Component {
                   src="https://i.ibb.co/7QkNCbV/staff.png"
                   className="staffpic"
                 /> */}
-                  <img src='https://www.transamericacenter.org/images/default-source/employer-research-images/tcrs_employer_16th_web_image.png?sfvrsn=7f695d9b_2' className='staffpic'/>
+                <img src='https://www.transamericacenter.org/images/default-source/employer-research-images/tcrs_employer_16th_web_image.png?sfvrsn=7f695d9b_2' className='staffpic' />
               </div>
               <div data-aos='fade-left' className="role1des col-6 ">
                 <p className="p-title">STAFF</p>
@@ -82,7 +100,7 @@ class Home extends Component {
                   View work statistic
                 </p>
               </div>
-            
+
             </div>
             <br />
             <div className="roledes">
@@ -174,10 +192,10 @@ class Home extends Component {
 
         <div className="footer">
           <div className="col-8 d-flex ftext1">
-                
+
           </div>
           <div className="col-4  ftext2" />
-         
+
         </div>
       </div>
     );

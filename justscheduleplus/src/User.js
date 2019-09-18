@@ -3,23 +3,51 @@ import './Css/User.css';
 import { Button, Table } from 'reactstrap';
 import { Container } from 'react-grid-system';
 import Header from './Header';
+import * as jwt_decode from 'jwt-decode';
 
-class User extends Component{
+class User extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-            user:['test1','test2','test3'],
+        this.state = {
+            user: [],
             day: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
-            block:[]
+            block: []
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        this.LoginAuthentication();
+        var token = localStorage.getItem('tk');
+        var decoded = jwt_decode(token);
+        if (token == null || token == "undefined") {
+            window.location.href = "http://localhost:3000/";
+        }else if(token != null || token != "undefined") {
+            if(decoded.position == "Manager" || decoded.position == "Admin"){
+                window.location.href = "http://localhost:3000/Schedule";
+            }
+        }
+
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
+    }
+
+    LoginAuthentication = () => {
+        const Url = 'http://localhost:8080/tk/auth';
+
+        var token = localStorage.getItem('tk');
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({
+                tkAuth: token
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram);
     }
 
     getNameofMonth = (month) => {
@@ -34,7 +62,6 @@ class User extends Component{
         switch (dayStr) {
             case 'Sat':
                 return "#eeaa7b"
-            // break;
             case 'Sun':
                 return "#eeaa7b"
         }
@@ -63,43 +90,45 @@ class User extends Component{
 
     }
 
-    render(){
+    render() {
 
         //เอา user มาแสดง
-        const users = this.state.user.map((event,x) => {return <tr className="test2">
-                      <td colSpan="2">{event}</td>
-                      {this.state.block.map((e,y) => {return <td style={{ backgroundColor: 'white'}}></td>})}
-        </tr>})
+        const users = this.state.user.map((event, x) => {
+            return <tr className="test2">
+                <td colSpan="2">{event}</td>
+                {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }}></td> })}
+            </tr>
+        })
         //เอา วันที่มาแสดง
-        const date =  this.state.day.map((event,i) => { return <th style={{backgroundColor: this.ShowDayColorOnSchedule(event)}} className="day">{event} </th> })
+        const date = this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })
 
-        return(
+        return (
             <div className="User">
                 <Header></Header>
-                 <Container className="Schedule" fluid>
+                <Container className="Schedule" fluid>
                     <div className="before-schedule">
-                        <div id="filter"> 
+                        <div id="filter">
                             <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
                             <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
                             <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
                         </div>
                     </div>
-                  <Table bordered responsive className="tests">
-                    <thead>
-                        <tr id="tr1"> 
-                            <th colSpan="16">Company :</th>
-                            <th colSpan="17">Department :</th>
-                        </tr>
-                        <tr id="tr2">
-                            <th colSpan="33">{this.getNameofMonth(this.state.month)+"  "+this.state.year} </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <th className="name"  colSpan="2" id="name-schedule">NAME</th>
-                        {date}
-                        {users}
-                    </tbody>
-                  </Table>                   
+                    <Table bordered responsive className="tests">
+                        <thead>
+                            <tr id="tr1">
+                                <th colSpan="16">Company :</th>
+                                <th colSpan="17">Department :</th>
+                            </tr>
+                            <tr id="tr2">
+                                <th colSpan="33">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <th className="name" colSpan="2" id="name-schedule">NAME</th>
+                            {date}
+                            {users}
+                        </tbody>
+                    </Table>
                 </Container>
             </div>
         );

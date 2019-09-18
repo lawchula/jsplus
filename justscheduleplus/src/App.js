@@ -19,12 +19,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <Router>
-          <Route exact path="/" component = {TestComponent2} />
+        <Router>
+          <Route exact path="/" component = {Home} />
           <Route path = "/Schedule" component = {Schedule} />
-        </Router> */}
+          <Route path = "/User" component = {User} />
+        </Router>
       {/* <Schedule/>  */}
-      <User></User>
+      {/* <User></User> */}
        {/* <TestComponent2/> */}
        {/* <Register/> */}
        {/* <Home></Home> */}

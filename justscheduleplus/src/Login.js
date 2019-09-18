@@ -50,14 +50,16 @@ class Login extends React.Component {
       localStorage.setItem('tk', json.tk);
       var token = localStorage.getItem('tk')
 
-      if(token != "undefined"){
+      if(token != "undefined" || token != null){
         var decoded = jwt_decode(token);
-        // console.log(decoded)
-        if(token != null){
-          window.location.href = "http://localhost:3000/Schedule";
+          if(decoded.position == "Manager"){
+            window.location.href = "http://localhost:3000/Schedule";
+          }else{
+            window.location.href = "http://localhost:3000/User";
+          }
         }
       }
-    });
+    );
   }
 
   onClose = (e) => {
