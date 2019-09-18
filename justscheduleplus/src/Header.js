@@ -9,6 +9,9 @@ import {
     NavLink,
 } from 'reactstrap';
 import './Css/Header.css';
+import Login from './Login';
+import Register from './Register';
+
 
 class Header extends Component {
 
@@ -25,6 +28,18 @@ class Header extends Component {
             isOpen: !this.state.isOpen
         });
     }
+    showLogin = () => {
+      this.setState({
+        showLogin: !this.state.showLogin
+      })
+    }
+  
+    showRegister = () => {
+      this.setState({
+        showregis: !this.state.showregis
+      })
+    }
+  
 
     render() {
         return (
@@ -50,14 +65,16 @@ class Header extends Component {
                     {/* <NavLink href=""><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" style={{marginTop:'25%'}}></img></NavLink> */}
                   </NavItem>
                   <NavItem>  
-                    <NavLink href="" id="second-header" style={{marginTop:7}}><span>Sign In</span></NavLink>
+                    <NavLink  id="second-header" onClick={this.showLogin} style={{marginTop:7}}><span>Sign In</span></NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="" id="second-header" style={{border:'1px solid #66b9bf',borderRadius:5}}><span>Sign Up</span></NavLink>
+                    <NavLink id="second-header" onClick={this.showRegister} style={{border:'1px solid #66b9bf',borderRadius:5}}><span>Sign Up</span></NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
             </Navbar>
+            <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
+          <Register show={this.state.showregis} onClose={this.showRegister}></Register>
           </div>
         );
     }

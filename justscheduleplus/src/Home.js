@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Header from "./Header";
 import "./Css/Home.css";
 import AOS from 'aos';
-import Login from './Login';
-import Register from './Register';
 import 'aos/dist/aos.css';
 import coverimg from './Images/coverimg.png'
 
@@ -14,17 +12,6 @@ class Home extends Component {
       showLogin: false,
       showregis: false,
     };
-  }
-  showLogin = () => {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
-  }
-
-  showRegister = () => {
-    this.setState({
-      showregis: !this.state.showregis
-    })
   }
 
   componentDidMount() {
@@ -37,7 +24,6 @@ class Home extends Component {
     return (
       <div className="Home">
         <Header />
-<<<<<<< Updated upstream
 
         <div className="headhome">
           <div className="col-xl-7 col-12 .col-sm-12  headtext" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -45,30 +31,10 @@ class Home extends Component {
             <span className="p-2">MAKE YOUR LIFE EASIER</span>
             <span className="p-3">GET STARTED NOW!</span>
             <div className="headbutt ">
-              <button onClick={this.showLogin} className="signinbutt">Sign In</button>
-              <button onClick={this.showRegister} className="regisbutt">Sign Up</button>
-=======
-      
-          <div className="headhome">
-            <div className="col-xl-7 col-12 .col-sm-12  headtext" style={{display:'flex',flexDirection:'column'}}>
-              <span className="p-1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
-              <span className="p-2">MAKE YOUR LIFE EASIER</span>
-              <span className="p-3">GET STARTED NOW!</span>
-              <div className="headbutt ">
-                <button className="signinbutt">Create Company</button>
-                <button className="regisbutt">Join Company</button>
-              </div>
-            </div>
-            <div className="col-sm-5 headpic d-flex" style={{backgroundColor:'#07889b',height:330}}>
-              <img
-                src={coverimg}
-                className="managePic"
-              />
->>>>>>> Stashed changes
+              <button  className="signinbutt">Create Company</button>
+              <button  className="regisbutt">Join Company</button>
             </div>
           </div>
-          <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
-        <Register show={this.state.showregis} onClose={this.showRegister}></Register>
           <div className="col-sm-5 headpic d-flex" style={{ backgroundColor: '#07889b', height: 330 }}>
             <img
               src={coverimg}

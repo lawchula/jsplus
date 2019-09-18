@@ -20,28 +20,30 @@
     margin: auto;
     width: 370px;
     height: "auto";
-    background-color:  white; 
     border-radius: 5px;
-    box-shadow: 0px 0px 5px 10px #808080;
-   
+    box-shadow: 0px 0px 2px 3px #808080;
+    margin-bottom: 3px;
+
 }
 .regis-header{
     display:flex;
-    background-color:white;
+    background-image:linear-gradient(#07889b,#66b9bf);    
     justify-content:center;
     height:80px;
     padding-top:25px;
-    border-radius:5px;
-
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .header-text1{
-    color:#66b9bf;
-    font-weight:600;
+    font-family: Helvetica;
+    color:white;
+    font-weight:lighter;
     font-size:22.5px;
 }
 .header-text2{
-    color:#E37222;
-    font-weight:600;
+    font-family: Helvetica;
+    color:white;
+    font-weight:lighter;
     font-size:22.5px;
 }
 .img-container{
@@ -50,18 +52,19 @@
     top:-1px;
 }
 .img{
-    width: 17.5px;
-    height: 17.5px;
+    width: 12.5px;
+    height: 12.5px;
     margin-top: 0;
+    margin-right: 3px;
 }
 .register-container{
     height:300px;
-    background-color:#e8ecf3;
+    background-color:#fafafb; 
     position:relative;
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding-top:35px;
+    padding-top:55px;
 }
 .username{
     width:230px;
@@ -83,21 +86,26 @@
 .signup{
     width:230px;
     height:45px;
-    margin-top:20px;
-    border: 2px solid #EDEDED;
-    border-radius:8px;
-    background-color:#66b9bf;
+    margin-top:10px;
+    /* border: 2px solid #EDEDED; */
+    border:none;
+    border-radius:8;
+    background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
     color:white;
+    font-weight: bold;
     font-size:12.5px;
+    border-radius:8px;
 }
 .regis-footer{
     display:flex;
+    padding-top:10px; 
     height:70px;
     flex-direction:column;
     align-items:center;
+    background-image:linear-gradient(#66b9bf,#07889b);    
     color:#66b9bf;
-    border-radius: 5px;
-    background-color: white
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 .footer-text1{
     font-size:12.5px;

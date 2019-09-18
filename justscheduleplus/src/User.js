@@ -16,13 +16,9 @@ class User extends Component {
             company: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
-<<<<<<< Updated upstream
-            block: []
-=======
             block:[],
             class: 'Schedule',
             request: true
->>>>>>> Stashed changes
         }
     }
 
@@ -117,7 +113,6 @@ class User extends Component {
 
     }
 
-<<<<<<< Updated upstream
     render() {
 
         //เอา user มาแสดง
@@ -133,12 +128,8 @@ class User extends Component {
         return (
             <div className="User">
                 <Header></Header>
-<<<<<<< Updated upstream
-                <Container className="Schedule" fluid>
-=======
-                 <Container className="Schedule" fluid>
-                 <Button color="btn btn-light" className="p1" style={{color:'#E37222',float:'left'}} onClick={this.startRequest}><b>REQUEST</b></Button>
->>>>>>> Stashed changes
+
+                <Container className="user-Schedule" fluid>
                     <div className="before-schedule">
                         <div id="filter">
                             <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
@@ -146,24 +137,6 @@ class User extends Component {
                             <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
                         </div>
                     </div>
-<<<<<<< Updated upstream
-                    <Table bordered responsive className="tests">
-                        <thead>
-                            <tr id="tr1">
-                                <th colSpan="16">Company :</th>
-                                <th colSpan="17">Department :</th>
-                            </tr>
-                            <tr id="tr2">
-                                <th colSpan="33">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <th className="name" colSpan="2" id="name-schedule">NAME</th>
-                            {date}
-                            {/* {users} */}
-                        </tbody>
-                    </Table>
-=======
                     <div className="request" hidden={this.state.request}>
 
                     </div>
@@ -180,10 +153,9 @@ class User extends Component {
                     <tbody className='user-name'>
                     <th className="user-name"  colSpan="2" id="name-schedule">NAME</th>
                         {date}
-                        {users}
+                        {/* {users} */}
                     </tbody>
                   </Table>
->>>>>>> Stashed changes
                 </Container>
             </div>
         );
