@@ -42,33 +42,22 @@ class Schedule extends Component {
                 window.location.href = "http://localhost:3000/User";
             }
         }
-        this.LoginAuthentication();
-
+        this.SelectDataFromDB();
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
-        this.SelectDataFromDB();
 
     }
 
-    LoginAuthentication = () => {
-        const Url = 'http://localhost:8080/tk/auth';
-
+    SelectDataFromDB = () => {
         var token = localStorage.getItem('tk');
         const othepram = {
             headers: {
-                "content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify({
                 tkAuth: token
-            }),
-            method: "POST"
+            },
+            method: "GET"
         };
-        fetch(Url, othepram);
-    }
 
-
-    SelectDataFromDB = () => {
-        fetch('http://localhost:8080/users')
+        fetch('http://localhost:8080/users', othepram)
             .then((response) => {
                 return response.json();
             })
@@ -76,7 +65,7 @@ class Schedule extends Component {
                 this.setState({ user: myJson })
             });
 
-        fetch('http://localhost:8080/company')
+        fetch('http://localhost:8080/company', othepram)
             .then((response) => {
                 return response.json();
             })
@@ -84,7 +73,7 @@ class Schedule extends Component {
                 this.setState({ company: myJson })
             });
 
-        fetch('http://localhost:8080/department')
+        fetch('http://localhost:8080/department', othepram)
             .then((response) => {
                 return response.json();
             })

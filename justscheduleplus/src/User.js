@@ -12,6 +12,8 @@ class User extends Component {
         this.state = {
             user: [],
             day: [],
+            department: [],
+            company: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
             block: []
@@ -19,35 +21,54 @@ class User extends Component {
     }
 
     componentDidMount() {
-        this.LoginAuthentication();
         var token = localStorage.getItem('tk');
-        var decoded = jwt_decode(token);
         if (token == null || token == "undefined") {
             window.location.href = "http://localhost:3000/";
-        }else if(token != null || token != "undefined") {
-            if(decoded.position == "Manager" || decoded.position == "Admin"){
+        } else if (token != null || token != "undefined") {
+            var decoded = jwt_decode(token);
+            if (decoded.position == "Manager" || decoded.position == "Admin") {
                 window.location.href = "http://localhost:3000/Schedule";
             }
         }
+        this.SelectDataFromDB();
 
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
     }
 
-    LoginAuthentication = () => {
-        const Url = 'http://localhost:8080/tk/auth';
-
+    SelectDataFromDB = () => {
         var token = localStorage.getItem('tk');
         const othepram = {
             headers: {
-                "content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify({
                 tkAuth: token
-            }),
-            method: "POST"
+            },
+            method: "GET"
         };
-        fetch(Url, othepram);
+
+        fetch('http://localhost:8080/users', othepram)
+            .then((response) => {
+                return response.json();
+            })
+            .then((myJson) => {
+                this.setState({ user: myJson })
+            });
+
+        fetch('http://localhost:8080/company', othepram)
+            .then((response) => {
+                return response.json();
+            })
+            .then((myJson) => {
+                this.setState({ company: myJson })
+            });
+
+        fetch('http://localhost:8080/department', othepram)
+            .then((response) => {
+                return response.json();
+            })
+            .then((myJson) => {
+                this.setState({ department: myJson })
+            });
+
     }
 
     getNameofMonth = (month) => {
@@ -93,13 +114,13 @@ class User extends Component {
     render() {
 
         //เอา user มาแสดง
-        const users = this.state.user.map((event, x) => {
-            return <tr className="test2">
-                <td colSpan="2">{event}</td>
-                {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }}></td> })}
-            </tr>
-        })
-        //เอา วันที่มาแสดง
+        // const users = this.state.user.map((event, x) => {
+        //     return <tr className="test2">
+        //         <td colSpan="2">{event}</td>
+        //         {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }}></td> })}
+        //     </tr>
+        // })
+        // //เอา วันที่มาแสดง
         const date = this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })
 
         return (
@@ -126,7 +147,7 @@ class User extends Component {
                         <tbody>
                             <th className="name" colSpan="2" id="name-schedule">NAME</th>
                             {date}
-                            {users}
+                            {/* {users} */}
                         </tbody>
                     </Table>
                 </Container>
