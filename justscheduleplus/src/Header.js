@@ -47,7 +47,7 @@ class Header extends Component {
                   </NavItem>
                   </div>
                   <NavItem>
-                    <NavLink href=""><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" style={{marginTop:'25%'}}></img></NavLink>
+                    {/* <NavLink href=""><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" style={{marginTop:'25%'}}></img></NavLink> */}
                   </NavItem>
                   <NavItem>  
                     <NavLink href="" id="second-header" style={{marginTop:7}}><span>Sign In</span></NavLink>
