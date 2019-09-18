@@ -20,7 +20,8 @@ class Header extends Component {
 
         this.toggle = this.toggle.bind(this);
         this.state = {
-            isOpen: false
+            isOpen: false,
+            name: [],
         };
     }
     toggle() {
@@ -40,6 +41,25 @@ class Header extends Component {
       })
     }
   
+
+    componentDidMount() {
+      var token = localStorage.getItem('tk');
+      if(token != null || token != "undefined"){
+        const othepram = {
+          headers: {
+              tkAuth: token
+          },
+          method: "GET"
+      };
+    fetch('http://localhost:8080/name', othepram)
+        .then((response) => {
+            return response.json();
+        })
+        .then((myJson) => {
+            this.setState({ name: myJson })
+        });
+      }
+  }
 
     render() {
         return (
