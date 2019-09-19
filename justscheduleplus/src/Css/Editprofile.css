@@ -1,0 +1,98 @@
+.bodypage {
+  background-color: #66b9bf;
+  height: 721px;
+}
+.container {
+  display: flex;
+  justify-content: center;
+}
+.editbox {
+  width: 1400px;
+  height: 650px;
+  border: 1px solid white;
+  margin-top: 4%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.return {
+  width: 30px;
+  margin-top: 1%;
+  margin-left: 1.5%;
+}
+.edithead {
+  display: flex;
+  width: 120px;
+  height: 50px;
+  border: 1px solid white;
+  justify-content: center;
+  border-radius: 8px;
+
+  background-color: #e37222;
+  color: white;
+  font-weight: 600;
+  margin-left: auto;
+  margin-right: auto;
+}
+.profilepic {
+  margin-left: auto;
+  margin-right: auto;
+  width: 130px;
+  margin-top: 3%;
+  display: flex;
+}
+
+.edit {
+  margin-bottom: 4%;
+  justify-content: center;
+}
+.submitbutton {
+  width: 70px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid white;
+  background-color: #07889b;
+  color: white;
+  font-weight: 600;
+  margin-left: 5%;
+}
+.Name {
+  width: 300px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+.surname {
+  width: 300px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+.email {
+  width: 300px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+.phonenum {
+  width: 300px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+.edittextname {
+  margin-left: 5%;
+  color: white;
+  font-weight: 600;
+}
+.edittextsurname {
+  margin-left: 3%;
+  color: white;
+  font-weight: 600;
+}
+.edittextemail {
+  margin-left: 5%;
+  color: white;
+  font-weight: 600;
+}
+.edittextphone {
+  color: white;
+  font-weight: 600;
+}
+.camerapic {
+  width: 14px;
+}
