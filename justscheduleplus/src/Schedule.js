@@ -86,7 +86,14 @@ class Schedule extends Component {
     }
 
     getSchedules = () => {
-        fetch('http://localhost:8080/showschedule')
+        var token = localStorage.getItem('tk');
+        const othepram = {
+            headers: {
+                tkAuth: token
+            },
+            method: "GET"
+        };
+        fetch('http://localhost:8080/showschedule', othepram)
             .then((response) => {
                 return response.json();
             })

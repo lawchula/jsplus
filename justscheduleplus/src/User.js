@@ -14,12 +14,13 @@ class User extends Component {
             day: [],
             department: [],
             company: [],
+            schedule: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
             block: [],
             class: 'Schedule',
             request: true,
-            users:['kuy1','kuy2','kuy3']
+            users: ['kuy1', 'kuy2', 'kuy3']
         }
     }
 
@@ -53,10 +54,7 @@ class User extends Component {
                 return response.json();
             })
             .then((myJson) => {
-                console.log(myJson)
                 this.setState({ user: myJson })
-                console.log(this.state.user)
-                
             });
 
         fetch('http://localhost:8080/company', othepram)
@@ -75,7 +73,26 @@ class User extends Component {
                 this.setState({ department: myJson })
             });
 
+        this.getSchedules();
     }
+
+    getSchedules = () => {
+        var token = localStorage.getItem('tk');
+        const othepram = {
+            headers: {
+                tkAuth: token
+            },
+            method: "GET"
+        };
+        fetch('http://localhost:8080/showschedule', othepram)
+            .then((response) => {
+                return response.json();
+            })
+            .then((myJson) => {
+                this.setState({ schedule: myJson })
+            });
+    }
+
 
     getNameofMonth = (month) => {
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -118,17 +135,17 @@ class User extends Component {
     }
     request = () => {
         this.setState({
-            request:!this.state.request
+            request: !this.state.request
         })
     }
 
-    cancleRequest = () => { 
+    cancleRequest = () => {
         this.setState({
             request: true
         })
     }
 
-    
+
 
     render() {
 
@@ -136,7 +153,17 @@ class User extends Component {
         const users = this.state.user.map((event, x) => {
             return <tr className="test2">
                 <td colSpan="2">{event.Name}</td>
-                {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }} className="block"></td> })}
+                {this.state.block.map((e, y) => {
+                    return <td style={{ backgroundColor: 'white' }} className="block">
+                        {this.state.schedule.map(periodInSchedule => {
+                            if (event.User_ID == periodInSchedule.User_ID && periodInSchedule.Date == e)
+                                return <div id="period-container">
+                                    <div style={{ backgroundColor: periodInSchedule.Period_Color }} id="period-time">{periodInSchedule.Period_Time_One + "-" + periodInSchedule.Period_Time_Two}</div>
+                                </div>
+                        })
+                    }
+                        </td>
+                })}
             </tr>
         })
         // //เอา วันที่มาแสดง
@@ -145,8 +172,8 @@ class User extends Component {
         return (
             <div className="User">
                 <Header></Header>
-                <Container className="user-Schedule" fluid> 
-                <button onClick={this.request}>test</button>
+                <Container className="user-Schedule" fluid>
+                    <button onClick={this.request}>test</button>
                     <div className="before-schedule">
                         <div id="filter">
                             <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
@@ -154,7 +181,7 @@ class User extends Component {
                             <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
                         </div>
                     </div>
-                    <div className="request" hidden={this.state.request}  onClick={this.cancleRequest}>
+                    <div className="request" hidden={this.state.request} onClick={this.cancleRequest}>
 
                     </div>
                     <Table bordered responsive className="user-schedule">

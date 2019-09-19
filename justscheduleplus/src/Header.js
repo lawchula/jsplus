@@ -157,8 +157,8 @@ class Header extends Component {
             </Nav>
           </Collapse>
         </Navbar>
-        <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
-        <Register show={this.state.showregis} onClose={this.showRegister}></Register>
+        <Login show={this.state.showLogin} onClose={this.showLogin} showRegis={this.showRegister}></Login>
+        <Register show={this.state.showregis} onClose={this.showRegister} showLogin={this.showLogin}></Register>
       </div>
     );
   }

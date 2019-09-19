@@ -29,7 +29,6 @@ class Timepicker extends Component {
             },
             method: "GET"
         };
-
         fetch('http://localhost:8080/showperiod', othepram)
             .then((response) => {
                 return response.json();

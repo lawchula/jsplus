@@ -2,6 +2,7 @@ import React from 'react';
 import "./Css/Login.css";
 import error from './Images/error.png';
 import * as jwt_decode from 'jwt-decode';
+import Register from './Register';
 
 
 class Login extends React.Component {
@@ -12,15 +13,11 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      submitted: false
+      submitted: false,
+      showregis: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount(){
-    var token = localStorage.getItem('tk');
-    console.log(token);
   }
 
   handleChange(e) {
@@ -72,6 +69,12 @@ class Login extends React.Component {
     }
   }
 
+  popUpRegister = (e) => {
+    this.onClose();
+    this.props.showRegis(e);
+
+  }
+
   render() {
     
     if (!this.props.show) {
@@ -106,9 +109,10 @@ class Login extends React.Component {
               <span className="footer-text1">Forgot Password ?</span>
               <div>
                 <span className="footer-text2" >Don't have an account?</span>
-                <span className="footer-text3">Sign up</span>
+                <span className="footer-text3" onClick={this.popUpRegister}>Sign up</span>
               </div>
             </div>
+            <Register show={this.state.showregis} onClose={this.popUpRegister}></Register>
         </div>
       </div>
     );

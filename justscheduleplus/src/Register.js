@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./Css/Register.css";
 import error from './Images/error.png';
+import Login from './Login';
 
 
 class Register extends Component {
@@ -11,7 +12,8 @@ class Register extends Component {
       user: {
         username: '',
         password: '',
-        confirmPass: ''
+        confirmPass: '',
+        showlogin: false
       },
       submitted: false,
       localUrl: 'http://localhost:8080/'
@@ -63,6 +65,11 @@ class Register extends Component {
     }
   }
 
+  popUpLogin = (e) => {
+    this.onClose();
+    this.props.showLogin(e);
+  }
+
   render() {
     if (!this.props.show) {
       return null;
@@ -99,9 +106,10 @@ class Register extends Component {
           <div className="regis-footer">
             <div>
               <span className="footer-text1">Already have an account?</span>
-              <span className="footer-text2">Sign in</span>
+              <span className="footer-text2" onClick = {this.popUpLogin}>Sign in</span>
             </div>
           </div>
+          <Login show={this.state.showregis} onClose={this.register}></Login>
         </div>
       </div>
 
