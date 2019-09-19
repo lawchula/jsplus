@@ -116,6 +116,19 @@ class User extends Component {
         this.setState({ day: days })
 
     }
+    request = () => {
+        this.setState({
+            request:!this.state.request
+        })
+    }
+
+    cancleRequest = () => { 
+        this.setState({
+            request: true
+        })
+    }
+
+    
 
     render() {
 
@@ -123,7 +136,7 @@ class User extends Component {
         const users = this.state.user.map((event, x) => {
             return <tr className="test2">
                 <td colSpan="2">{event.Name}</td>
-                {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }}></td> })}
+                {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }} className="block"></td> })}
             </tr>
         })
         // //เอา วันที่มาแสดง
@@ -132,8 +145,8 @@ class User extends Component {
         return (
             <div className="User">
                 <Header></Header>
-
-                <Container className="user-Schedule" fluid>
+                <Container className="user-Schedule" fluid> 
+                <button onClick={this.request}>test</button>
                     <div className="before-schedule">
                         <div id="filter">
                             <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
@@ -141,17 +154,17 @@ class User extends Component {
                             <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
                         </div>
                     </div>
-                    <div className="request" hidden={this.state.request}>
+                    <div className="request" hidden={this.state.request}  onClick={this.cancleRequest}>
 
                     </div>
                     <Table bordered responsive className="user-schedule">
                         <thead className='user-name'>
                             <tr id="user-tr1">
                                 <th colSpan="16" >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
-                                <th colSpan="15">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
+                                <th colSpan="16">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
                             </tr>
                             <tr id="user-tr2">
-                                <th colSpan="33">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                                <th colSpan="32">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
                             </tr>
                         </thead>
                         <tbody className='user-name'>

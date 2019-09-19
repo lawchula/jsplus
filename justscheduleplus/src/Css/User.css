@@ -54,7 +54,7 @@ width: auto;
     color: #E37222;
 }
 .request{
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
