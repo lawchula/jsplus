@@ -50,7 +50,8 @@ class Register extends Component {
           method: "POST"
         };
         fetch(Url, othepram)
-          .then(data => { return data.json() })
+          .then(data => { 
+            return data.json() })
           .catch(error => console.log(error))
       }
     }

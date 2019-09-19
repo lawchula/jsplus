@@ -34,11 +34,11 @@ class Schedule extends Component {
     }
     componentDidMount() {
         var token = localStorage.getItem('tk');
-        var decoded = jwt_decode(token);
         if (token == null || token == "undefined") {
             window.location.href = "http://localhost:3000/";
-        }else if(token != null || token != "undefined") {
-            if(decoded.position != "Manager"){
+        } else if (token != null || token != "undefined") {
+            var decoded = jwt_decode(token);
+            if (decoded.position != "Manager") {
                 window.location.href = "http://localhost:3000/User";
             }
         }

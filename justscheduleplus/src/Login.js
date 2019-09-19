@@ -18,6 +18,10 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount(){
+    var token = localStorage.getItem('tk');
+    console.log(token);
+  }
 
   handleChange(e) {
     const { name, value } = e.target;

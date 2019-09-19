@@ -4,11 +4,11 @@ import './Css/App.css';
 // import TestComponent2 from './TestComponent2';
 import Schedule from './Schedule';
 import Home from './Home';
-import CreateCompany from './CreateCompany';
-import Department from './Department';
-import Register from './Register';
-import Login from './Login';
-import CreateDepartment from './CreateDepartment';
+// import CreateCompany from './CreateCompany';
+// import Department from './Department';
+// import Register from './Register';
+// import Login from './Login';
+// import CreateDepartment from './CreateDepartment';
 import User from './User';
 
 
