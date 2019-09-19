@@ -16,9 +16,10 @@ class User extends Component {
             company: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
-            block:[],
+            block: [],
             class: 'Schedule',
-            request: true
+            request: true,
+            users:['kuy1','kuy2','kuy3']
         }
     }
 
@@ -52,7 +53,10 @@ class User extends Component {
                 return response.json();
             })
             .then((myJson) => {
+                console.log(myJson)
                 this.setState({ user: myJson })
+                console.log(this.state.user)
+                
             });
 
         fetch('http://localhost:8080/company', othepram)
@@ -116,12 +120,12 @@ class User extends Component {
     render() {
 
         //เอา user มาแสดง
-        // const users = this.state.user.map((event, x) => {
-        //     return <tr className="test2">
-        //         <td colSpan="2">{event}</td>
-        //         {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }}></td> })}
-        //     </tr>
-        // })
+        const users = this.state.user.map((event, x) => {
+            return <tr className="test2">
+                <td colSpan="2">{event.Name}</td>
+                {this.state.block.map((e, y) => { return <td style={{ backgroundColor: 'white' }}></td> })}
+            </tr>
+        })
         // //เอา วันที่มาแสดง
         const date = this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })
 
@@ -140,22 +144,22 @@ class User extends Component {
                     <div className="request" hidden={this.state.request}>
 
                     </div>
-                  <Table bordered responsive className="user-schedule">
-                    <thead className='user-name'> 
-                        <tr id="user-tr1"> 
-                            <th colSpan="16">Company :</th>
-                            <th colSpan="17">Department :</th>
-                        </tr>
-                        <tr id="user-tr2">
-                            <th colSpan="33">{this.getNameofMonth(this.state.month)+"  "+this.state.year} </th>
-                        </tr>
-                    </thead>
-                    <tbody className='user-name'>
-                    <th className="user-name"  colSpan="2" id="name-schedule">NAME</th>
-                        {date}
-                        {/* {users} */}
-                    </tbody>
-                  </Table>
+                    <Table bordered responsive className="user-schedule">
+                        <thead className='user-name'>
+                            <tr id="user-tr1">
+                                <th colSpan="16" >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <th colSpan="15">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
+                            </tr>
+                            <tr id="user-tr2">
+                                <th colSpan="33">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                            </tr>
+                        </thead>
+                        <tbody className='user-name'>
+                            <th className="user-name" colSpan="2" id="name-schedule">NAME</th>
+                            {date}
+                            {users}
+                        </tbody>
+                    </Table>
                 </Container>
             </div>
         );

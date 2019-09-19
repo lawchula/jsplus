@@ -22,7 +22,15 @@ class Timepicker extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/showperiod')
+        var token = localStorage.getItem('tk');
+        const othepram = {
+            headers: {
+                tkAuth: token
+            },
+            method: "GET"
+        };
+
+        fetch('http://localhost:8080/showperiod', othepram)
             .then((response) => {
                 return response.json();
             })
