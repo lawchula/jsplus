@@ -11,6 +11,10 @@ import {
 import './Css/Header.css';
 import Login from './Login';
 import Register from './Register';
+import {DropdownToggle,DropdownMenu,DropdownItem,Dropdown} from 'reactstrap';
+import edit from './Images/edit.png';
+import signout from './Images/signout.png';
+import select from './Images/select.png';
 
 
 class Header extends Component {
@@ -22,6 +26,7 @@ class Header extends Component {
         this.state = {
             isOpen: false,
             name: [],
+            dropdownOpen:false,
         };
     }
     toggle() {
@@ -40,6 +45,13 @@ class Header extends Component {
         showregis: !this.state.showregis
       })
     }
+
+    toggle() {
+      this.setState({
+        dropdownOpen: !this.state.dropdownOpen
+      });
+    }
+  
   
 
     componentDidMount() {
@@ -62,8 +74,53 @@ class Header extends Component {
   }
 
     render() {
+
+      const {name} = this.state
+      const showname = this.state.name.map((event,key) => {return  <NavItem className="header-username">
+      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} style={{margin:0,paddingTop:2.5}} id="user-dropdown">
+        <DropdownToggle
+           tag="span"
+           onClick={this.toggle}
+           data-toggle="dropdown"
+           aria-expanded={this.state.dropdownOpen}
+           modifiers={{
+            setMaxHeight: {
+              enabled: true,
+              order: 890,
+              fn: (data) => {
+                return {
+                  ...data,
+                  styles: {
+                    ...data.styles,
+                    overflow: 'auto',
+                    maxHeight: 100,
+                  },
+                };
+              },
+            },
+          }}>
+          <div style={{display:'flex'}} >
+            {event.name}
+            <img src={select} className="select"></img>
+            </div>
+        </DropdownToggle>
+        <DropdownMenu id="user-dropdown">
+            <div onClick={this.toggle}>
+              <img src={edit} className="select2"></img>
+              Edit profile
+            </div>
+            <hr className="hr"></hr>
+            <div onClick={this.toggle}>
+            <img src={signout} className="select2"></img>
+              Sign out
+            </div>
+        </DropdownMenu>
+      </Dropdown>
+      </NavItem>
+      })
+    
         return (
-            <div>
+            <div >
             <Navbar color="light" light expand="sm" style={{height:'auto'}} >
               <div className="JS" ><b>JS</b></div>
               <div className="Plus" ><b>+</b></div>
@@ -81,15 +138,22 @@ class Header extends Component {
                     <NavLink href=""  style={{color:'#07889B' ,fontSize:15,marginTop:'4%'}}><b>CONTRACT US</b></NavLink>
                   </NavItem>
                   </div>
+                  {name.length > 0  ? 
+                  <div className="third-header">
                   <NavItem>
-                    {/* <NavLink href=""><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" style={{marginTop:'25%'}}></img></NavLink> */}
+                  <NavLink id="second-header"><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" ></img></NavLink>
                   </NavItem>
-                  <NavItem>  
-                    <NavLink  id="second-header" onClick={this.showLogin} style={{marginTop:7}}><span>Sign In</span></NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink id="second-header" onClick={this.showRegister} style={{border:'1px solid #66b9bf',borderRadius:5}}><span>Sign Up</span></NavLink>
-                  </NavItem>
+                    {showname}
+                  </div>
+                  :  
+                  <div className="third-header">
+                <NavItem>  
+                  <NavLink  id="second-header" onClick={this.showLogin} style={{marginTop:7}}><span>Sign In</span></NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink id="second-header" onClick={this.showRegister} style={{border:'1px solid #66b9bf',borderRadius:5}}><span>Sign Up</span></NavLink>
+                </NavItem>
+                </div>}
                 </Nav>
               </Collapse>
             </Navbar>
