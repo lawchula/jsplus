@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Route} from "react-router-dom"
 import './Css/App.css';
-// import TestComponent2 from './TestComponent2';
 import Schedule from './Schedule';
 import Home from './Home';
-// import CreateCompany from './CreateCompany';
-// import Department from './Department';
-// import Register from './Register';
-// import Login from './Login';
-// import CreateDepartment from './CreateDepartment';
 import User from './User';
+import EditProfile from './EditProfile'
 
 
 
@@ -23,6 +18,7 @@ class App extends Component {
           <Route exact path="/" component = {Home} />
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
+          <Route path = "/EditProfile" component = {EditProfile} />
         </Router>
       {/* <Schedule/>  */}
       {/* <User></User> */}
