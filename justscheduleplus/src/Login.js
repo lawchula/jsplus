@@ -56,6 +56,7 @@ class Login extends React.Component {
       localStorage.setItem('tk', json.tk);
       var token = localStorage.getItem('tk')
       if(token != "undefined" || token != null){
+        this.setState({loginFail: []});
         var decoded = jwt_decode(token);
           if(decoded.position == "Manager"){
             window.location.href = "http://localhost:3000/Schedule";
