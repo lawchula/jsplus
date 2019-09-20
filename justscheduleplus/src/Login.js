@@ -77,7 +77,6 @@ class Login extends React.Component {
   popUpRegister = (e) => {
     this.onClose();
     this.props.showRegis(e);
-
   }
 
   render() {
@@ -117,7 +116,7 @@ class Login extends React.Component {
                 <span className="footer-text3" onClick={this.popUpRegister}>Sign up</span>
               </div>
             </div>
-            <Register show={this.state.showregis} onClose={this.popUpRegister}></Register>
+            <Register onClose={this.popUpRegister}></Register>
         </div>
       </div>
     );

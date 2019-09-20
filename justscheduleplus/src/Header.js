@@ -15,6 +15,7 @@ import { DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap
 import edit from './Images/edit.png';
 import signout from './Images/signout.png';
 import select from './Images/select.png';
+import schedule1 from './Images/schedule1.png';
 
 
 class Header extends Component {
@@ -111,6 +112,11 @@ class Header extends Component {
             </div>
           </DropdownToggle>
           <DropdownMenu id="user-dropdown">
+          <div onClick={this.toggle}>
+              <img src={schedule1} className="select2"></img>
+              Schedule
+            </div>
+            <hr className="hr"></hr>
             <div onClick={this.toggle}>
               <img src={edit} className="select2"></img>
               Edit profile

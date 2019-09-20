@@ -84,7 +84,7 @@ hr{
     font-size: 12.5px;
     width: 150px;
     height: 40px;
-    background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
+    background-image:linear-gradient(#FF8C00,orange,#eeaa7b);
     border: 1px solid #eeaa7b;
     border-radius: 10px;
     color: white;
@@ -142,3 +142,4 @@ label {
     color: red;
     font-size: 12px;
  }
+ 

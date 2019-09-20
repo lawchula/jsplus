@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Header";
 import "./Css/Editprofile.css";
+import user from './Images/user.png';
 
 class AdminHome extends Component {
   constructor(props) {
@@ -15,79 +16,32 @@ class AdminHome extends Component {
         <div className="bodypage">
           <div className="container">
             <div className="editbox ">
-              <img
-                src="https://i.ibb.co/Bfq9svj/back-arrow-1.png"
-                className="return"
-              ></img>
-              <button className="edithead">EDIT PROFILE</button>
-
-              <img
-                src="https://i.ibb.co/r09kNbX/user-2.png"
-                className="profilepic"
-              ></img>
-              <div className="d-flex edit">
-                <span className="editlink">
-                  <u>edit</u>
-                  <img
-                    className="camerapic"
-                    src="https://i.ibb.co/hgsqcL7/photo-camera.png"
-                  ></img>
-                </span>
+              <div className="zindex">
+        
               </div>
-              {/* <form onSubmit={this.handleSubmit}> */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  width: 1000,
-                  position: "relative",
-                  alignItems: "center"
-                }}
-              >
-                <label className="edittextname">
-                  Name:
-                  <input
-                    className="Name"
-                    type="text"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br></br>
-                <label className="edittextsurname">
-                  Surname:
-                  <input
-                    className="surname"
-                    type="text"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br></br>
-                <label className="edittextemail">
-                  E-mail:
-                  <input
-                    className="email"
-                    type="text"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br></br>
-                <label className="edittextphone">
-                  Phonenumber:
-                  <input
-                    className="phonenum"
-                    type="text"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br></br>
-                <input className="submitbutton" type="submit" value="Submit" />
+                <div className="edit-profile">
+                    <img src={user} className="edit-userimg"></img>
+                </div>
+                <div style={{display:'flex',marginTop:10}}>
+                    <label htmlFor="upload-photo"  className="upload-picture">Browse...</label>
+                    <input type="file" name="photo" id="upload-photo"  onChange={this.fileSelectedHandler}/>
+                    <button className="upload-picture" onClick={this.confirmUploadImage}>Upload</button>
+                </div>
+                <div className="user-information">
+                <span className="span">USERNAME</span>
+                <input  type="text" className="input-userinfor" />
+                <span className="span">NAME</span>
+                <input  type="text" className="input-userinfor" />
+                <span className="span">SURNAME</span>
+                <input  type="text" className="input-userinfor" />
+                <span className="span">EMAIL</span>
+                <input  type="text" className="input-userinfor" />
+                <span className="span">TEL</span>
+                <input  type="text" className="input-userinfor" />
+                </div>
+                <div className="edit-profilefooter">
+                    <button type="submit" className="confirm-create" >Confirm</button>
               </div>
-              {/* </form> */}
             </div>
           </div>
         </div>

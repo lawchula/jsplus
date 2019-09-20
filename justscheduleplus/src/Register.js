@@ -117,7 +117,7 @@ class Register extends Component {
               <span className="footer-text2" onClick={this.popUpLogin}>Sign in</span>
             </div>
           </div>
-          <Login show={this.state.showregis} onClose={this.register}></Login>
+          <Login onClose={this.register}></Login>
         </div>
       </div>
 

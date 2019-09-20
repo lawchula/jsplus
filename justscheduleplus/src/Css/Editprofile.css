@@ -1,98 +1,106 @@
 .bodypage {
-  background-color: #66b9bf;
-  height: 721px;
+  background-image:linear-gradient(#07889b,#66b9bf);   
+  background-color: #fafafb;  
+  height: 100vh;
 }
 .container {
   display: flex;
   justify-content: center;
 }
 .editbox {
+  position: relative;
   width: 1400px;
   height: 650px;
   border: 1px solid white;
   margin-top: 4%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-.return {
-  width: 30px;
-  margin-top: 1%;
-  margin-left: 1.5%;
-}
-.edithead {
+  background-color: #fafafb;  
   display: flex;
-  width: 120px;
-  height: 50px;
-  border: 1px solid white;
-  justify-content: center;
-  border-radius: 8px;
-
-  background-color: #e37222;
-  color: white;
-  font-weight: 600;
-  margin-left: auto;
-  margin-right: auto;
+  align-items: center;
+  padding-top: 5px;
+  flex-direction: column;
+  z-index: 2;
 }
-.profilepic {
-  margin-left: auto;
-  margin-right: auto;
-  width: 130px;
-  margin-top: 3%;
+.edit-profile{
+  width:150px;
+  height: 150px;
+  border: 1px solid #bdc7d8;
+  border-radius: 100px;
+  margin-left: 27px;
   display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.edit-userimg{
+  width:150px;
+  height: 150px;
+}
+.upload-picture{
+  margin-left:5px;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 12.5px;
+  width: 75.58px;
+  height: 26px;
+  background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
+  border: 1px solid #eeaa7b;
+  color: white;
+  margin-top: 10px;
+  padding: 2px 8px 2px 8px;
+  border-radius:5px;
+}
+label {
+  cursor: pointer;
+  /* Style as you please, it will become the visible UI component. */
 }
 
-.edit {
-  margin-bottom: 4%;
-  justify-content: center;
+#upload-photo {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
 }
-.submitbutton {
-  width: 70px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid white;
-  background-color: #07889b;
-  color: white;
-  font-weight: 600;
-  margin-left: 5%;
+.user-information{
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }
-.Name {
+.input-userinfor{
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: #EDEDED;
+  background-color: #fafafb;
   width: 300px;
+}
+.input-userinfor:focus{
+  border-color: #FF8C00
+}
+.span{
+  font-family: Helvetica;
+  font-weight: bold; 
+  font-size: 11px;
+  color:#848d95;
+  margin-top: 15px;
+}
+.edit-profilefooter{
+  position: absolute;
+  left: 0; 
+  right: 0;
+  bottom:0;
+  margin-left: auto; 
+  margin-right: auto; 
+  width: 150px; 
+}
+.confirm-create{
+  position:absolute;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 12.5px;
+  width: 150px;
+  height: 40px;
+  background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
+  border: 1px solid #eeaa7b;
   border-radius: 10px;
-  margin-left: 10px;
-}
-.surname {
-  width: 300px;
-  border-radius: 10px;
-  margin-left: 10px;
-}
-.email {
-  width: 300px;
-  border-radius: 10px;
-  margin-left: 10px;
-}
-.phonenum {
-  width: 300px;
-  border-radius: 10px;
-  margin-left: 10px;
-}
-.edittextname {
-  margin-left: 5%;
   color: white;
-  font-weight: 600;
+  margin-top: -20px;
 }
-.edittextsurname {
-  margin-left: 3%;
-  color: white;
-  font-weight: 600;
-}
-.edittextemail {
-  margin-left: 5%;
-  color: white;
-  font-weight: 600;
-}
-.edittextphone {
-  color: white;
-  font-weight: 600;
-}
-.camerapic {
-  width: 14px;
-}
+
