@@ -26,13 +26,17 @@ class Header extends Component {
     this.state = {
       isOpen: false,
       name: [],
-      dropdownOpen: false,
+      dropdownOpen: false
     };
   }
-  
+
   componentDidMount() {
+    this.checkToken();
+  }
+
+  checkToken = () => {
     var token = localStorage.getItem('tk');
-    if (token != null || token != "undefined") {
+    if (token != null && token != "undefined") {
       const othepram = {
         headers: {
           tkAuth: token
@@ -40,38 +44,40 @@ class Header extends Component {
         method: "GET"
       };
       fetch('http://localhost:8080/name', othepram)
-      .then((response) => {
-        return response.json();
-      })
-      .then((myJson) => {
-        this.setState({ name: myJson })
-      });
+        .then((response) => {
+          return response.json();
+        })
+        .then((myJson) => {
+          this.setState({ name: myJson })
+          token = "null";
+        });
     }
   }
-  
-    showLogin = () => {
-      this.setState({
-        showLogin: !this.state.showLogin
-      })
-    }
-  
-    showRegister = () => {
-      this.setState({
-        showregis: !this.state.showregis
-      })
-    }
-  
-    toggle() {
-      this.setState({
-        dropdownOpen: !this.state.dropdownOpen
-      });
-    }
-  
+
+  showLogin = () => {
+    this.setState({
+      showLogin: !this.state.showLogin
+    })
+  }
+
+  showRegister = () => {
+    this.setState({
+      showregis: !this.state.showregis
+    })
+  }
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  }
+
   Logout = () => {
     localStorage.removeItem('tk');
+    this.setState({ name: [] });
     window.location.href = "http://localhost:3000/";
   }
-  
+
   render() {
 
     const { name } = this.state

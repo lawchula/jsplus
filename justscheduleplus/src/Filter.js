@@ -41,10 +41,10 @@ class Filter extends Component {
   getPeriods = () => {
     var token = localStorage.getItem('tk');
     const othepram = {
-        headers: {
-            tkAuth: token
-        },
-        method: "GET"
+      headers: {
+        tkAuth: token
+      },
+      method: "GET"
     };
 
     fetch("http://localhost:8080/showperiod", othepram)
@@ -83,7 +83,6 @@ class Filter extends Component {
         color: period.color
       }
     });
-    console.log("state", this.state.periods);
   };
 
   handleChange = event => {
@@ -120,8 +119,6 @@ class Filter extends Component {
   DeletePeriodFromDB = event => {
     if (!window.confirm("Do you want to delete this period!!")) return;
     const Url = "http://localhost:8080/deleteperiod";
-    console.log(event);
-
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"

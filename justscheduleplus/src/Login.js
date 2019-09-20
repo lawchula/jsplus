@@ -14,7 +14,8 @@ class Login extends React.Component {
       username: '',
       password: '',
       submitted: false,
-      showregis: false
+      showregis: false,
+      loginFail: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,9 +49,12 @@ class Login extends React.Component {
     fetch(Url,othepram)
     .then(res => res.json())
     .then(json => {
+
+      if(json == "Wrong Username or Password"){
+        this.setState({loginFail: json})
+      }else{
       localStorage.setItem('tk', json.tk);
       var token = localStorage.getItem('tk')
-
       if(token != "undefined" || token != null){
         var decoded = jwt_decode(token);
           if(decoded.position == "Manager"){
@@ -60,6 +64,7 @@ class Login extends React.Component {
           }
         }
       }
+    }
     );
   }
 

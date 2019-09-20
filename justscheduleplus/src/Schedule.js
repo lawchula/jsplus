@@ -33,19 +33,24 @@ class Schedule extends Component {
         }
     }
     componentDidMount() {
-        var token = localStorage.getItem('tk');
-        if (token == null || token == "undefined") {
-            window.location.href = "http://localhost:3000/";
-        } else if (token != null || token != "undefined") {
-            var decoded = jwt_decode(token);
-            if (decoded.position != "Manager") {
-                window.location.href = "http://localhost:3000/User";
-            }
-        }
-        this.SelectDataFromDB();
+        this.checkToken();
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
 
+    }
+
+    checkToken = () => {
+        var token = localStorage.getItem('tk');
+        if (token == null || token == "undefined") {
+            window.location.href = "http://localhost:3000/";
+        } else if (token !=  null && token != "undefined") {
+            var decoded = jwt_decode(token);
+            if (decoded.position != "Manager" || decoded.position == "Admin") {
+                window.location.href = "http://localhost:3000/User";
+            } else {
+                this.SelectDataFromDB();
+            }
+        }
     }
 
     SelectDataFromDB = () => {

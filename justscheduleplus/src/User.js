@@ -25,19 +25,23 @@ class User extends Component {
     }
 
     componentDidMount() {
+        this.checkToken();
+        this.getDaysInMonth(this.state.month, this.state.year)
+        this.setBlock(this.state.month, this.state.year)
+    }
+
+    checkToken(){
         var token = localStorage.getItem('tk');
-        if (token == null || token == "undefined") {
+        if (token ==  null || token == "undefined") {
             window.location.href = "http://localhost:3000/";
-        } else if (token != null || token != "undefined") {
+        } else if (token !=  null && token != "undefined") {
             var decoded = jwt_decode(token);
             if (decoded.position == "Manager" || decoded.position == "Admin") {
                 window.location.href = "http://localhost:3000/Schedule";
+            } else {
+                this.SelectDataFromDB();
             }
         }
-        this.SelectDataFromDB();
-
-        this.getDaysInMonth(this.state.month, this.state.year)
-        this.setBlock(this.state.month, this.state.year)
     }
 
     SelectDataFromDB = () => {
@@ -161,8 +165,8 @@ class User extends Component {
                                     <div style={{ backgroundColor: periodInSchedule.Period_Color }} id="period-time">{periodInSchedule.Period_Time_One + "-" + periodInSchedule.Period_Time_Two}</div>
                                 </div>
                         })
-                    }
-                        </td>
+                        }
+                    </td>
                 })}
             </tr>
         })

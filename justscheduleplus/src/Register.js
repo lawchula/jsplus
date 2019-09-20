@@ -13,8 +13,9 @@ class Register extends Component {
         username: '',
         password: '',
         confirmPass: '',
-        showlogin: false
       },
+      showlogin: false,
+      userAlreadyHave: [],
       submitted: false,
       localUrl: 'http://localhost:8080/'
     };
@@ -52,9 +53,16 @@ class Register extends Component {
           method: "POST"
         };
         fetch(Url, othepram)
-          .then(data => { 
-            return data.json() })
-          .catch(error => console.log(error))
+          .then(res => res.json())
+          .then(json => {
+            if (json == "Username is already exists!!!") {
+              this.setState({ userAlreadyHave: json })
+            } else {
+              this.setState({ user: { username: '', password: '', confirmPass: '' }, submitted: false, userAlreadyHave: [] });
+              this.popUpLogin();
+            }
+          }
+          )
       }
     }
   }
@@ -100,13 +108,13 @@ class Register extends Component {
               {submitted && user.confirmPass != user.password &&
                 <div className="help-block">Password is not same</div>
               }
-               <button type="submit" className="signup">Sign Up</button>
+              <button type="submit" className="signup">Sign Up</button>
             </div>
           </form>
           <div className="regis-footer">
             <div>
               <span className="footer-text1">Already have an account?</span>
-              <span className="footer-text2" onClick = {this.popUpLogin}>Sign in</span>
+              <span className="footer-text2" onClick={this.popUpLogin}>Sign in</span>
             </div>
           </div>
           <Login show={this.state.showregis} onClose={this.register}></Login>
