@@ -31,7 +31,7 @@ class RequestAbsent extends Component {
 
         return(
             <div className="request-popup-absent">
-            <div className='request-popup_inner1'>
+            <div className='request-popup_inner1-absent'>
                 <div className='request-header2-absent'>able to select more than one period
                 <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
                 </div>

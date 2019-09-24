@@ -10,7 +10,7 @@
     z-index: 3;
     background-color: rgba(0,0,0, 0.5);
 }
-.request-popup_inner1 {
+.request-popup_inner1-absent{
     position: absolute;
     left: 18%;
     right: 20%;

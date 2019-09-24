@@ -66,7 +66,6 @@ class Register extends Component {
           )
       }
     }
-     this.setState({ user: { username: '', password: '', confirmPass: '' },submitted: false})
   }
 
   onClose = (e) => {

@@ -143,13 +143,13 @@ class Header extends Component {
             <Nav className="ml-auto" navbar >
               <div id="first-header">
                 <NavItem>
-                  <NavLink href="" style={{ color: '#07889B', fontSize: 15, marginTop: '4%' }} ><b>HOW TO USE</b></NavLink>
+                  <NavLink href=""  ><b className="firstheader-item">HOW TO USE</b></NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="" style={{ color: '#07889B', fontSize: 15, marginTop: '7%' }}><b>ABOUT</b></NavLink>
+                  <NavLink href="" ><b className="firstheader-item">ABOUT</b></NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="" style={{ color: '#07889B', fontSize: 15, marginTop: '4%' }}><b>CONTRACT US</b></NavLink>
+                  <NavLink href="" ><b className="firstheader-item">CONTRACT US</b></NavLink>
                 </NavItem>
               </div>
               {name.length > 0 ?
@@ -165,7 +165,7 @@ class Header extends Component {
                     <NavLink id="second-header" onClick={this.showLogin} style={{ marginTop: 7 }}><span>Sign In</span></NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink id="second-header" onClick={this.showRegister} style={{ border: '1px solid #66b9bf', borderRadius: 5 }}><span>Sign Up</span></NavLink>
+                    <NavLink id="second-header2" onClick={this.showRegister} style={{ border: '1px solid #66b9bf', borderRadius: 5 }}><span>Sign Up</span></NavLink>
                   </NavItem>
                 </div>}
             </Nav>
