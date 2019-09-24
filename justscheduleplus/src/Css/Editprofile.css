@@ -32,8 +32,10 @@
   margin-top: 30px;
 }
 .edit-userimg{
-  width:150px;
-  height: 150px;
+    width:150px;
+    height: 150px;
+    border: 1px solid #bdc7d8;
+    border-radius: 100px;
 }
 .upload-picture{
   margin-left:5px;

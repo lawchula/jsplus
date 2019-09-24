@@ -30,6 +30,7 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
+<<<<<<< Updated upstream
     this.setState({ submitted: true,shake: 'login-popup_inner-shake' })
     const { username, password } = this.state;
     if (username !== '' && password !== '') {
@@ -37,6 +38,8 @@ class Login extends React.Component {
     }
     
     
+=======
+>>>>>>> Stashed changes
     const Url = 'http://localhost:8080/users/authenticate';
     const othepram = {
       headers: {
@@ -48,6 +51,7 @@ class Login extends React.Component {
       }),
       method: "POST"
     };
+<<<<<<< Updated upstream
     fetch(Url,othepram)
     .then(res => res.json())
     .then(json => {
@@ -70,6 +74,54 @@ class Login extends React.Component {
     }
     );
     
+=======
+    fetch(Url, othepram)
+      .then(res => res.json())
+      .then(json => {
+        if (json == "Wrong Username or Password") {
+          this.setState({ loginFail: json })
+        } else {
+          localStorage.setItem('sc', json.sc);
+          this.requestToken();
+        }
+      });
+  }
+  
+  requestToken = () => {
+    const Url = 'http://localhost:8080/users/requesttk';
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password
+      }),
+      method: "POST"
+    };
+    fetch(Url, othepram)
+      .then(res => res.json())
+      .then(json => {
+        if (json == "Not have Profile") {
+          window.location.href = "http://localhost:3000/EditProfile";
+        }
+        else if (json == "Not have Position") {
+          window.location.href = "http://localhost:3000/";
+        } else {
+          localStorage.setItem('tk', json.tk);
+          var token = localStorage.getItem('tk')
+          if (token != "undefined" || token != null) {
+            this.setState({ loginFail: [] });
+            var decoded = jwt_decode(token);
+            if (decoded.position == "Manager") {
+              window.location.href = "http://localhost:3000/Schedule";
+            } else {
+              window.location.href = "http://localhost:3000/User";
+            }
+          }
+        }
+      })
+>>>>>>> Stashed changes
   }
 
   onClose = (e) => {
@@ -85,14 +137,19 @@ class Login extends React.Component {
   }
 
   render() {
-    
+
     if (!this.props.show) {
       return null;
     }
 
     const { loggingIn } = this.props;
+<<<<<<< Updated upstream
     const { username, password, submitted,loginFail } = this.state;
     
+=======
+    const { username, password, submitted } = this.state;
+
+>>>>>>> Stashed changes
     return (
       <div className="login-popup">
         <div className={this.state.shake}>
@@ -121,14 +178,14 @@ class Login extends React.Component {
               <button type="submit" className="sign-in">Sign In</button>
             </div>
           </form>
-            <div className="login-footer">
-              <span className="footer-text1">Forgot Password ?</span>
-              <div>
-                <span className="footer-text2" >Don't have an account?</span>
-                <span className="footer-text3" onClick={this.popUpRegister}>Sign up</span>
-              </div>
+          <div className="login-footer">
+            <span className="footer-text1">Forgot Password ?</span>
+            <div>
+              <span className="footer-text2" >Don't have an account?</span>
+              <span className="footer-text3" onClick={this.popUpRegister}>Sign up</span>
             </div>
-            <Register onClose={this.popUpRegister}></Register>
+          </div>
+          <Register onClose={this.popUpRegister}></Register>
         </div>
       </div>
     );

@@ -36,7 +36,8 @@ class Header extends Component {
   }
 
   checkToken = () => {
-    var token = localStorage.getItem('tk');
+    var token = localStorage.getItem('sc');
+    console.log(token)
     if (token != null && token != "undefined") {
       const othepram = {
         headers: {
@@ -75,6 +76,7 @@ class Header extends Component {
 
   Logout = () => {
     localStorage.removeItem('tk');
+    localStorage.removeItem('sc');
     this.setState({ name: [] });
     window.location.href = "http://localhost:3000/";
   }
