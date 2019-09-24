@@ -15,7 +15,8 @@ class Login extends React.Component {
       password: '',
       submitted: false,
       showregis: false,
-      loginFail: []
+      loginFail: [],
+      shake:'login-popup_inner'
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,11 +30,12 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    // this.setState({ submitted: true });
-    // const { username, password } = this.state;
-    // if (username && password) {
-    //     this.props.login(username, password);
-    // }
+    this.setState({ submitted: true,shake: 'login-popup_inner-shake' })
+    const { username, password } = this.state;
+    if (username !== '' && password !== '') {
+      this.setState({ submitted: false,shake: 'login-popup_inner'})
+    }
+    
     
     const Url = 'http://localhost:8080/users/authenticate';
     const othepram = {
@@ -51,7 +53,7 @@ class Login extends React.Component {
     .then(json => {
 
       if(json == "Wrong Username or Password"){
-        this.setState({loginFail: json})
+        this.setState({loginFail: json,shake: 'login-popup_inner'})
       }else{
       localStorage.setItem('tk', json.tk);
       var token = localStorage.getItem('tk')
@@ -67,12 +69,14 @@ class Login extends React.Component {
       }
     }
     );
+    
   }
 
   onClose = (e) => {
     if (this.props.onClose !== undefined) {
       this.props.onClose(e)
     }
+    this.setState({loginFail:[],shake:'login-popup_inner',submitted:false})
   }
 
   popUpRegister = (e) => {
@@ -87,11 +91,11 @@ class Login extends React.Component {
     }
 
     const { loggingIn } = this.props;
-    const { username, password, submitted } = this.state;
+    const { username, password, submitted,loginFail } = this.state;
     
     return (
       <div className="login-popup">
-        <div className="login-popup_inner">
+        <div className={this.state.shake}>
           <div className="login-header">
             <span className="login-header-text1">Sign</span>&nbsp;
                     <span className="login-header-text2">In</span>
@@ -102,7 +106,14 @@ class Login extends React.Component {
           <form name="form" onSubmit={this.handleSubmit}>
             <div className="login">
               <input type="text" className="username" name="username" placeholder="Username or Email" value={username} onChange={this.handleChange}></input>
+              {submitted && !username &&
+                <div className="help-block">Username is required</div>
+              }
               <input type="password" className="password" name="password" placeholder="Password" value={password} onChange={this.handleChange}></input>
+              {submitted == true && password == '' ?
+                <div className="help-block">Password is required</div> : ''
+              }
+               {loginFail.length > 0 && username !== '' && password !== '' ? <div className="help-block">Username or password is incorrect</div> : ''}
               <div className="remember">
                 <input type="checkbox"  ></input>
                 <span className="remember-text">Remember me</span>

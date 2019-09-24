@@ -39,7 +39,7 @@ class Register extends Component {
     event.preventDefault();
 
     this.setState({ submitted: true });
-    const { user } = this.state
+    const { user,userAlreadyHave } = this.state
     if (user.password == user.confirmPass) {
       if (user.username && user.password) {
         const Url = this.state.localUrl + 'register';
@@ -56,7 +56,8 @@ class Register extends Component {
           .then(res => res.json())
           .then(json => {
             if (json == "Username is already exists!!!") {
-              this.setState({ userAlreadyHave: json })
+              this.setState({ userAlreadyHave: json})
+              console.log(userAlreadyHave)
             } else {
               this.setState({ user: { username: '', password: '', confirmPass: '' }, submitted: false, userAlreadyHave: [] });
               this.popUpLogin();
@@ -65,6 +66,7 @@ class Register extends Component {
           )
       }
     }
+     this.setState({ user: { username: '', password: '', confirmPass: '' },submitted: false})
   }
 
   onClose = (e) => {
@@ -82,7 +84,7 @@ class Register extends Component {
     if (!this.props.show) {
       return null;
     }
-    const { user, submitted } = this.state;
+    const { user, submitted, userAlreadyHave } = this.state;
 
     return (
       <div className="register-popup">
@@ -105,9 +107,13 @@ class Register extends Component {
                 <div className="help-block">Password is required</div>
               }
               <input placeholder="ConfirmPassword" type="password" className="password" name="confirmPass" value={user.confirmPass} onChange={this.handleChange} />
+              {submitted && !user.password &&
+                <div className="help-block">Password is required</div>
+              }
               {submitted && user.confirmPass != user.password &&
                 <div className="help-block">Password is not same</div>
               }
+              {userAlreadyHave.length > 0 ? <div className="help-block">This username is already exists</div> : ''}
               <button type="submit" className="signup">Sign Up</button>
             </div>
           </form>
@@ -119,8 +125,9 @@ class Register extends Component {
           </div>
           <Login onClose={this.register}></Login>
         </div>
+        {console.log(userAlreadyHave)}
       </div>
-
+    
     );
 
 

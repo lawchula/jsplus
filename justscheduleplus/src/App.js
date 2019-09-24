@@ -5,6 +5,7 @@ import Schedule from './Schedule';
 import Home from './Home';
 import User from './User';
 import EditProfile from './EditProfile'
+import TestComponent2 from './TestComponent2';
 
 
 
@@ -19,10 +20,10 @@ class App extends Component {
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
           <Route path = "/EditProfile" component = {EditProfile} />
-        </Router>
-      {/* <Schedule/>  */}
+        </Router> */}
+      {/* <Schedule/> 
       {/* <User></User> */}
-       {/* <TestComponent2/> */}
+       <TestComponent2/>
        {/* <Register/> */}
        {/* <Home></Home> */}
        {/* <Department></Department> */}
