@@ -30,7 +30,6 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-<<<<<<< Updated upstream
     this.setState({ submitted: true,shake: 'login-popup_inner-shake' })
     const { username, password } = this.state;
     if (username !== '' && password !== '') {
@@ -38,8 +37,6 @@ class Login extends React.Component {
     }
     
     
-=======
->>>>>>> Stashed changes
     const Url = 'http://localhost:8080/users/authenticate';
     const othepram = {
       headers: {
@@ -51,30 +48,6 @@ class Login extends React.Component {
       }),
       method: "POST"
     };
-<<<<<<< Updated upstream
-    fetch(Url,othepram)
-    .then(res => res.json())
-    .then(json => {
-
-      if(json == "Wrong Username or Password"){
-        this.setState({loginFail: json,shake: 'login-popup_inner'})
-      }else{
-      localStorage.setItem('tk', json.tk);
-      var token = localStorage.getItem('tk')
-      if(token != "undefined" || token != null){
-        this.setState({loginFail: []});
-        var decoded = jwt_decode(token);
-          if(decoded.position == "Manager"){
-            window.location.href = "http://localhost:3000/Schedule";
-          }else{
-            window.location.href = "http://localhost:3000/User";
-          }
-        }
-      }
-    }
-    );
-    
-=======
     fetch(Url, othepram)
       .then(res => res.json())
       .then(json => {
@@ -121,7 +94,6 @@ class Login extends React.Component {
           }
         }
       })
->>>>>>> Stashed changes
   }
 
   onClose = (e) => {
@@ -143,13 +115,8 @@ class Login extends React.Component {
     }
 
     const { loggingIn } = this.props;
-<<<<<<< Updated upstream
     const { username, password, submitted,loginFail } = this.state;
     
-=======
-    const { username, password, submitted } = this.state;
-
->>>>>>> Stashed changes
     return (
       <div className="login-popup">
         <div className={this.state.shake}>
