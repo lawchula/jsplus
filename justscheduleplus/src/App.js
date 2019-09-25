@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route} from "react-router-dom"
 import './Css/App.css';
 import Schedule from './Schedule';
-import Home from './Home';
+// import Home from './OldHome';
 import User from './User';
 import EditProfile from './EditProfile'
 import TestComponent2 from './TestComponent2';
-import NewHomePage from './NewHomePage';
+import Home from './Home';
 // import Request from './RequestPopup';
 
 
@@ -17,12 +17,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <Router>
+        <Router>
           <Route exact path="/" component = {Home} />
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
           <Route path = "/EditProfile" component = {EditProfile} />
-        </Router> */}
+        </Router>
       {/* <Schedule/> 
       {/* <User></User> */}
        {/* <TestComponent2/> */}
@@ -30,7 +30,7 @@ class App extends Component {
        {/* <Home></Home> */}
        {/* <Department></Department> */}
        {/* <CreateDepartment></CreateDepartment> */}
-       <NewHomePage></NewHomePage>
+       {/* <NewHomePage></NewHomePage> */}
       </div>
     );
   }
