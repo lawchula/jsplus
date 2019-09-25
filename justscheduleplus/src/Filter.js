@@ -98,10 +98,12 @@ class Filter extends Component {
   };
 
   onAfterInsertRow = () => {
+    var token = localStorage.getItem('tk');
     const Url = "http://localhost:8080/period";
     const othepram = {
       headers: {
-        "content-type": "application/json; charset=UTF-8"
+        "content-type": "application/json; charset=UTF-8",
+        tkAuth: token
       },
       body: JSON.stringify({
         period: this.state.periods

@@ -36,7 +36,6 @@ class Login extends React.Component {
       this.setState({ submitted: false,shake: 'login-popup_inner'})
     }
     
-    
     const Url = 'http://localhost:8080/users/authenticate';
     const othepram = {
       headers: {
@@ -52,7 +51,7 @@ class Login extends React.Component {
       .then(res => res.json())
       .then(json => {
         if (json == "Wrong Username or Password") {
-          this.setState({ loginFail: json })
+          this.setState({loginFail: json, shake: 'login-popup_inner', username: '', password: ''})
         } else {
           localStorage.setItem('sc', json.sc);
           this.requestToken();

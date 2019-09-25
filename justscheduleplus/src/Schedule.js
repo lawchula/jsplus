@@ -32,12 +32,13 @@ class Schedule extends Component {
             addperiodscheduletodb: []
         }
     }
-    componentDidMount() {
-        this.checkToken();
+
+    async componentDidMount() {
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
-
+        await this.checkToken();
     }
+
 
     checkToken = () => {
         var token = localStorage.getItem('tk');
@@ -53,7 +54,7 @@ class Schedule extends Component {
         }
     }
 
-    SelectDataFromDB = () => {
+    SelectDataFromDB = async () => {
         var token = localStorage.getItem('tk');
         const othepram = {
             headers: {
@@ -62,39 +63,34 @@ class Schedule extends Component {
             method: "GET"
         };
 
-        fetch('http://localhost:8080/users', othepram)
-            .then((response) => {
-                return response.json();
-            })
-            .then((myJson) => {
-                this.setState({ user: myJson })
-            });
+        const data = await Promise.all([
+            fetch('http://localhost:8080/users', othepram)
+                .then((response) => {
+                    return response.json();
+                }),
+            fetch('http://localhost:8080/company', othepram)
+                .then((response) => {
+                    return response.json();
+                }),
+            fetch('http://localhost:8080/department', othepram)
+                .then((response) => {
+                    return response.json();
+                }),
+        ])
 
-        fetch('http://localhost:8080/company', othepram)
-            .then((response) => {
-                return response.json();
-            })
-            .then((myJson) => {
-                this.setState({ company: myJson })
-            });
-
-        fetch('http://localhost:8080/department', othepram)
-            .then((response) => {
-                return response.json();
-            })
-            .then((myJson) => {
-                this.setState({ department: myJson })
-            });
+        const [user, company, department] = data
+        this.setState({ user, company, department })
 
         this.getSchedules();
-
     }
 
     getSchedules = () => {
         var token = localStorage.getItem('tk');
+        let month = this.state.month;
         const othepram = {
             headers: {
-                tkAuth: token
+                tkAuth: token,
+                month: month
             },
             method: "GET"
         };
@@ -110,8 +106,6 @@ class Schedule extends Component {
     getDaysInMonth = (month, year) => {
         var date = new Date(year, month, 1);
         var days = [];
-        var numofday = [];
-        var TestColorAgain = [];
         var TestShowday = [];
 
         while (date.getMonth() === month) {
@@ -231,7 +225,8 @@ class Schedule extends Component {
                 "content-type": "application/json; charset=UTF-8"
             },
             body: JSON.stringify({
-                addperiodscheduletodb: this.state.TestShow
+                addperiodscheduletodb: this.state.TestShow,
+                month: this.state.month
             }),
             method: "POST"
         };
