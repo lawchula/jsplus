@@ -1,0 +1,119 @@
+.home-img{
+    width: 1440px;
+    height: 600px;
+    position: relative;
+    background-size:100% 100%;
+}
+.layer {
+    /* background-color: rgba(0, 0, 0, 0.7); */
+    background-image: -webkit-linear-gradient(-120deg, #8647f9 0%, #4e91c1 64%, #15da88 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+.h-t1{
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    font-weight: bold; 
+    font-size: 55px;
+}
+.h-t2{
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    font-weight: bold; 
+    font-size: 35px;
+}
+.h-t3{
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    font-weight: bold; 
+    font-size: 25px;
+    margin-top: 10px;
+}
+.b-h1{
+    font-family: 'Poppins', sans-serif;
+    margin-top: 20px;
+    width: 170px;
+    height: 55px;
+    background: none;
+    color: white;
+    border: 1px solid white;
+}
+.b-h1:hover{
+    margin-top: 20px;
+    width: 170px;
+    height: 55px;
+    background: none;
+    border: 1px solid white;
+    color: #6754e2;
+    background-color: white;
+}
+.c-t1{
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+    color: black;
+    margin-top: 60px;
+}
+.c-t2{
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    font-size: 20px;
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 60px;
+
+}
+.h-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.contents{
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.c-func{
+    width: 400px;
+    height: 300px;
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column; 
+    padding-left: 10px;
+}
+.cover-func{
+    justify-content: center;
+    align-items: center;
+}
+.role-func{
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+    color: white;
+    margin-top: 20px;
+}
+.role-func2{
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    font-size: 15px;
+    color: white;
+    margin-top: 15px;
+}
+.func-pic{
+    width:48px;
+    height: 48px;
+    margin-top: 20px;
+}

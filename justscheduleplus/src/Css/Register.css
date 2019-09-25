@@ -27,7 +27,7 @@
 }
 .regis-header{
     display:flex;
-    background-image:linear-gradient(#07889b,#66b9bf);    
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
     justify-content:center;
     height:80px;
     padding-top:25px;
@@ -35,13 +35,13 @@
     border-top-right-radius: 5px;
 }
 .header-text1{
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
     color:white;
     font-weight:lighter;
     font-size:22.5px;
 }
 .header-text2{
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
     color:white;
     font-weight:lighter;
     font-size:22.5px;
@@ -59,7 +59,7 @@
 }
 .register-container{
     height:300px;
-    background-color:#fafafb; 
+    background-color:white; 
     position:relative;
     display:flex;
     flex-direction:column;
@@ -84,13 +84,13 @@
     font-size:12.5px;
 }
 .signup{
+    font-family: 'Poppins', sans-serif;
     width:230px;
     height:45px;
     margin-top:10px;
-    /* border: 2px solid #EDEDED; */
-    border:none;
+    border: 2px solid #EDEDED;
     border-radius:8;
-    background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
     color:white;
     font-weight: bold;
     font-size:12.5px;
@@ -102,22 +102,25 @@
     height:70px;
     flex-direction:column;
     align-items:center;
-    background-image:linear-gradient(#66b9bf,#07889b);    
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
     color:#66b9bf;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 .footer-text1{
+    font-family: 'Poppins', sans-serif;
     font-size:12.5px;
     color: white;
 }
 .footer-text2{
+    font-family: 'Poppins', sans-serif;
     font-size:12.5px;
     margin-left:3px;
     color:white;
 }
 .footer-text3{
-    color:#E37222;
+    font-family: 'Poppins', sans-serif;
+    color:white;
     font-weight: bold;
 }
 .help-block{

@@ -6,6 +6,8 @@ import Home from './Home';
 import User from './User';
 import EditProfile from './EditProfile'
 import TestComponent2 from './TestComponent2';
+import NewHomePage from './NewHomePage';
+// import Request from './RequestPopup';
 
 
 
@@ -15,12 +17,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Router>
+        {/* <Router>
           <Route exact path="/" component = {Home} />
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
           <Route path = "/EditProfile" component = {EditProfile} />
-        </Router>
+        </Router> */}
       {/* <Schedule/> 
       {/* <User></User> */}
        {/* <TestComponent2/> */}
@@ -28,6 +30,7 @@ class App extends Component {
        {/* <Home></Home> */}
        {/* <Department></Department> */}
        {/* <CreateDepartment></CreateDepartment> */}
+       <NewHomePage></NewHomePage>
       </div>
     );
   }

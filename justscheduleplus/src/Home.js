@@ -23,9 +23,8 @@ class Home extends Component {
   render() {
     return (
       <div className="Home">
-        <Header />
-
         <div className="headhome">
+        <Header />
           <div className="col-xl-7 col-12 .col-sm-12  headtext" style={{ display: 'flex', flexDirection: 'column' }}>
             <span className="p-1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
             <span className="p-2">MAKE YOUR LIFE EASIER</span>

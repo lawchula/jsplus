@@ -16,6 +16,7 @@ import edit from './Images/edit.png';
 import signout from './Images/signout.png';
 import select from './Images/select.png';
 import schedule1 from './Images/schedule1.png';
+import Notification from './Images/notification.png';
 
 
 class Header extends Component {
@@ -27,7 +28,8 @@ class Header extends Component {
     this.state = {
       isOpen: false,
       name: [],
-      dropdownOpen: false
+      dropdownOpen: false,
+      notificationOpen:false
     };
   }
 
@@ -70,8 +72,20 @@ class Header extends Component {
 
   toggle() {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen
+      dropdownOpen: !this.state.dropdownOpen,
     });
+  }
+
+  navbarOpen = () =>{
+    this.setState({
+      isOpen: !this.state.isOpen
+    })
+  }
+
+  openNotification = () =>{
+    this.setState({
+      notificationOpen: !this.state.notificationOpen
+    })
   }
 
   Logout = () => {
@@ -110,22 +124,22 @@ class Header extends Component {
             }}>
             <div style={{ display: 'flex' }} >
               {event.name}
-              <img src={select} className="select"></img>
+              <img src={select} className="select" style={{width:15,height:15}}></img>
             </div>
           </DropdownToggle>
-          <DropdownMenu id="user-dropdown">
-          <div onClick={this.toggle}>
+          <DropdownMenu id="user-dropdown-select">
+          <div onClick={this.toggle} className="user-item">
               <img src={schedule1} className="select2"></img>
               Schedule
             </div>
             <hr className="hr"></hr>
-            <div onClick={this.toggle}>
+            <div onClick={this.toggle} className="user-item">
               <img src={edit} className="select2"></img>
               Edit profile
             </div>
             <hr className="hr"></hr>
-            <div onClick={this.Logout}>
-              <img src={signout} className="select2"></img>
+            <div onClick={this.Logout} className="user-item">
+              <img src={signout} className="select2" ></img>
               Sign out
             </div>
           </DropdownMenu>
@@ -133,12 +147,48 @@ class Header extends Component {
       </NavItem>
     })
 
+    const notification =  <div>
+    <div className="count-notification">
+      1
+    </div>
+    <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" >
+    <DropdownToggle
+      tag="span"
+      onClick={this.openNotification}
+      data-toggle="dropdown"
+      aria-expanded={this.state.notificationOpen}
+      modifiers={{
+        setMaxHeight: {
+          enabled: true,
+          order: 890,
+          fn: (data) => {
+            return {
+              ...data,
+              styles: {
+                ...data.styles,
+                overflow: 'auto',
+                maxHeight: 100,
+              },
+            };
+          },
+        },
+      }}>
+          <img src={Notification} width="25" height="25" ></img>
+      </DropdownToggle>
+      <DropdownMenu>
+        <div>test</div>
+        <div>test</div>
+        <div>test</div>
+      </DropdownMenu>
+      </Dropdown>
+    </div>
+
     return (
       <div >
-        <Navbar color="light" light expand="sm" style={{ height: 'auto' }} >
+        <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
           <div className="JS" ><b>JS</b></div>
           <div className="Plus" ><b>+</b></div>
-          <NavbarToggler onClick={this.toggle} />
+          <NavbarToggler onClick={this.navbarOpen} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar >
               <div id="first-header">
@@ -155,7 +205,8 @@ class Header extends Component {
               {name.length > 0 ?
                 <div className="third-header">
                   <NavItem>
-                    <NavLink id="second-header"><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" ></img></NavLink>
+                    {/* <NavLink id="second-header"><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" ></img></NavLink> */}
+                    {notification}
                   </NavItem>
                   {showname}
                 </div>
@@ -165,7 +216,7 @@ class Header extends Component {
                     <NavLink id="second-header" onClick={this.showLogin} style={{ marginTop: 7 }}><span>Sign In</span></NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink id="second-header2" onClick={this.showRegister} style={{ border: '1px solid #66b9bf', borderRadius: 5 }}><span>Sign Up</span></NavLink>
+                    <NavLink id="second-header2" onClick={this.showRegister}><span>Sign Up</span></NavLink>
                   </NavItem>
                 </div>}
             </Nav>
