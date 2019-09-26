@@ -1,11 +1,18 @@
 .bodypage {
-  background-image:linear-gradient(#07889b,#66b9bf);   
-  background-color: #fafafb;  
-  height: 100vh;
+  background-image: -webkit-linear-gradient(
+    -120deg,
+    #8647f9 0%,
+    #4e91c1 64%,
+    #15da88 100%
+  );
+  background-color: #fafafb;
+  height: 91.4vh;
 }
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 .editbox {
   position: relative;
@@ -14,15 +21,15 @@
   border: 1px solid white;
   margin-top: 4%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  background-color: #fafafb;  
+  background-color: #fafafb;
   display: flex;
   align-items: center;
   padding-top: 5px;
   flex-direction: column;
   z-index: 2;
 }
-.edit-profile{
-  width:150px;
+.edit-profile {
+  width: 150px;
   height: 150px;
   border: 1px solid #bdc7d8;
   border-radius: 100px;
@@ -31,26 +38,40 @@
   justify-content: center;
   margin-top: 30px;
 }
-.edit-userimg{
-    width:150px;
-    height: 150px;
-    border: 1px solid #bdc7d8;
-    border-radius: 100px;
+.edit-userimg {
+  width: 150px;
+  height: 150px;
+  border: 1px solid #bdc7d8;
+  border-radius: 100px;
 }
-.upload-picture{
-  margin-left:5px;
+
+.camerapic {
+  width: 45px;
+  position: fixed;
+  right: 45%;
+  top: 28%;
+}
+.upload-image {
+  background-image: -webkit-linear-gradient(
+    -120deg,
+    #8647f9 0%,
+    #4e91c1 64%,
+    #15da88 100%
+  );
+  margin-left: 5px;
   font-family: Helvetica;
   font-weight: bold;
   font-size: 12.5px;
   width: 75.58px;
   height: 26px;
-  background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
-  border: 1px solid #eeaa7b;
   color: white;
+  border: 1px solid white;
+
   margin-top: 10px;
   padding: 2px 8px 2px 8px;
-  border-radius:5px;
+  border-radius: 5px;
 }
+
 label {
   cursor: pointer;
   /* Style as you please, it will become the visible UI component. */
@@ -61,48 +82,63 @@ label {
   position: absolute;
   z-index: -1;
 }
-.user-information{
+.user-information {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
 }
-.input-userinfor{
+.input-userinfor {
   outline: 0;
   border-width: 0 0 2px;
-  border-color: #EDEDED;
+  border: 1px solid #707070;
   background-color: #fafafb;
   width: 300px;
+  height: 35px;
+  margin-bottom: 8%;
 }
-.input-userinfor:focus{
-  border-color: #FF8C00
-}
-.span{
+
+.span {
   font-family: Helvetica;
-  font-weight: bold; 
+  font-weight: bold;
   font-size: 11px;
-  color:#848d95;
+  color: #848d95;
   margin-top: 15px;
 }
-.edit-profilefooter{
+.edit-profilefooter {
   position: absolute;
-  left: 0; 
+  left: 0;
   right: 0;
-  bottom:0;
-  margin-left: auto; 
-  margin-right: auto; 
-  width: 150px; 
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
 }
-.confirm-create{
-  position:absolute;
+
+.confirmbutt {
   font-family: Helvetica;
   font-weight: bold;
   font-size: 12.5px;
-  width: 150px;
+  width: 110px;
   height: 40px;
-  background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
-  border: 1px solid #eeaa7b;
-  border-radius: 10px;
-  color: white;
-  margin-top: -20px;
+  background-color: #f1f1f1;
+  border: 1px solid #707070;
+  border-radius: 7px;
+  color: #707070;
+  margin-left: 30%;
 }
-
+.span {
+  color: white;
+  font-family: Helvetica;
+  font-size: 14px;
+  margin-bottom: 1%;
+}
+.selectedfile2 {
+  margin-top: 10px;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+}
+.Name {
+  background-image: url("http://placehold.it/150x20");
+}
