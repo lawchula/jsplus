@@ -17,7 +17,8 @@ class RequestPopup extends Component {
             loading: true,
             firstCheckboxValue: '',
             secondCheckboxValue: '',
-            requestValue: []
+            requestValue: [],
+            requestID: ''
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -91,7 +92,7 @@ class RequestPopup extends Component {
                 if (arr[0] == schedules.Period_Time_One && arr[1] == schedules.Period_Time_Two) {
                     b = schedules.Schedule_ID
                     this.state.requestValue.push(a, b)
-                    
+
                     const Url = 'http://localhost:8080/request';
                     const othepram = {
                         headers: {
@@ -103,16 +104,44 @@ class RequestPopup extends Component {
                         method: "POST"
                     };
                     fetch(Url, othepram)
-                        .then(data => { return data.json() })
-                        .catch(error => console.log(error))
+                        .then(res => res.json())
+                        .then(json => {
+                            if (json != "null") {
+                                this.setState({requestID: json})
+                                this.insertNotification();
+                            }
+                        })
                 }
             })
         }
+    }
 
+    insertNotification = () => {
+        const Url = 'http://localhost:8080/insert/notification/manager';
+
+        var token = localStorage.getItem('tk');
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8",
+                tkAuth: token
+            },
+            body: JSON.stringify({
+                notification: this.state.requestID
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram)
+        .then(res => res.json())
+        .then(json => {
+            if(json == "Request Success"){
+                this.onClose();
+            }
+        })
     }
 
     onClose = (e) => {
         if (this.props.onClose !== undefined) {
+            this.setState({ requestUser: '', requestdate: '', userHasBeenReq: '', dateHasBeenReq: '', period: [], newPeriod: [], loading: false, firstCheckboxValue: '', secondCheckboxValue: '', requestValue: [] })
             this.props.onClose(e)
         }
     }

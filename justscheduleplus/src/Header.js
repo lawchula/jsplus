@@ -29,7 +29,9 @@ class Header extends Component {
       isOpen: false,
       name: [],
       dropdownOpen: false,
-      notificationOpen:false
+      notificationOpen: false,
+      notification1: [],
+      loading: true
     };
   }
 
@@ -37,9 +39,10 @@ class Header extends Component {
     this.checkToken();
   }
 
-  checkToken = () => {
-    var token = localStorage.getItem('sc');
-    console.log(token)
+  checkToken = async () => {
+    let token = localStorage.getItem('sc');
+    let detailtk = localStorage.getItem('tk');
+
     if (token != null && token != "undefined") {
       const othepram = {
         headers: {
@@ -47,14 +50,28 @@ class Header extends Component {
         },
         method: "GET"
       };
-      fetch('http://localhost:8080/name', othepram)
-        .then((response) => {
-          return response.json();
-        })
-        .then((myJson) => {
-          this.setState({ name: myJson })
-          token = "null";
-        });
+
+      const otheprams = {
+        headers: {
+          tkAuth: detailtk
+        },
+        method: "GET"
+      };
+
+      const data = await Promise.all([
+        fetch('http://localhost:8080/name', othepram)
+          .then((response) => {
+            return response.json();
+          }),
+        fetch('http://localhost:8080/notification', otheprams)
+          .then((response) => {
+            return response.json();
+          })
+      ])
+      const [name, notification1] = data;
+      this.setState({ name, notification1, loading: false })
+    } else {
+      this.setState({ loading: false })
     }
   }
 
@@ -76,13 +93,13 @@ class Header extends Component {
     });
   }
 
-  navbarOpen = () =>{
+  navbarOpen = () => {
     this.setState({
       isOpen: !this.state.isOpen
     })
   }
 
-  openNotification = () =>{
+  openNotification = () => {
     this.setState({
       notificationOpen: !this.state.notificationOpen
     })
@@ -97,8 +114,13 @@ class Header extends Component {
 
   render() {
 
-    const { name } = this.state
-    const showname = this.state.name.map((event, key) => {
+    const { name, notification1, loading } = this.state
+    let showname;
+    let notification;
+    // console.log(notification1)
+
+    if(!loading){
+    showname = this.state.name.map((event, key) => {
       return <NavItem className="header-username">
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} style={{ margin: 0, paddingTop: 2.5 }} id="user-dropdown">
           <DropdownToggle
@@ -124,11 +146,11 @@ class Header extends Component {
             }}>
             <div style={{ display: 'flex' }} >
               {event.name}
-              <img src={select} className="select" style={{width:15,height:15}}></img>
+              <img src={select} className="select" style={{ width: 15, height: 15 }}></img>
             </div>
           </DropdownToggle>
           <DropdownMenu id="user-dropdown-select">
-          <div onClick={this.toggle} className="user-item">
+            <div onClick={this.toggle} className="user-item">
               <img src={schedule1} className="select2"></img>
               Schedule
             </div>
@@ -147,83 +169,89 @@ class Header extends Component {
       </NavItem>
     })
 
-    const notification =  <div>
-    <div className="count-notification">
-      1
+    notification = <div>
+      <div className="count-notification">
+        1
     </div>
-    <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" >
-    <DropdownToggle
-      tag="span"
-      onClick={this.openNotification}
-      data-toggle="dropdown"
-      aria-expanded={this.state.notificationOpen}
-      modifiers={{
-        setMaxHeight: {
-          enabled: true,
-          order: 890,
-          fn: (data) => {
-            return {
-              ...data,
-              styles: {
-                ...data.styles,
-                overflow: 'auto',
-                maxHeight: 100,
+      <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" >
+        <DropdownToggle
+          tag="span"
+          onClick={this.openNotification}
+          data-toggle="dropdown"
+          aria-expanded={this.state.notificationOpen}
+          modifiers={{
+            setMaxHeight: {
+              enabled: true,
+              order: 890,
+              fn: (data) => {
+                return {
+                  ...data,
+                  styles: {
+                    ...data.styles,
+                    overflow: 'auto',
+                    maxHeight: 100,
+                  },
+                };
               },
-            };
-          },
-        },
-      }}>
+            },
+          }}>
           <img src={Notification} width="25" height="25" ></img>
-      </DropdownToggle>
-      <DropdownMenu>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-      </DropdownMenu>
+        </DropdownToggle>
+        <DropdownMenu>
+          <div>test</div>
+          <div>test</div>
+          <div>test</div>
+        </DropdownMenu>
       </Dropdown>
     </div>
+    }
 
     return (
       <div >
-        <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
-          <div className="JS" ><b>JS</b></div>
-          <div className="Plus" ><b>+</b></div>
-          <NavbarToggler onClick={this.navbarOpen} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar >
-              <div id="first-header">
-                <NavItem>
-                  <NavLink href=""  ><b className="firstheader-item">HOW TO USE</b></NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="" ><b className="firstheader-item">ABOUT</b></NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="" ><b className="firstheader-item">CONTRACT US</b></NavLink>
-                </NavItem>
-              </div>
-              {name.length > 0 ?
-                <div className="third-header">
-                  <NavItem>
-                    {/* <NavLink id="second-header"><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" ></img></NavLink> */}
-                    {notification}
-                  </NavItem>
-                  {showname}
-                </div>
-                :
-                <div className="third-header">
-                  <NavItem>
-                    <NavLink id="second-header" onClick={this.showLogin} style={{ marginTop: 7 }}><span>Sign In</span></NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink id="second-header2" onClick={this.showRegister}><span>Sign Up</span></NavLink>
-                  </NavItem>
-                </div>}
-            </Nav>
-          </Collapse>
-        </Navbar>
-        <Login show={this.state.showLogin} onClose={this.showLogin} showRegis={this.showRegister}></Login>
-        <Register show={this.state.showregis} onClose={this.showRegister} showLogin={this.showLogin}></Register>
+        {
+          !loading && (<React.Fragment>
+            <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
+              <div className="JS" ><b>JS</b></div>
+              <div className="Plus" ><b>+</b></div>
+              <NavbarToggler onClick={this.navbarOpen} />
+              <Collapse isOpen={this.state.isOpen} navbar>
+                <Nav className="ml-auto" navbar >
+                  <div id="first-header">
+                    <NavItem>
+                      <NavLink href=""  ><b className="firstheader-item">HOW TO USE</b></NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink href="" ><b className="firstheader-item">ABOUT</b></NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink href="" ><b className="firstheader-item">CONTRACT US</b></NavLink>
+                    </NavItem>
+                  </div>
+                  {name.length > 0 ?
+                    <div className="third-header">
+                      <NavItem>
+                        {/* <NavLink id="second-header"><img src="https://i.ibb.co/FHGFrmD/001-notifications-button-1.png" width="25" height="25" ></img></NavLink> */}
+                        {notification}
+                      </NavItem>
+                      {showname}
+                    </div>
+                    :
+                    <div className="third-header">
+                      <NavItem>
+                        <NavLink id="second-header" onClick={this.showLogin} style={{ marginTop: 7 }}><span>Sign In</span></NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink id="second-header2" onClick={this.showRegister}><span>Sign Up</span></NavLink>
+                      </NavItem>
+                    </div>}
+                </Nav>
+              </Collapse>
+            </Navbar>
+            <Login show={this.state.showLogin} onClose={this.showLogin} showRegis={this.showRegister}></Login>
+            <Register show={this.state.showregis} onClose={this.showRegister} showLogin={this.showLogin}></Register>
+          </React.Fragment>
+          )
+        }
       </div>
     );
   }
