@@ -150,11 +150,12 @@ class User extends Component {
 
     cancleRequest = () => {
         this.setState({
-            request: true,
             firstScheduleDetail: null,
             secondScheduleDetail: null,
             firstUser: null,
-            secondUser: null
+            secondUser: null,
+            count: 0,
+            showReqPopup: !this.state.showReqPopup
         })
     }
 
@@ -188,7 +189,7 @@ class User extends Component {
         this.state.schedule.map(e => {
             if (e.User_ID == name.User_ID && e.Date == date) {
                 arr.push(e)
-                this.setState({ secondScheduleDetail: arr, count: 2, request: false, zIndex: 6, zIndex2: 0 })
+                this.setState({ secondScheduleDetail: arr, count: 0, request: false, zIndex: 6, zIndex2: 0 })
                 this.showRequestPopup();
             }
         })
@@ -268,7 +269,7 @@ class User extends Component {
                                             secondUser={this.state.secondUser}
                                             month={this.state.month}
                                             year={this.state.year}
-                                            onClose={this.showRequestPopup}></RequestPopup>
+                                            onClose={this.cancleRequest}></RequestPopup>
                                     }
                                 </tbody>
                             </Table>

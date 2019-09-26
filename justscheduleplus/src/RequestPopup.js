@@ -25,6 +25,7 @@ class RequestPopup extends Component {
     }
 
     componentDidMount = () => {
+        console.log("TEST")
         this.receiveRequest();
     }
 
@@ -33,6 +34,8 @@ class RequestPopup extends Component {
         let setPeriod = "";
         let arr = [];
 
+        console.log(this.props.firstScheduleDetail)
+        console.log(this.props.firstUser)
         if (this.props.firstScheduleDetail && this.props.firstUser) {
             {
                 this.props.firstScheduleDetail.map(e => {
@@ -142,7 +145,7 @@ class RequestPopup extends Component {
 
     onClose = (e) => {
         if (this.props.onClose !== undefined) {
-            this.setState({ requestUser: '', requestdate: '', userHasBeenReq: '', dateHasBeenReq: '', period: [], newPeriod: [], loading: false, firstCheckboxValue: '', secondCheckboxValue: '', requestValue: [] })
+            this.setState({ requestUser: '', requestdate: '', userHasBeenReq: '', dateHasBeenReq: '', period: [], newPeriod: [], loading: true, firstCheckboxValue: '', secondCheckboxValue: '', requestValue: [] })
             this.props.onClose(e)
         }
     }
