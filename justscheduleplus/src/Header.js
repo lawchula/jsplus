@@ -29,8 +29,9 @@ class Header extends Component {
       isOpen: false,
       name: [],
       dropdownOpen: false,
-      loading: true
+      loading: true,
       notificationOpen:false,
+      notification1:[],
       user1:"Teetuch",
       user2:"Kaniphit",
       period:'Morning',
@@ -121,7 +122,7 @@ class Header extends Component {
     const { name, notification1, loading } = this.state
     let showname;
     let notification;
-    // console.log(notification1)
+    console.log(notification1)
 
     if(!loading){
     showname = this.state.name.map((event, key) => {
@@ -195,14 +196,19 @@ class Header extends Component {
                 overflow: 'auto',
                 maxHeight: 100,
               },
-            },
-          }}>
+            };
+          },
+          },
+        }}>
           <img src={Notification} width="25" height="25" ></img>
       </DropdownToggle>
       <DropdownMenu tag="div" className="noti-box">
         <div className="noti-description">
-        <span style={{ textAlignLast: 'center'}}>
-        {this.state.user1} request to change from {this.state.period} {this.state.date1} with  {this.state.user2} {this.state.period} {this.state.date2} </span>
+          
+        {this.state.notification1.map((e) => {return <div style={{textAlign:'center'}}>
+        <span>{this.state.notification1[0].Date}</span>
+        <span>{this.state.notification1[0].Period_Time_One}</span>
+        </div>})}
         <div style={{display:'flex',marginTop:5}}>
           <button className="approve">Approve</button> 
           <button className="reject">Reject</button>

@@ -38,7 +38,6 @@ class Home extends Component {
                 </div>
             </div>
           </div>
-        </div>
         <div className="h-content">
           <span className="c-t1">What are we offer</span>
           <span className="c-t2">we offering online schedule management</span>
@@ -88,7 +87,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
-      </div>
+    </div>
     );
   }
 }
