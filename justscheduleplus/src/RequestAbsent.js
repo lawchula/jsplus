@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import close from './Images/error.png';
 import './Css/RequestAbsent.css';
+import TextField from '@material-ui/core/TextField';;
 
 class RequestAbsent extends Component {
    
@@ -42,7 +43,7 @@ class RequestAbsent extends Component {
                         {period}
                         </div>
                         <div style={{display:'flex',marginTop:15}}> 
-                        <span className="date-absent">Please specific reason :</span>
+                        <span className="givereason">Please specific reason :</span>
                         <select className="type">
                             <option>Excused Absences</option>
                             <option>Sick Time</option>
@@ -53,7 +54,16 @@ class RequestAbsent extends Component {
                             <option>Jury Duty</option>
                             </select>
                         </div>
-                        <input type="text" className="reason" style={{marginTop:5}}></input>
+                        <TextField
+                            id="outlined-multiline-flexible"
+                            label="Reason"
+                            multiline
+                            rowsMax="10"
+                            className="reason"
+                            margin="normal"
+                            variant="outlined"
+                            rowsMax="5"
+                        />
                         <button className="select-request2-absent">Request</button>
                     </div>
                 </div>

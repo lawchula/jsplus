@@ -157,9 +157,9 @@ class Schedule extends Component {
         var dayStr = event.substr(event.length - 3)
         switch (dayStr) {
             case 'Sat':
-                return "#eeaa7b"
+                return "#A9A9A9"
             case 'Sun':
-                return "#eeaa7b"
+                return "#A9A9A9"
         }
     }
 
@@ -271,28 +271,32 @@ class Schedule extends Component {
             <div className="Schedule">
                 <Header />
                 <Container className="Schedule" fluid>
+                <span className="show-position">MANAGER</span>
                     <div className="before-schedule">
-                        <p className="stat"><b><i>STATISTIC</i></b></p>
+                        <p className="stat"><b>STATISTIC</b></p>
                         <div className="stat-schedule">
-                            <Button color="btn btn-light" className="gbutton" onClick={this.showPopup} style={{ color: '#E37222' }}><b>FILTER</b></Button>{' '}
+                            <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
                             <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
                             </Filter>
                         </div>
                         <div id="filter">
-                            <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
+                            {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
                             <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
-                            <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
+                            <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button> */}
+                            <div className="b-static">WORK HOUR:</div>
+                            <div className="b-static">DONE:</div>
+                            <div className="b-static">REMAIN:</div>
                         </div>
                     </div>
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr id="tr1">
-                                <th colSpan="16" >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
-                                <th colSpan="15">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
+                                <th colSpan={this.state.block.length/2} >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                <th colSpan={this.state.block.length/2}>Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
                                 <td colSpan="2" style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
                             <tr id="tr2">
-                                <th colSpan="33">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                                <th colSpan={this.state.block.length+2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -349,11 +353,12 @@ class Schedule extends Component {
                             })}
                         </tbody>
                     </Table>
-                    <div style={{ display: "flex", float: 'right' }}>
-                        {this.state.edit && <Button color="btn btn-light" style={{ color: '#E37222', marginRight: 10, marginTop: 20 }} onClick={this.finishEdit}><b>OK</b></Button>}
-                        <Button color="btn btn-light" style={{ color: '#E37222', marginTop: 20, marginRight: 10 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}><b>SAVE</b></Button>{' '}
+                    <div style={{ display: "flex", float: 'right' }}>  
+                        {this.state.edit &&  <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
+                      {this.state.edit == false ?  <button className="b-save"  onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> : ""}
                     </div>
                 </Container>
+                {console.log(this.state.block)}
             </div>
         );
     }

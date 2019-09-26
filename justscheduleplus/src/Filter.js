@@ -7,6 +7,8 @@ import { Table } from "reactstrap";
 import TextField from "@material-ui/core/TextField";
 import InputColor from "react-input-color";
 import { withTheme } from "@material-ui/core";
+import close from './Images/error.png';
+import remove from './Images/close.png';
 
 class Filter extends Component {
   constructor(props) {
@@ -157,11 +159,11 @@ class Filter extends Component {
           {/* {
           returnDB !== null ? () : ()
         } */}
-          <Container>
+          <Container className="all">
             <Row>
               <Col
                 className="headimg"
-                md={11}
+                md={12}
                 style={{
                   color: "white",
                   height: 80,
@@ -169,26 +171,12 @@ class Filter extends Component {
                 }}
               >
                 <p
-                  style={{
-                    marginTop: 20,
-                    fontSize: 20,
-                    textAlign: "center",
-                    fontFamily: "Helvetica",
-                    fontWeight: "lighter"
-                  }}
+                 className="filter-head-text"
                 >
                   FILTER
                   <hr className="headline" />
                 </p>
-              </Col>
-              <Col md={1} className="headimg">
-                <img
-                  src={error}
-                  style={{ width: 25, height: 25, marginTop: 10 }}
-                  onClick={e => {
-                    this.onClose(e);
-                  }}
-                ></img>
+                <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
               </Col>
             </Row>
 
@@ -202,18 +190,14 @@ class Filter extends Component {
                   {/* <p style={{color:"white",marginLeft:100,marginBottom:-5,marginTop:10}}>Period name</p> */}
                   <Row style={{ marginLeft: 100 }}>
                     <div
-                      style={{
-                        marginTop: 15,
-                        marginBottom: 8,
-                        color: "#E37222"
-                      }}
+                     className="row1"
                     >
-                      <span style={{ marginRight: 45, marginLeft: -15 }}>
-                        period name
+                      <span>
+                        Period name
                       </span>
-                      <span style={{ marginRight: 45 }}>start period</span>
-                      <span style={{ marginRight: 38 }}>end period</span>
-                      <span>color</span>
+                      <span style={{ marginLeft: 20 }}>Start-period</span>
+                      <span style={{ marginLeft:32.5 }}>End-period</span>
+                      <span style={{ marginLeft:43 }}>Color</span>
                     </div>
                   </Row>
                   <Row>
@@ -231,7 +215,7 @@ class Filter extends Component {
                         className="InputPeriod"
                         type="text"
                         name="periodName"
-                        placeholder="period name"
+                        placeholder=""
                         value={this.state.period.periodName}
                         onChange={event => this.handleChange(event)}
                       ></input>
@@ -309,13 +293,7 @@ class Filter extends Component {
                       />
 
                       <input
-                        style={{
-                          width: 60,
-                          height: 38,
-                          borderColor: "#eeaa7b",
-                          marginLeft: 20
-                        }}
-                        className="btn btn-primary add"
+                        className="add"
                         type="submit"
                         value="Add"
                         disabled={this.disablePeriod()}
@@ -368,25 +346,26 @@ class Filter extends Component {
                         scope="col"
                         style={{ fontSize: 14, fontWeight: "bold" }}
                       >
-                        color
+                        Color
                       </td>
                       <td
                         className="td1"
                         scope="col"
                         style={{ fontSize: 14, fontWeight: "bold" }}
                       >
-                        remove
+                        Remove
                       </td>
                     </tr>
                   </thead>
-                  <tbody style={{ backgroundColor: "#E37222", color: "white" }}>
+                  <tbody className="tbody">
                     {showPeriod.map(event => {
                       return (
                         <tr>
                           <td
                             style={{
                               fontSize: 14,
-                              fontWeight: "bold"
+                              fontWeight: "bold",
+                              textAlign:'center'
                             }}
                           >
                             {event.Period_Name}
@@ -394,7 +373,8 @@ class Filter extends Component {
                           <td
                             style={{
                               fontSize: 14,
-                              fontWeight: "bold"
+                              fontWeight: "bold",
+                              textAlign:'center'
                             }}
                           >
                             {" "}
@@ -403,7 +383,8 @@ class Filter extends Component {
                           <td
                             style={{
                               fontSize: 14,
-                              fontWeight: "bold"
+                              fontWeight: "bold",
+                              textAlign:'center'
                             }}
                           >
                             {event.Period_Time_Two + " น."}
@@ -413,7 +394,7 @@ class Filter extends Component {
                               style={{
                                 width: 20,
                                 height: 20,
-                                marginBottom: 20,
+                                marginLeft:40,
                                 backgroundColor: event.Period_Color,
                                 borderRadius: 25
                               }}
@@ -421,14 +402,14 @@ class Filter extends Component {
                               {" "}
                             </div>
                           </td>
-                          <td>
+                          <td style={{textAlign:'center'}}> 
                             <img
-                              src={error}
+                              src={remove}
                               style={{
                                 width: 15,
                                 height: 15,
                                 marginTop: 0,
-                                marginLeft: 15
+                                marginLeft: 15,
                               }}
                               onClick={() => this.DeletePeriodFromDB(event)}
                             ></img>
@@ -439,7 +420,7 @@ class Filter extends Component {
 
                     {this.state.periods.map((event, key) => {
                       return (
-                        <tr style={{ backgroundColor: "#66B9BF" }}>
+                        <tr style={{ backgroundColor: "#808080" }}>
                           <td
                             style={{
                               fontSize: 14,
@@ -483,12 +464,12 @@ class Filter extends Component {
                           </td>
                           <td>
                             <img
-                              src={error}
+                              src={remove}
                               style={{
                                 width: 15,
                                 height: 15,
                                 marginTop: 0,
-                                marginLeft: 48
+                                marginLeft: 55
                               }}
                               onClick={() => this.remove(key)}
                             ></img>
@@ -499,14 +480,7 @@ class Filter extends Component {
                   </tbody>
                 </Table>
                 <input
-                  style={{
-                    marginLeft: 600,
-                    position: "static",
-                    marginBottom: 10,
-                    borderColor: "#66b9bf",
-                    marginTop: 10
-                  }}
-                  className="btn btn-primary submitbutt"
+                  className="submit"
                   onClick={() => this.onAfterInsertRow()}
                   type="submit"
                   value="Submit"

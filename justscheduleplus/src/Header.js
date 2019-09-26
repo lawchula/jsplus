@@ -29,9 +29,13 @@ class Header extends Component {
       isOpen: false,
       name: [],
       dropdownOpen: false,
-      notificationOpen: false,
-      notification1: [],
       loading: true
+      notificationOpen:false,
+      user1:"Teetuch",
+      user2:"Kaniphit",
+      period:'Morning',
+      date1:"22/09/2019",
+      date2:"23/09/2019"
     };
   }
 
@@ -173,35 +177,38 @@ class Header extends Component {
       <div className="count-notification">
         1
     </div>
-      <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" >
-        <DropdownToggle
-          tag="span"
-          onClick={this.openNotification}
-          data-toggle="dropdown"
-          aria-expanded={this.state.notificationOpen}
-          modifiers={{
-            setMaxHeight: {
-              enabled: true,
-              order: 890,
-              fn: (data) => {
-                return {
-                  ...data,
-                  styles: {
-                    ...data.styles,
-                    overflow: 'auto',
-                    maxHeight: 100,
-                  },
-                };
+    <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
+    <DropdownToggle
+      tag="span"
+      onClick={this.openNotification}
+      data-toggle="dropdown"
+      aria-expanded={this.state.notificationOpen}
+      modifiers={{
+        setMaxHeight: {
+          enabled: true,
+          order: 890,
+          fn: (data) => {
+            return {
+              ...data,
+              styles: {
+                ...data.styles,
+                overflow: 'auto',
+                maxHeight: 100,
               },
             },
           }}>
           <img src={Notification} width="25" height="25" ></img>
-        </DropdownToggle>
-        <DropdownMenu>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-        </DropdownMenu>
+      </DropdownToggle>
+      <DropdownMenu tag="div" className="noti-box">
+        <div className="noti-description">
+        <span style={{ textAlignLast: 'center'}}>
+        {this.state.user1} request to change from {this.state.period} {this.state.date1} with  {this.state.user2} {this.state.period} {this.state.date2} </span>
+        <div style={{display:'flex',marginTop:5}}>
+          <button className="approve">Approve</button> 
+          <button className="reject">Reject</button>
+        </div>
+        </div>
+      </DropdownMenu>
       </Dropdown>
     </div>
     }

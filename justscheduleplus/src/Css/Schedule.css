@@ -1,10 +1,11 @@
 .Schedule{
-background-image:linear-gradient(#07889b,#66b9bf);
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);  
 height: 100vh;
 width: auto;
 }
 .stat{
-    color: antiquewhite;
+    font-family: 'Poppins', sans-serif;
+    color: white;
     margin-top: 50px;
     font-size: 18px;
 }
@@ -35,9 +36,10 @@ width: auto;
 .test2{
     width: 30px;
     height: 50px;
-    color: black;
-    font-weight: bold;
-    background-Color: #eeaa7b;
+    font-family: 'Poppins', sans-serif;
+    background-color: #4054b2;
+     color: white;
+    font-weight:bold;
     font-size:13px;
 }
 .day{
@@ -48,39 +50,49 @@ width: auto;
 }
 .before-schedule{
     float:right;
+    margin-top: 50px;
 }
 .stat-schedule{
+    display: flex;
+    flex-direction: column;
     position:absolute;
     left:15px;
-    margin-left:20;
+    top:70px;
+    margin-right:20px;
 }
 #filter{
+    display: flex;
     margin-right:10;
 }
 #tr1{
-    background-color: #07889b;
+    font-family: 'Poppins', sans-serif;
+    background-color: #4054b2;
      color: white;
 }
 #edit-schedule{
-    background-color:white;
-    color:#E37222;
-    border:0px;
-    border-radius:5px;
-    font-weight:bold;
+    border: 1px solid white;
+    color: #6754e2;
+    background-color: none;
     margin-left:7px;
 }
 #tr2{
-    background-color: #E37222 ;
+    /* background-image: -webkit-linear-gradient(125deg, #5f51fb 0%, #ae59cb 64%, #fd609b 100%); */
+    font-family: 'Poppins', sans-serif;
+    background-color: #4054b2;
     color: white;
     text-align:center;
 }
 #name-schedule{
-    background-color: #eeaa7b;
+    /* background-color: #eeaa7b; */
+    font-family: 'Poppins', sans-serif;
+    background-color: #4054b2;
+     color: white;
 }
 #username-schedule{
-    background-color: #eeaa7b;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fafafb;
+     color: #4054b2;
     font-size:13;
-    color:black;
     font-weight:bold;
 }
 #period-container{
@@ -98,6 +110,8 @@ width: auto;
     margin-top:3px;
     margin-bottom:0px;
     color:white;
+    font-weight: bold;
+    cursor: pointer;
 }
 #edit{
     width: 10px;
@@ -123,3 +137,49 @@ width: auto;
     margin-top: 8px;
     margin-left: 18px;
 }
+.b-save:hover,.b-filter:hover{
+    font-family: 'Poppins', sans-serif;
+    width: 150px;
+    height: 40px;
+    background: none;
+    color: white;
+    border: 1px solid white;
+}
+.b-filter{
+    width: 150px;
+    height: 40px;
+    background: none;
+    border: 1px solid white;
+    color: #6754e2;
+    background-color: white;
+    margin-top: 65px;
+}
+.b-static{
+    font-family: 'Poppins', sans-serif;
+    width: 150px;
+    height: 40px;
+    background: none;
+    border: 1px solid white;
+    color: white;
+    background-color: none;
+    margin-right: 10px;
+    padding-top: 7px;
+    padding-left: 5px;
+    font-weight: bold; 
+}
+.show-position{
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    font-weight: bold;
+    font-size: 55px;
+}
+.b-save{
+    width: 150px;
+    height: 40px;
+    background: none;
+    border: 1px solid white;
+    color: #6754e2;
+    background-color: white;
+    margin-top: 30px;
+}
+

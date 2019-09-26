@@ -114,9 +114,9 @@ class User extends Component {
         var dayStr = event.substr(event.length - 3)
         switch (dayStr) {
             case 'Sat':
-                return "#eeaa7b"
+                return "#A9A9A9"
             case 'Sun':
-                return "#eeaa7b"
+                return "#A9A9A9"
         }
     }
 
@@ -206,13 +206,14 @@ class User extends Component {
         const { loading, count } = this.state
         const users = this.state.user.map((name, user) => {
             return <tr className="test2">
-                <td colSpan="2"  style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} className="block">{name.Name}</td>
+                <td colSpan="2"  style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} className="user-block">{name.Name}</td>
                 {this.state.block.map((date, y) => {
                     return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} onClick={() => this.checkRequest(name, date)}>
                         {this.state.schedule.map(periodInSchedule => {
                             if (name.User_ID == periodInSchedule.User_ID && periodInSchedule.Date == date)
                                 return <div id="period-container">
                                     <div style={{ backgroundColor: periodInSchedule.Period_Color }} id="period-time">{periodInSchedule.Period_Time_One + "-" + periodInSchedule.Period_Time_Two}</div>
+                                    <div id="wtf"></div>
                                 </div>
                         })
                         }
@@ -227,13 +228,18 @@ class User extends Component {
                 {
                     !loading && (<React.Fragment>
                         <Header></Header>
-                        <Container className="user-Schedule" fluid>
-                            <button onClick={this.request}>test</button>
-                            <div className="before-schedule">
+                        <Container className="User" fluid>
+                        <span className="show-position">STAFF</span>
+                        <div className="before-schedule">
+                        <p className="stat"><b>STATISTIC</b></p>
+                        <div className="request-schedule">
+                            <button className="b-request" onClick={this.request}>Request</button>
+                            <button className="b-request" style={{marginLeft:10}}>ABSENCE</button>
+                        </div>          
                                 <div id="filter">
-                                    <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
-                                    <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
-                                    <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button>
+                                    <div className="b-static">WORK HOUR:</div>
+                                     <div className="b-static">DONE:</div>
+                                     <div className="b-static">REMAIN:</div>
                                 </div>
                             </div>
                             <div className="request" hidden={this.state.request} onClick={this.cancleRequest}>
@@ -242,11 +248,11 @@ class User extends Component {
                             <Table bordered responsive className="user-schedule">
                                 <thead className='user-name'>
                                     <tr id="user-tr1">
-                                        <th colSpan="16" >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
-                                        <th colSpan="16">Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
+                                        <th colSpan={this.state.block.length/2+1} >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                        <th colSpan={this.state.block.length/2+1}>Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
                                     </tr>
                                     <tr id="user-tr2">
-                                        <th colSpan="32">{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                                        <th colSpan={this.state.block.length+2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
                                     </tr>
                                 </thead>
                                 <tbody className='user-name'>

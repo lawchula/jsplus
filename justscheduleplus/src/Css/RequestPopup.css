@@ -36,6 +36,16 @@
     border-bottom-right-radius: 5px;
     border-bottom-left-radius:  5px;
 }
+.change{
+    position: absolute;
+    left: 46%;
+    right: 20%;
+    top:38%;
+    bottom:25%;
+    z-index: 10;
+    width: 70px;
+    height: 70px;
+}
 .user-request1{
     display: flex;
     flex-direction: column;
@@ -44,20 +54,32 @@
     font-family: Helvetica;
 }
 .request-name{
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
     font-size: 25px;
     font-weight: lighter;
 }
 .date{
-    font-family: Helvetica;
-    font-size: 12.5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
     font-weight: bold;
-    color: #848d95;
+    color: white;
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
+    width: 80px;
+    padding-left: 7.5px;  
+}
+.date2{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    background-image: -webkit-linear-gradient(125deg, #5f51fb 0%, #ae59cb 64%, #fd609b 100%);
+    width: 80px;
+    padding-left: 7.5px;  
 }
 
 .select-request2{
     position: absolute;
-    background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
     margin-top: 5px;
     margin-right: 15px;
     width: auto;
@@ -68,12 +90,11 @@
     border-radius: 5px;
 }
 .request-header1{
-    background-image:linear-gradient(#07889b,#66b9bf);
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
     width: 600px;
     height: 40px;
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
     font-size: 15px;
-    font-weight: lighter;
     color: white;
     text-align: center;
     padding-top: 10px;
@@ -81,12 +102,11 @@
     border-top-right-radius: 5px;
 }
 .request-header2{
-    background-image:linear-gradient(	#FF8C00,orange,#eeaa7b);
+    background-image: -webkit-linear-gradient(125deg, #5f51fb 0%, #ae59cb 64%, #fd609b 100%);
     width: 600px;
     height: 40px;
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
     font-size: 15px;
-    font-weight: lighter;
     color: white;
     text-align: center;
     padding-top: 10px;
@@ -98,4 +118,7 @@
     position: absolute;
     right: 5px;
     top: 5px;
+}
+.req-period{
+    font-family: 'Poppins', sans-serif;
 }

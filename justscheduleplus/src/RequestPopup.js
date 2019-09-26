@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Css/RequestPopup.css';
 import close from './Images/error.png';
 import User from './User';
+import change from './Images/refresh.png';
 
 class RequestPopup extends Component {
 
@@ -151,8 +152,8 @@ class RequestPopup extends Component {
         if (!this.props.show) {
             return null;
         }
-        const period = this.state.period.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="firstCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }}>{event}</span></div> })
-        const newPeriod = this.state.newPeriod.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="secondCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }}>{event}</span></div> })
+        const period = this.state.period.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="firstCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period">{event}</span></div> })
+        const newPeriod = this.state.newPeriod.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="secondCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period" >{event}</span></div> })
 
         return (
             <div>
@@ -171,12 +172,13 @@ class RequestPopup extends Component {
                                     </div>
                                 </div>
                             </div>
+                            <img src={change} className="change"></img>
                             <div className='request-popup_inner2'>
                                 <div className='request-header2'>select only one period
                                 </div>
                                 <div className='user-request1'>
                                     <span className='request-name'>{this.state.userHasBeenReq}</span>
-                                    <span className='date'>{this.state.dateHasBeenReq}</span>
+                                    <span className='date2'>{this.state.dateHasBeenReq}</span>
                                     <div style={{ display: 'flex', flexDirection: 'row', marginTop: 20, marginLeft: -15 }}>
                                         {newPeriod}
                                     </div>

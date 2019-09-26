@@ -8,7 +8,7 @@ import staff from './Images/staff.png';
 import admin from './Images/admin.png';
 
 
-class NewHomePage extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +30,7 @@ class NewHomePage extends Component {
       <div className="Home">
         <Header />
         <div className="home-img">
-            <div class="layer">
+            <div className="layer">
                 <span className="h-t1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
                 <span className="h-t2">MAKE YOUR LIFE EASIER</span>
                 <span className="h-t3">GET START NOW</span>
@@ -80,4 +80,4 @@ class NewHomePage extends Component {
   }
 }
 
-export default NewHomePage;
+export default Home;

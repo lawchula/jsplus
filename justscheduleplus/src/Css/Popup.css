@@ -15,11 +15,11 @@
   left: 18%;
   right: 20%;
   top: 20%;
-  bottom: 25%;
   margin: auto;
   width: 750px;
-  height: "auto";
   background-color: #fafafb;
+  border-radius:5px;
+  /* box-shadow: 0px 0px 2px 3px #808080; */
 }
 .Addbutton {
   margin-left: 285px;
@@ -34,30 +34,24 @@
   height: 30px;
   border-radius: 20px;
 }
-.Advice {
-  color: white;
-  text-align: center;
-  font-size: 65px;
-  background-color: "#66B9BF";
-  height: auto;
+.all{
+  box-shadow: 0px 0px 2px 3px #808080;
+  border-radius: 5px;
 }
-.Advice2 {
-  font-size: 20px;
-  color: white;
-  text-align: center;
-  margin-top: 0px;
-}
+
 .Period {
   background-color: #fafafb;
   height: auto;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .InputPeriod {
   margin-bottom: 15px;
   width: 110px;
   margin-top: 0px;
   border-radius: 5px;
-  border: 0px;
   height: 30px;
+  border: 1px solid 	#C0C0C0;
 }
 #TextField {
   margin-top: 20px;
@@ -74,8 +68,26 @@
   border-radius: 100px;
 }
 .headimg {
-  background-image: linear-gradient(#07889b, #66b9bf);
+  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
+  width: 750px;
   height: 80px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.filter-head-text{
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+.row1{
+  margin-top: 15px;
+  margin-bottom: 8px;
+  margin-left: -20px;
+  color: #6754e2;
+  font-family: 'Poppins', sans-serif;
 }
 .addbutt {
   background-image: linear-gradient(#a7a7a7, orange, #eeaa7b);
@@ -93,7 +105,38 @@
   width: 70px;
 }
 .td1 {
-  background-image: linear-gradient(#ff8c00, orange, #eeaa7b);
+  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
+  font-family: 'Poppins', sans-serif;
   border: 1px solid white;
   text-align: center;
+}
+.tbody{
+  font-family: 'Poppins', sans-serif;
+  background-color: #F5F5F5;
+}
+.add{
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  width: 60px;
+  height: 38px;
+  margin-left: 20px;
+  margin-top: -5px;
+  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
+  border:none;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+.submit{
+  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);
+  font-family: 'Poppins', sans-serif;
+  color: white;  
+  margin-left: 600px;
+  position: "static";
+  font-size: 15px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  border:none;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
 }
