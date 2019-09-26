@@ -85,9 +85,11 @@ class User extends Component {
 
     getSchedules = () => {
         var token = localStorage.getItem('tk');
+        let month = this.state.month;
         const othepram = {
             headers: {
-                tkAuth: token
+                tkAuth: token,
+                month: month
             },
             method: "GET"
         };
@@ -195,7 +197,7 @@ class User extends Component {
     showRequestPopup = () => {
         this.setState({
             showReqPopup: !this.state.showReqPopup,
-            request: true,
+            request: true
         })
     }
 
