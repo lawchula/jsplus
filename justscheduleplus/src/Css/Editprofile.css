@@ -47,7 +47,7 @@
 
 .camerapic {
   width: 45px;
-  position: fixed;
+  position: absolute;
   right: 45%;
   top: 28%;
 }
