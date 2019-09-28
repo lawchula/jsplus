@@ -30,13 +30,10 @@ class Header extends Component {
       name: [],
       dropdownOpen: false,
       loading: true,
-      notificationOpen:false,
-      notification1:[],
-      user1:"Teetuch",
-      user2:"Kaniphit",
-      period:'Morning',
-      date1:"22/09/2019",
-      date2:"23/09/2019"
+      haveNotification: true,
+      notificationOpen: false,
+      notification1: null,
+      notificationAbsent: []
     };
   }
 
@@ -73,11 +70,113 @@ class Header extends Component {
             return response.json();
           })
       ])
+      fetch('http://localhost:8080/notification/absent', otheprams)
+        .then(res => res.json().then(json => {
+          console.log(json)
+          this.setState({notificationAbsent: json})
+        }))
+
       const [name, notification1] = data;
-      this.setState({ name, notification1, loading: false })
+      this.setState({ name, notification1 })
+      let userRequest = [];
+      let userReq = [];
+      this.state.notification1.map(notification => {
+        userRequest.push(notification)
+        if (userRequest[0].name != notification.name && userRequest[0].Request_ID == notification.Request_ID) {
+          userReq.push([userRequest[0], notification]);
+          userRequest = []
+        }
+      })
+      this.setState({ notification1: userReq, loading: false, haveNotification: false })
     } else {
       this.setState({ loading: false })
     }
+  }
+
+  clickApproveExchangeNotification = (notification) => {
+    const Url = 'http://localhost:8080/notification/approve';
+
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        approve: notification
+      }),
+      method: "POST"
+    };
+    fetch(Url, othepram)
+      .then(data => { return data.json() })
+      .then(res => {
+        this.setState({ loading: true, haveNotification: true })
+        this.checkToken();
+        this.props.Schedule();
+      })
+      .catch(error => console.log(error))
+  }
+
+  clickRejectExchangeNotification = (notification) => {
+    const Url = 'http://localhost:8080/notification/reject';
+
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        reject: notification
+      }),
+      method: "POST"
+    };
+    fetch(Url, othepram)
+      .then(data => { return data.json() })
+      .then(res => {
+        this.setState({ loading: true, haveNotification: true })
+        this.checkToken();
+      })
+      .catch(error => console.log(error))
+  }
+
+  clickApproveAbsentNotification = (notification) => {
+    const Url = 'http://localhost:8080/notification/absent/approve';
+
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        approve: notification
+      }),
+      method: "POST"
+    };
+    fetch(Url, othepram)
+      .then(data => { return data.json() })
+      .then(res => {
+        this.setState({ loading: true, haveNotification: true })
+        this.checkToken();
+        this.props.Schedule();
+      })
+      .catch(error => console.log(error))
+  }
+
+  clickRejectAbsentNotification = (notification) => {
+    const Url = 'http://localhost:8080/notification/absent/reject';
+
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        reject: notification
+      }),
+      method: "POST"
+    };
+    fetch(Url, othepram)
+      .then(data => { return data.json() })
+      .then(res => {
+        this.setState({ loading: true, haveNotification: true })
+        this.checkToken();
+      })
+      .catch(error => console.log(error))
   }
 
   showLogin = () => {
@@ -119,20 +218,69 @@ class Header extends Component {
 
   render() {
 
-    const { name, notification1, loading } = this.state
+    const { name, notification1, loading, haveNotification, notificationAbsent } = this.state
     let showname;
     let notification;
-    console.log(notification1)
+    if (!loading) {
+      showname = this.state.name.map((event, key) => {
+        return <NavItem className="header-username">
+          <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} style={{ margin: 0, paddingTop: 2.5 }} id="user-dropdown">
+            <DropdownToggle
+              tag="span"
+              onClick={this.toggle}
+              data-toggle="dropdown"
+              aria-expanded={this.state.dropdownOpen}
+              modifiers={{
+                setMaxHeight: {
+                  enabled: true,
+                  order: 890,
+                  fn: (data) => {
+                    return {
+                      ...data,
+                      styles: {
+                        ...data.styles,
+                        overflow: 'auto',
+                        maxHeight: 100,
+                      },
+                    };
+                  },
+                },
+              }}>
+              <div style={{ display: 'flex' }} >
+                {event.name}
+                <img src={select} className="select" style={{ width: 15, height: 15 }}></img>
+              </div>
+            </DropdownToggle>
+            <DropdownMenu id="user-dropdown-select">
+              <div onClick={this.toggle} className="user-item">
+                <img src={schedule1} className="select2"></img>
+                Schedule
+            </div>
+              <hr className="hr"></hr>
+              <div onClick={this.toggle} className="user-item">
+                <img src={edit} className="select2"></img>
+                Edit profile
+            </div>
+              <hr className="hr"></hr>
+              <div onClick={this.Logout} className="user-item">
+                <img src={signout} className="select2" ></img>
+                Sign out
+            </div>
+            </DropdownMenu>
+          </Dropdown>
+        </NavItem>
+      })
 
-    if(!loading){
-    showname = this.state.name.map((event, key) => {
-      return <NavItem className="header-username">
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} style={{ margin: 0, paddingTop: 2.5 }} id="user-dropdown">
+      notification = <div>
+        <div className="count-notification">
+          1
+    </div>
+        <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
           <DropdownToggle
             tag="span"
-            onClick={this.toggle}
+            onClick={this.openNotification}
             data-toggle="dropdown"
-            aria-expanded={this.state.dropdownOpen}
+            aria-expanded={this.state.notificationOpen}
             modifiers={{
               setMaxHeight: {
                 enabled: true,
@@ -149,74 +297,40 @@ class Header extends Component {
                 },
               },
             }}>
-            <div style={{ display: 'flex' }} >
-              {event.name}
-              <img src={select} className="select" style={{ width: 15, height: 15 }}></img>
-            </div>
+            <img src={Notification} width="25" height="25" ></img>
           </DropdownToggle>
-          <DropdownMenu id="user-dropdown-select">
-            <div onClick={this.toggle} className="user-item">
-              <img src={schedule1} className="select2"></img>
-              Schedule
-            </div>
-            <hr className="hr"></hr>
-            <div onClick={this.toggle} className="user-item">
-              <img src={edit} className="select2"></img>
-              Edit profile
-            </div>
-            <hr className="hr"></hr>
-            <div onClick={this.Logout} className="user-item">
-              <img src={signout} className="select2" ></img>
-              Sign out
-            </div>
+          <DropdownMenu tag="div" className="noti-box">
+
+            {!haveNotification && <React.Fragment>
+              <div className="noti-description">
+                {notification1.map((notification, x) => {
+                  return <div style={{ textAlign: 'center' }}>
+                    <span>{notification[0].name} {notification[0].surname} request to change from {notification[0].Date} {notification[0].Period_Time_One}-{notification[0].Period_Time_Two} with {notification[1].name} {notification[1].surname} {notification[1].Date} {notification[1].Period_Time_One}-{notification[1].Period_Time_Two} </span>
+                    <div style={{ display: 'flex', marginTop: 5, justifyContent: 'center', textAlign: 'center', marginBottom: 10 }}>
+                      <button className="approve" onClick={() => this.clickApproveExchangeNotification(notification)}>Approve</button>
+                      <button className="reject" onClick={() => this.clickRejectExchangeNotification(notification)}>Reject</button>
+                    </div>
+                    <hr style={{ margin: 0, width: 285, marginBottom: 5 }}></hr>
+                  </div>
+                })}
+              </div>
+              <div className="noti-description">
+                {notificationAbsent.map((notification, x) => {
+                  return <div style={{ textAlign: 'center' }}>
+                    <span>{notification.name} {notification.surname} request to Absent {notification.Date} {notification.Period_Time_One}-{notification.Period_Time_Two} </span>
+                    <div style={{ display: 'flex', marginTop: 5, justifyContent: 'center', textAlign: 'center', marginBottom: 10 }}>
+                      <button className="approve" onClick={() => this.clickApproveAbsentNotification(notification)}>Approve</button>
+                      <button className="reject" onClick={() => this.clickRejectAbsentNotification(notification)}>Reject</button>
+                    </div>
+                    <hr style={{ margin: 0, width: 285, marginBottom: 5 }}></hr>
+                  </div>
+                })}
+              </div>
+            </React.Fragment>
+            }
           </DropdownMenu>
         </Dropdown>
-      </NavItem>
-    })
-
-    notification = <div>
-      <div className="count-notification">
-        1
-    </div>
-    <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
-    <DropdownToggle
-      tag="span"
-      onClick={this.openNotification}
-      data-toggle="dropdown"
-      aria-expanded={this.state.notificationOpen}
-      modifiers={{
-        setMaxHeight: {
-          enabled: true,
-          order: 890,
-          fn: (data) => {
-            return {
-              ...data,
-              styles: {
-                ...data.styles,
-                overflow: 'auto',
-                maxHeight: 100,
-              },
-            };
-          },
-          },
-        }}>
-          <img src={Notification} width="25" height="25" ></img>
-      </DropdownToggle>
-      <DropdownMenu tag="div" className="noti-box">
-        <div className="noti-description">
-          
-        {this.state.notification1.map((e) => {return <div style={{textAlign:'center'}}>
-        <span>{this.state.notification1[0].Date}</span>
-        <span>{this.state.notification1[0].Period_Time_One}</span>
-        </div>})}
-        <div style={{display:'flex',marginTop:5}}>
-          <button className="approve">Approve</button> 
-          <button className="reject">Reject</button>
-        </div>
-        </div>
-      </DropdownMenu>
-      </Dropdown>
-    </div>
+      </div>
     }
 
     return (

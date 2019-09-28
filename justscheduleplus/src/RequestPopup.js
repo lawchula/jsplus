@@ -25,7 +25,6 @@ class RequestPopup extends Component {
     }
 
     componentDidMount = () => {
-        console.log("TEST")
         this.receiveRequest();
     }
 
@@ -34,8 +33,6 @@ class RequestPopup extends Component {
         let setPeriod = "";
         let arr = [];
 
-        console.log(this.props.firstScheduleDetail)
-        console.log(this.props.firstUser)
         if (this.props.firstScheduleDetail && this.props.firstUser) {
             {
                 this.props.firstScheduleDetail.map(e => {

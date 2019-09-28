@@ -5,6 +5,7 @@ import { Container } from 'react-grid-system';
 import Header from './Header';
 import * as jwt_decode from 'jwt-decode';
 import RequestPopup from './RequestPopup';
+import RequestAbsent from './RequestAbsent';
 
 class User extends Component {
 
@@ -25,11 +26,15 @@ class User extends Component {
             zIndex2: 0,
             firstScheduleDetail: null,
             secondScheduleDetail: null,
+            userAbsent: null,
+            scheduleAbsentDetail: null,
             firstUser: null,
             secondUser: null,
             request: true,
-            loading: true,
-            showReqPopup: false
+            requestAbsent: true,
+            showReqPopup: false,
+            showReqAbsentPopup: false,
+            loading: true
         }
     }
 
@@ -140,12 +145,30 @@ class User extends Component {
             date.setDate(date.getDate() + 1);
         }
         this.setState({ day: days })
-
     }
+
     request = () => {
         this.setState({
             request: !this.state.request, count: 0
         })
+    }
+
+    clickRequestAbsent = () => {
+        this.setState({
+            requestAbsent: !this.state.requestAbsent, count: 0
+        })
+    }
+
+    showRequestPopup = () => {
+        this.setState({
+            showReqPopup: !this.state.showReqPopup,
+            request: true
+        })
+    }
+
+    showRequestAbsentPopup = () => {
+        this.setState({ showReqAbsentPopup: !this.state.showReqAbsentPopup, 
+            requestAbsent: true })
     }
 
     cancleRequest = () => {
@@ -159,6 +182,15 @@ class User extends Component {
         })
     }
 
+    cancleAbsentRequest = () => {
+        this.setState({
+            userAbsent: null,
+            scheduleAbsentDetail: null,
+            count: 0,
+            showReqAbsentPopup: !this.state.showReqAbsentPopup
+        })
+    }
+
     checkRequest(name, date) {
         const checkCount = this.state.count
         const request = this.state.request
@@ -169,6 +201,8 @@ class User extends Component {
             else {
                 this.setSecondRequest(name, date);
             }
+        } else if (this.state.requestAbsent != true){
+            this.userRequestAbsent(name, date)
         }
     }
 
@@ -183,7 +217,7 @@ class User extends Component {
         })
     }
 
-    setSecondRequest(name,date) {
+    setSecondRequest(name, date) {
         const arr = []
         this.setState({ secondUser: name });
         this.state.schedule.map(e => {
@@ -195,19 +229,24 @@ class User extends Component {
         })
     }
 
-    showRequestPopup = () => {
-        this.setState({
-            showReqPopup: !this.state.showReqPopup,
-            request: true
+    userRequestAbsent(name, date) {
+        const arr = []
+        this.setState({ userAbsent: name });
+        this.state.schedule.map(e => {
+            if (e.User_ID == name.User_ID && e.Date == date) {
+                arr.push(e)
+                this.setState({ scheduleAbsentDetail: arr, count: 0, zIndex2: 6 })
+                this.showRequestAbsentPopup();
+            }
         })
-    }
 
+    }
 
     render() {
         const { loading, count } = this.state
         const users = this.state.user.map((name, user) => {
             return <tr className="test2">
-                <td colSpan="2"  style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} className="user-block">{name.Name}</td>
+                <td colSpan="2" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} className="user-block">{name.Name}</td>
                 {this.state.block.map((date, y) => {
                     return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} onClick={() => this.checkRequest(name, date)}>
                         {this.state.schedule.map(periodInSchedule => {
@@ -228,32 +267,35 @@ class User extends Component {
             <div className="User">
                 {
                     !loading && (<React.Fragment>
-                        <Header></Header>
+                        <Header Schedule={this.getSchedules}></Header>
                         <Container className="User" fluid>
-                        <span className="show-position">STAFF</span>
-                        <div className="before-schedule">
-                        <p className="stat"><b>STATISTIC</b></p>
-                        <div className="request-schedule">
-                            <button className="b-request" onClick={this.request}>Request</button>
-                            <button className="b-request" style={{marginLeft:10}}>ABSENCE</button>
-                        </div>          
+                            <span className="show-position">STAFF</span>
+                            <div className="before-schedule">
+                                <p className="stat"><b>STATISTIC</b></p>
+                                <div className="request-schedule">
+                                    <button className="b-request" onClick={this.request}>Request</button>
+                                    <button className="b-request" onClick={this.clickRequestAbsent} style={{ marginLeft: 10 }}>ABSENCE</button>
+                                </div>
                                 <div id="filter">
                                     <div className="b-static">WORK HOUR:</div>
-                                     <div className="b-static">DONE:</div>
-                                     <div className="b-static">REMAIN:</div>
+                                    <div className="b-static">DONE:</div>
+                                    <div className="b-static">REMAIN:</div>
                                 </div>
                             </div>
                             <div className="request" hidden={this.state.request} onClick={this.cancleRequest}>
 
                             </div>
+                            <div className="request" hidden={this.state.requestAbsent} onClick={this.cancleRequest}>
+
+                            </div>
                             <Table bordered responsive className="user-schedule">
                                 <thead className='user-name'>
                                     <tr id="user-tr1">
-                                        <th colSpan={this.state.block.length/2+1} >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
-                                        <th colSpan={this.state.block.length/2+1}>Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
+                                        <th colSpan={this.state.block.length / 2 + 1} >Company : {this.state.company.map(event => { return <h20>{event.Company_Name}</h20> })}</th>
+                                        <th colSpan={this.state.block.length / 2 + 1}>Department : {this.state.department.map(event => { return <h20>{event.Department_Name}</h20> })} </th>
                                     </tr>
                                     <tr id="user-tr2">
-                                        <th colSpan={this.state.block.length+2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                                        <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
                                     </tr>
                                 </thead>
                                 <tbody className='user-name'>
@@ -271,6 +313,10 @@ class User extends Component {
                                             year={this.state.year}
                                             onClose={this.cancleRequest}></RequestPopup>
                                     }
+                                    {
+                                        this.state.scheduleAbsentDetail &&
+                                        <RequestAbsent show={this.state.showReqAbsentPopup} userAbsent={this.state.userAbsent} scheduleAbsentDetail={this.state.scheduleAbsentDetail}    month={this.state.month}
+                                        year={this.state.year} onClose={this.cancleAbsentRequest}></RequestAbsent>}
                                 </tbody>
                             </Table>
                         </Container>

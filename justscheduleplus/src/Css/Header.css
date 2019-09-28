@@ -157,10 +157,11 @@
     padding-left: 4px;
     justify-content: center;
     align-items: center;
+    
 }
 .noti-box{
     width: 300px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 .approve{
     background-color:#32CD32;

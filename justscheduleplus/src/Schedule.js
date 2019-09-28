@@ -269,7 +269,7 @@ class Schedule extends Component {
 
         return (
             <div className="Schedule">
-                <Header />
+                <Header Schedule = {this.getSchedules}/>
                 <Container className="Schedule" fluid>
                 <span className="show-position">MANAGER</span>
                     <div className="before-schedule">
@@ -358,7 +358,6 @@ class Schedule extends Component {
                       {this.state.edit == false ?  <button className="b-save"  onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> : ""}
                     </div>
                 </Container>
-                {console.log(this.state.block)}
             </div>
         );
     }
