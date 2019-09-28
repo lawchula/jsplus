@@ -19,7 +19,8 @@ class RequestPopup extends Component {
             firstCheckboxValue: '',
             secondCheckboxValue: '',
             requestValue: [],
-            requestID: ''
+            requestID: '',
+            firstValue: ''
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -60,8 +61,17 @@ class RequestPopup extends Component {
     }
 
     handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
+        const { name, value } = e.target
+        if(e.target.checked){
+            this.setState({ [name]: value })
+            if(name !== null){
+                // console.log("PASS")
+            }
+        }else{
+            this.setState({ [name]: "" })
+        }
+        // console.log(name,value)
+       
     }
 
 
@@ -152,9 +162,9 @@ class RequestPopup extends Component {
         if (!this.props.show) {
             return null;
         }
-        const period = this.state.period.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="firstCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period">{event}</span></div> })
-        const newPeriod = this.state.newPeriod.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="secondCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period" >{event}</span></div> })
-
+        const period = this.state.period.map((event) => { return <div style={{ marginLeft: 20 }}><input disabled={ this.state.firstCheckboxValue !== '' && event !== this.state.firstCheckboxValue  ? true : false}  type="checkbox" name="firstCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period">{event}</span></div> })
+        const newPeriod = this.state.newPeriod.map((event) => { return <div style={{ marginLeft: 20 }} ><input disabled={ event == this.state.firstCheckboxValue || this.state.firstCheckboxValue == '' ? true:false} type="checkbox" name="secondCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period" >{event}</span></div> })
+           
         return (
             <div>
                 {
@@ -164,6 +174,7 @@ class RequestPopup extends Component {
                                 <div className='request-header1'>select only one period
                                 <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
                                 </div>
+                                {/* <button onClick={this.test}>test</button> */}
                                 <div className="user-request1">
                                     <span className='request-name'>{this.state.requestUser}</span>
                                     <span className='date'>{this.state.requestdate}</span>
@@ -189,6 +200,7 @@ class RequestPopup extends Component {
                         </div>
                     )
                 }
+                {/* { console.log(this.state.firstCheckboxValue)} */}
             </div>
         )
     }

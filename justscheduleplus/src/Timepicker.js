@@ -37,11 +37,13 @@ class Timepicker extends Component {
             .then((myJson) => {
                 this.setState({ showperiod: myJson })
             });
+           
     }
 
     toggle = () => {
         const { dropdownOpen } = this.state
         this.setState({ dropdownOpen: !dropdownOpen })
+       
     }
 
     dropdownTest() {
@@ -55,6 +57,7 @@ class Timepicker extends Component {
             this.props.AddPeriod(this.state.ShowPeriodOnSchedule)
         })
     }
+
 
     render() {
         return (

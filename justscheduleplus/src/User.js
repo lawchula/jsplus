@@ -31,10 +31,8 @@ class User extends Component {
             firstUser: null,
             secondUser: null,
             request: true,
-            requestAbsent: true,
-            showReqPopup: false,
-            showReqAbsentPopup: false,
-            loading: true
+            loading: true,
+            showReqPopup: false
         }
     }
 
@@ -117,12 +115,23 @@ class User extends Component {
 
     ShowDayColorOnSchedule = (event) => {
         var dayStr = event.substr(event.length - 3)
+        var dayStr1 = event.substr(1,2)
         switch (dayStr) {
             case 'Sat':
                 return "#A9A9A9"
             case 'Sun':
                 return "#A9A9A9"
         }
+        if(dayStr1 == this.state.currentDay ){
+            return "#15da88"
+        }
+    }
+
+    ShowUserColorOnSchedule = (user) => {
+        if(user == 0){
+            return "userloggedcolor"
+        }
+       
     }
 
     setBlock = (month, year) => {
@@ -178,7 +187,8 @@ class User extends Component {
             firstUser: null,
             secondUser: null,
             count: 0,
-            showReqPopup: !this.state.showReqPopup
+            showReqPopup: !this.state.showReqPopup,
+            // request : true
         })
     }
 
@@ -190,11 +200,16 @@ class User extends Component {
             showReqAbsentPopup: !this.state.showReqAbsentPopup
         })
     }
-
-    checkRequest(name, date) {
+    checkRequest(name, date,y) {
         const checkCount = this.state.count
         const request = this.state.request
-        if (request != true) {
+        // if(y < this.state.currentDay){
+        //     alert('Error')
+        //     this.setState({
+        //         request: !this.state.request
+        //     })
+        // }else{
+                    if (request != true) {
             if (checkCount == 0) {
                 this.setFirstRequest(name, date);
             }
@@ -204,6 +219,9 @@ class User extends Component {
         } else if (this.state.requestAbsent != true){
             this.userRequestAbsent(name, date)
         }
+    
+
+        console.log(y)
     }
 
     setFirstRequest(name, date) {
@@ -212,7 +230,7 @@ class User extends Component {
         this.state.schedule.map(e => {
             if (e.User_ID == name.User_ID && e.Date == date) {
                 arr.push(e)
-                this.setState({ firstScheduleDetail: arr, count: 1, zIndex2: 6 })
+                this.setState({ firstScheduleDetail: arr, count: 1, zIndex2: 6})
             }
         })
     }
@@ -246,9 +264,9 @@ class User extends Component {
         const { loading, count } = this.state
         const users = this.state.user.map((name, user) => {
             return <tr className="test2">
-                <td colSpan="2" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} className="user-block">{name.Name}</td>
+                <td colSpan="2"  className={"block" && this.ShowUserColorOnSchedule(user)} style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0)}} >{name.Name}</td>
                 {this.state.block.map((date, y) => {
-                    return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} onClick={() => this.checkRequest(name, date)}>
+                    return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0)  }} onClick={() => this.checkRequest(name, date,y)}>
                         {this.state.schedule.map(periodInSchedule => {
                             if (name.User_ID == periodInSchedule.User_ID && periodInSchedule.Date == date)
                                 return <div id="period-container">

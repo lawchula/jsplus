@@ -79,6 +79,7 @@ width: auto;
     /* background-image: -webkit-linear-gradient(125deg, #5f51fb 0%, #ae59cb 64%, #fd609b 100%); */
     font-family: 'Poppins', sans-serif;
     background-color: #4054b2;
+    
     color: white;
     text-align:center;
 }
@@ -181,5 +182,9 @@ width: auto;
     color: #6754e2;
     background-color: white;
     margin-top: 30px;
+}
+.userloggedcolor{
+    color: black;
+    background-color: #15da88
 }
 

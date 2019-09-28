@@ -29,7 +29,8 @@ class Schedule extends Component {
             TestShow: [],
             edit: false,
             disable: false,
-            addperiodscheduletodb: []
+            addperiodscheduletodb: [],
+            currentDay: new Date().getDate()
         }
     }
 
@@ -155,13 +156,24 @@ class Schedule extends Component {
 
     ShowDayColorOnSchedule = (event) => {
         var dayStr = event.substr(event.length - 3)
+        var dayStr1 = event.substr(1,2)
         switch (dayStr) {
             case 'Sat':
                 return "#A9A9A9"
             case 'Sun':
                 return "#A9A9A9"
         }
+        if(dayStr1 == this.state.currentDay ){
+            return "#15da88"
+        }
     }
+
+    ShowUserColorOnSchedule = (x) => {
+        if(x == 0){
+            return "userloggedcolor"
+        }
+    }
+    
 
     showButtonAfterEdit = () => {
         const { edit } = this.state
@@ -175,7 +187,7 @@ class Schedule extends Component {
 
     AddPeriod = async (PeriodUserClick, x, y, event, e) => {
         this.CloseDropdown();
-
+        console.log(PeriodUserClick)
         const checkSelectedPeriod = this.state.selectSchedule.findIndex(period => {
             return period.Period_ID == PeriodUserClick.Period_ID &&
                 period.User_ID == event.User_ID &&
@@ -265,8 +277,9 @@ class Schedule extends Component {
             .catch(error => console.log(error))
     }
 
-    render() {
 
+    render() {
+        
         return (
             <div className="Schedule">
                 <Header Schedule = {this.getSchedules}/>
@@ -307,7 +320,7 @@ class Schedule extends Component {
                             {this.state.user.map((event, x) => {
                                 return <tr className="test2">
                                     {/* เอาค่า username มาแสดง*/}
-                                    <td colSpan="2">{event.Name}</td>
+                                    <td colSpan="2" className={this.ShowUserColorOnSchedule(x)} >{event.Name}</td>
                                     {/* เอาค่าวันที่มา set เป็นช่อง */}
                                     {this.state.block.map((e, y) => {
                                         return <td style={{ backgroundColor: 'white' }} onClick={() => this.SendMultidimension(x, y)}>
@@ -331,10 +344,10 @@ class Schedule extends Component {
                                                 this.state.showDropdown[0] === x &&
                                                 this.state.showDropdown[1] === y &&
                                                 !this.state.dropdownshouldclose &&
-                                                <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)} />
+                                                <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)}/>
                                                 :
                                                 false}
-                                            {/* เอาค่า period จาก state มาแสดง */}
+                                    
                                             {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
                                                 &&
                                                 this.state.TestShow[`${event.User_ID},${e}`].map((show) =>
