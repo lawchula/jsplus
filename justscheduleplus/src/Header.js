@@ -58,7 +58,7 @@ class Header extends Component {
         } else {
           this.getUserNoti(token, detailtk)
         }
-      }else{
+      } else {
         this.getNewUser(token);
       }
     } else {
@@ -79,10 +79,10 @@ class Header extends Component {
         .then((response) => {
           return response.json();
         })
-      ])
+    ])
 
-      const [name] = data;
-      this.setState({ name, loading: false})
+    const [name] = data;
+    this.setState({ name, loading: false })
   }
 
   getManagerNoti = async (token, detailtk) => {
@@ -125,15 +125,15 @@ class Header extends Component {
         this.setState({ haveNotification: false })
       }
     })
-    this.getManagerAbNoti(otheprams,userReq)
+    this.getManagerAbNoti(otheprams, userReq)
   }
 
-  getManagerAbNoti = async (otheprams,userReq) => {
+  getManagerAbNoti = async (otheprams, userReq) => {
     await fetch('http://localhost:8080/manager/notification/absent', otheprams)
-    .then(res => res.json()
-    .then(json => {
-      this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
-    }))
+      .then(res => res.json()
+        .then(json => {
+          this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
+        }))
     this.setState({ managerNoti: userReq, loading: false })
   }
   getUserNoti = async (token, detailtk) => {
@@ -163,7 +163,7 @@ class Header extends Component {
     ])
 
     const [name, userNotification] = data;
-    this.setState({ name, userNotification, loading: false, userhaveNoti: false, managerNoti: "T"})
+    this.setState({ name, userNotification, loading: false, userhaveNoti: false, managerNoti: "T" })
 
   }
   clickApproveExchangeNotification = (notification) => {
@@ -293,6 +293,26 @@ class Header extends Component {
     window.location.href = "http://localhost:3000/";
   }
 
+  editProifile = () => {
+    window.location.href = "http://localhost:3000/EditProfile"
+  }
+
+  openSchedule = () => {
+    var token = localStorage.getItem('tk');
+    if (token != null && token != "undefined") {
+      var decoded = jwt_decode(token);
+      if (decoded.position != "Manager" || decoded.position == "Admin") {
+        window.location.href = "http://localhost:3000/User";
+      } else {
+        window.location.href = "http://localhost:3000/Schedule";
+      }
+    }
+  }
+
+  homePage = () =>{
+    window.location.href = "http://localhost:3000/";
+  }
+
   render() {
 
     const { name, managerNoti, loading, userNotification, haveNotification, userhaveNoti, managerNotificationAbsent, haveAbsentNoti } = this.state
@@ -329,12 +349,12 @@ class Header extends Component {
               </div>
             </DropdownToggle>
             <DropdownMenu id="user-dropdown-select">
-              <div onClick={this.toggle} className="user-item">
+              <div onClick={this.openSchedule} className="user-item">
                 <img src={schedule1} className="select2"></img>
                 Schedule
             </div>
               <hr className="hr"></hr>
-              <div onClick={this.toggle} className="user-item">
+              <div onClick={this.editProifile} className="user-item">
                 <img src={edit} className="select2"></img>
                 Edit profile
             </div>
@@ -350,15 +370,15 @@ class Header extends Component {
       })
 
       notification = <div>
-        
-        {!userhaveNoti &&   userNotification.length !== 0 ? <div className="count-notification">
-              {userNotification.length}
+
+        {!userhaveNoti && userNotification.length !== 0 ? <div className="count-notification">
+          {userNotification.length}
         </div> : null}
 
-       {!haveNotification || !haveAbsentNoti && managerNoti.length !== 0 && managerNotificationAbsent.length !== 0 ?
-       <div className="count-notification">
-           {managerNoti.length+managerNotificationAbsent.length}
-        </div> : null}
+        {!haveNotification || !haveAbsentNoti && managerNoti.length !== 0 && managerNotificationAbsent.length !== 0 ?
+          <div className="count-notification">
+            {managerNoti.length + managerNotificationAbsent.length}
+          </div> : null}
 
         <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
           <DropdownToggle
@@ -435,7 +455,7 @@ class Header extends Component {
         {
           !loading && (<React.Fragment>
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
-              <div className="JS" ><b>JS</b></div>
+              <div className="JS" onClick = {this.homePage}><b>JS</b></div>
               <div className="Plus" ><b>+</b></div>
               <NavbarToggler onClick={this.navbarOpen} />
               <Collapse isOpen={this.state.isOpen} navbar>
