@@ -74,6 +74,7 @@ class RequestPopup extends Component {
     }
 
     handleChange2 = (event) => {
+        console.log(event)
         if (this.state.checkValue && this.state.checkValues) {
             this.setState({ secondCheckboxValue: event, checkValues: false })
         } else {
@@ -82,24 +83,84 @@ class RequestPopup extends Component {
     }
 
     checkValidateRequest = (click) => {
+        console.log(this.state.newPeriod)
+        let periodUser = '';
+        let periodUse = '';
+        let firstArr = []
+        let secondArr = []
+        let totalArr = []
         let valid = true;
-        let period = this.state.period.length
+        let validate = true;
+        let vali = true;
+        let period = firstArr.length
+        let period2 = secondArr.length
         let allPeriod = this.props.showPeriod.length
+
+
+        this.props.checkReq.map(e => {
+            periodUser =  e.Period_Time_One+"-"+e.Period_Time_Two
+            firstArr.push(periodUser)
+        })
+
+        this.props.checkHasReq.map(n => {
+            periodUse =  n.Period_Time_One+"-"+n.Period_Time_Two
+            secondArr.push(periodUse)
+        })
+
         if(period != allPeriod){
-            this.state.newPeriod.map(e => {
-                if(e == click){
-                    valid = false;
-                }else{
-                    this.setState({ checkRequest: this.state.period, checkValidate: false })
-                }
-            })
+            if(period == 0){
+                firstArr.map(e => {
+                    this.state.newPeriod.map(n => {
+                        if(e == n){
+                            totalArr.push(e)
+                            valid = false;
+                        }else{
+                            this.setState({ checkRequest: firstArr, checkValidate: false })
+                        }
+                    })
+                })
+            }else{
+                this.setState({ checkRequest: firstArr, checkValidate: false })
+            }
         }else{
-            this.setState({ checkRequest: this.state.period, checkValidate: false })
+           this.setState({ checkRequest: firstArr, checkValidate: false })
         }
 
-        if(!valid){
-            this.setState({ checkRequest: this.state.newPeriod, checkValidate: false })
+        if(period2 != allPeriod){
+            if(period2){
+                secondArr.map(e => {
+                    this.state.newPeriod.map(n => {
+                        if(e == n){
+                            totalArr.push(e)
+                            validate = false;
+                        }else{
+                            this.setState({ checkRequest: secondArr, checkValidate: false })
+                        }
+                    })
+                })
+            }else{
+                this.setState({ checkRequest: secondArr, checkValidate: false })
+            }
+        }else{
+            this.setState({ checkRequest: secondArr, checkValidate: false })
         }
+
+        if(!valid && !validate){
+            alert("Can't Change any Period")
+            this.setState({ checkRequest: totalArr, checkValidate: false })
+        }
+        // if(period != allPeriod){
+        //     this.state.newPeriod.map(e => {
+        //         if(e == click){
+        //             valid = false;
+        //         }else{
+        //             this.setState({ checkRequest: this.state.period, checkValidate: false })
+        //         }
+        //     })
+        // }else{
+        //     this.setState({ checkRequest: this.state.period, checkValidate: false })
+        // }
+
     }
 
     insertRequest = () => {
@@ -231,6 +292,9 @@ class RequestPopup extends Component {
             </div>
         })
 
+        console.log("newPeriod : " , newPeriod)
+        console.log("CheckRequest : ", checkRequest)
+        console.log(checkValidate)
         const showNewPeriod = newPeriod.map((event) => {
             let valid = true;
             if(event !== secondCheckboxValue && secondCheckboxValue !== ''){
@@ -250,6 +314,7 @@ class RequestPopup extends Component {
                                 valid = false
                             }
                         })}
+                        {console.log("event : ",event)}
                             <input disabled={!valid} type="checkbox" name="secondCheckboxValue" onClick={() => this.handleChange2(event)} ></input>
                             <span style={{ marginLeft: 10 }} className="req-period" >{event}</span>
                     </React.Fragment>

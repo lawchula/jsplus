@@ -11,6 +11,7 @@ import {
 import './Css/Header.css';
 import Login from './Login';
 import Register from './Register';
+import Schedule from './Schedule';
 import * as jwt_decode from 'jwt-decode';
 import { DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import edit from './Images/edit.png';
@@ -211,7 +212,7 @@ class Header extends Component {
   }
 
   clickApproveAbsentNotification = (notification) => {
-    if (!window.confirm("Do you want to approve this abesnt request?")) return
+    if (!window.confirm("Do you want to approve this absent request?")) return
     const Url = 'http://localhost:8080/notification/absent/approve';
 
     const othepram = {
@@ -234,7 +235,7 @@ class Header extends Component {
   }
 
   clickRejectAbsentNotification = (notification) => {
-    if (!window.confirm("Do you want to reject this abesnt request?")) return
+    if (!window.confirm("Do you want to reject this absent request?")) return
     const Url = 'http://localhost:8080/notification/absent/reject';
 
     const othepram = {

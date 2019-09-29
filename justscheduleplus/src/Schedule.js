@@ -262,6 +262,8 @@ class Schedule extends Component {
     }
 
     DeletePeriodFromDB = (periodinschedule) => {
+        console.log(this.props.managerNotificationAbsent)
+        console.log(this.props.managerNoti)
         if (!window.confirm("Do you want to delete this period!!")) return
         const Url = 'http://localhost:8080/schedule/delete';
 

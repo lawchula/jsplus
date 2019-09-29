@@ -37,7 +37,9 @@ class User extends Component {
             showReqAbsentPopup: false,
             showReqPopup: false,
             showPeriod: [],
-            currentDay: new Date().getDate()
+            currentDay: new Date().getDate(),
+            checkReq: [],
+            checkHasReq: []
         }
     }
 
@@ -258,10 +260,35 @@ class User extends Component {
         this.state.schedule.map(e => {
             if (e.User_ID == name.User_ID && e.Date == date) {
                 arr.push(e)
-                this.setState({ secondScheduleDetail: arr, count: 0, request: false, zIndex: 6, zIndex2: 0 })
-                this.showRequestPopup();
+                this.setState({ secondScheduleDetail: arr})
             }
         })
+
+        this.getPeriodForChange(arr);
+    }
+
+    getPeriodForChange(arr){
+        let userID = this.state.firstScheduleDetail[0].User_ID;
+        let date = arr[0].Date
+        let reqDate = this.state.firstScheduleDetail[0].Date;
+        let reqUserID = arr[0].User_ID
+        let arrays = [];
+        let array = [];
+
+        this.state.schedule.map(period => {
+            if(period.User_ID === userID && period.Date === date){
+                array.push(period)
+            }
+        })
+
+        this.state.schedule.map(period => {
+            if(period.User_ID === reqUserID && period.Date === reqDate){
+                arrays.push(period)
+            }
+        })
+
+        this.setState({ checkReq: array, checkHasReq: arrays,count: 0, request: false, zIndex: 6, zIndex2: 0 })
+        this.showRequestPopup();
     }
 
     userRequestAbsent(name, date) {
@@ -333,7 +360,7 @@ class User extends Component {
                             <div className="request" hidden={this.state.request} onClick={this.cancleRequest}>
 
                             </div>
-                            <div className="request" hidden={this.state.requestAbsent} onClick={this.cancleRequest}>
+                            <div className="request" hidden={this.state.requestAbsent} onClick={this.cancleAbsentRequest}>
 
                             </div>
                             <Table bordered responsive className="user-schedule">
@@ -361,6 +388,8 @@ class User extends Component {
                                             month={this.state.month}
                                             year={this.state.year}
                                             showPeriod={this.state.showPeriod}
+                                            checkReq = {this.state.checkReq} 
+                                            checkHasReq = {this.state.checkHasReq}
                                             onClose={this.cancleRequest}
                                             schedule={this.getSchedules}></RequestPopup>
                                     }
@@ -374,7 +403,6 @@ class User extends Component {
                     </React.Fragment>
                     )
                 }
-               {console.log(this.state.showPeriod)}
             </div>
         );
     }
