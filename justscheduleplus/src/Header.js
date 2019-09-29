@@ -124,15 +124,17 @@ class Header extends Component {
         this.setState({ haveNotification: false })
       }
     })
-
-    await fetch('http://localhost:8080/manager/notification/absent', otheprams)
-      .then(res => res.json().then(json => {
-        console.log(json)
-        this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
-      }))
-    this.setState({ managerNoti: userReq, loading: false })
+    this.getManagerAbNoti(otheprams,userReq)
   }
 
+  getManagerAbNoti = async (otheprams,userReq) => {
+    await fetch('http://localhost:8080/manager/notification/absent', otheprams)
+    .then(res => res.json()
+    .then(json => {
+      this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
+    }))
+    this.setState({ managerNoti: userReq, loading: false })
+  }
   getUserNoti = async (token, detailtk) => {
     const othepram = {
       headers: {

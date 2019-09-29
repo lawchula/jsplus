@@ -15,13 +15,55 @@ class AdminHome extends Component {
       name: "",
       surname: "",
       email: "",
-      telno: ""
+      telno: "",
+      userDetail: null,
+      loading: true
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.checkToken()
+  }
+
+  async checkToken() {
+    var token = localStorage.getItem('sc')
+    var detailtk = localStorage.getItem('tk');
+
+    if (token != null && token != "undefined") {
+      this.getUserDetail(token);
+    } else {
+      window.location.href = 'http://localhost:3000/'
+    }
+  }
+
+  getUserDetail = async (token) => {
+    const othepram = {
+      headers: {
+        tkAuth: token
+      },
+      method: "GET"
+    };
+
+    const data = await Promise.all([
+      fetch('http://localhost:8080/user/profile', othepram)
+        .then((response) => {
+          return response.json();
+        }),
+    ])
+
+    const [userDetail] = data
+    this.setState({ userDetail })
+    this.setProfileDetail();
+
+  }
+  setProfileDetail = () => {
+    let detail = this.state.userDetail
+    this.setState({ name: detail[0].name, surname: detail[0].surname, email: detail[0].Email, telno: detail[0].PhoneNumber,userImg: detail[0].UserPicture, loading: false })
   }
 
   handleChange(e) {
@@ -32,11 +74,29 @@ class AdminHome extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    console.log(this.state.name);
-    console.log(this.state.surname);
-    console.log(this.state.email);
-    console.log(this.state.telno);
-    console.log(this.state.userImg);
+    var token = localStorage.getItem('tk');
+    const Url = 'http://localhost:8080/insert/user/profile';
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8",
+                tkAuth: token
+            },
+            body: JSON.stringify({
+                name: this.state.name,
+                surname: this.state.surname,
+                email: this.state.email,
+                telno: this.state.telno,
+                picture: this.state.userImg,
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram)
+            .then(res => res.json())
+            .then(json => {
+              if(json === "Edit Profile Success"){
+                window.location.href = "http://localhost:3000/"
+              }
+            })
   }
 
   fileSelectedHandler = event => {
@@ -77,101 +137,78 @@ class AdminHome extends Component {
   };
 
   render() {
-    const {
-      userImg,
-      userImgName,
-      userImages,
-      name,
-      surname,
-      email,
-      telno
-    } = this.state;
+    const { userImg, userImgName, userImages, name, surname, email, telno, userDetail, loading } = this.state;
+
     return (
       <div className="EditProfile">
-        <Header />
-        <div className="bodypage">
-          <div className="container">
-            <div className="zindex"></div>
+        {!loading && <React.Fragment>
+          <Header />
+          <div className="bodypage">
+            <div className="container">
+              <div className="zindex"></div>
 
-            <div className="edit-profile">
-              {userImg == "" ? (
-                <img className="edit-userimg" src={user}></img>
-              ) : (
-                <img className="edit-userimg" src={userImg}></img>
-              )}
-            </div>
+              <div className="edit-profile">
+                {userImg == "" ? (<img className="edit-userimg" src={user}></img>) : (<img className="edit-userimg" src={userImg}></img>)}
+              </div>
 
-            <label htmlFor="upload-photo">
-              <img
-                className="camerapic"
-                src="https://i.ibb.co/MGrq4Mt/camera.png"
-              ></img>
-            </label>
-            <span className="selectedfile2">
-              {userImages == null ? "no file selected" : userImgName}
-            </span>
+              <label htmlFor="upload-photo">
+                <img
+                  className="camerapic"
+                  src="https://i.ibb.co/MGrq4Mt/camera.png"
+                ></img>
+              </label>
+              <span className="selectedfile2">
+                {userImages == null ? "no file selected" : userImgName}
+              </span>
 
-            <input
-              type="file"
-              name="photo"
-              id="upload-photo"
-              accept="image/*"
-              onChange={this.fileSelectedHandler}
-            />
-            <button className="upload-image" onClick={this.confirmUploadImage}>
-              Upload
+              <input
+                type="file"
+                name="photo"
+                id="upload-photo"
+                accept="image/*"
+                onChange={this.fileSelectedHandler}
+              />
+              <button className="upload-image" onClick={this.confirmUploadImage}>
+                Upload
             </button>
 
-            <form name="form" onSubmit={this.handleSubmit}>
-              <div className="under">
-                <div className="user-information">
-                  <span className="span">profile</span>
-                  <input
-                    type="text"
-                    className="input-userinfor"
-                    name="name"
-                    placeholder="Name"
-                    value={name}
-                    onChange={this.handleChange}
-                  />
+              <form name="form" onSubmit={this.handleSubmit}>
+                <div className="under">
+                  <div className="user-information">
+                    <span className="span">profile</span>
+                    <input type="text" className="input-userinfor" name="name" placeholder="Name" value={name} onChange={this.handleChange} />
+                    <input type="text" className="input-userinfor" name="surname" placeholder="Surname" value={surname} onChange={this.handleChange} />
 
-                  <input
-                    type="text"
-                    className="input-userinfor"
-                    name="surname"
-                    placeholder="Surname"
-                    value={surname}
-                    onChange={this.handleChange}
-                  />
+                    <input
+                      type="text"
+                      className="input-userinfor"
+                      name="email"
+                      placeholder="E-mail"
+                      value={email}
+                      onChange={this.handleChange}
+                    ></input>
 
-                  <input
-                    type="text"
-                    className="input-userinfor"
-                    name="email"
-                    placeholder="E-mail"
-                    value={email}
-                    onChange={this.handleChange}
-                  />
-
-                  <input
-                    type="text"
-                    className="input-userinfor"
-                    name="telno"
-                    placeholder="Telno."
-                    imageURL="https://i.ibb.co/7JQ9XtS/call-answer.png"
-                    value={telno}
-                    onChange={this.handleChange}
-                  />
+                    <input
+                      type="text"
+                      className="input-userinfor"
+                      name="telno"
+                      placeholder="Telno."
+                      imageURL="https://i.ibb.co/7JQ9XtS/call-answer.png"
+                      value={telno}
+                      onChange={this.handleChange}
+                    />
+                  </div>
                 </div>
-              </div>
-              <br></br>
-              <br></br>
-              <button type="submit" className="confirmbutt">
-                Confirm
+                <br></br>
+                <br></br>
+                <button type="submit" className="confirmbutt">
+                  Confirm
               </button>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        </React.Fragment>
+        }
       </div>
     );
   }

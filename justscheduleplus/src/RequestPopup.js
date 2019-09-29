@@ -89,11 +89,14 @@ class RequestPopup extends Component {
             this.state.newPeriod.map(e => {
                 if(e == click){
                     valid = false;
+                }else{
+                    this.setState({ checkRequest: this.state.period, checkValidate: false })
                 }
             })
         }else{
             this.setState({ checkRequest: this.state.period, checkValidate: false })
         }
+
         if(!valid){
             this.setState({ checkRequest: this.state.newPeriod, checkValidate: false })
         }
