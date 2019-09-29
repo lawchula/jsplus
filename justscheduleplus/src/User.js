@@ -18,6 +18,7 @@ class User extends Component {
             department: [],
             company: [],
             schedule: [],
+            alreadyReq: [],
             block: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
@@ -31,8 +32,11 @@ class User extends Component {
             firstUser: null,
             secondUser: null,
             request: true,
+            requestAbsent: true,
             loading: true,
-            showReqPopup: false
+            showReqAbsentPopup: false,
+            showReqPopup: false,
+            showPeriod: []
         }
     }
 
@@ -86,7 +90,7 @@ class User extends Component {
         this.getSchedules();
     }
 
-    getSchedules = () => {
+    getSchedules = async () => {
         var token = localStorage.getItem('tk');
         let month = this.state.month;
         const othepram = {
@@ -96,13 +100,24 @@ class User extends Component {
             },
             method: "GET"
         };
-        fetch('http://localhost:8080/showschedule', othepram)
-            .then((response) => {
-                return response.json();
-            })
-            .then((myJson) => {
-                this.setState({ schedule: myJson, loading: false })
-            });
+
+        const data = await Promise.all([
+            fetch('http://localhost:8080/showschedule', othepram)
+                .then((response) => {
+                    return response.json();
+                }),
+            fetch('http://localhost:8080/already/request', othepram)
+                .then((response) => {
+                    return response.json();
+                }),
+            fetch("http://localhost:8080/showperiod", othepram)
+                .then(response => {
+                    return response.json();
+                })
+        ])
+
+        const [schedule, alreadyReq, showPeriod] = data
+        this.setState({ schedule, alreadyReq, showPeriod, loading: false })
     }
 
 
@@ -115,23 +130,23 @@ class User extends Component {
 
     ShowDayColorOnSchedule = (event) => {
         var dayStr = event.substr(event.length - 3)
-        var dayStr1 = event.substr(1,2)
+        var dayStr1 = event.substr(1, 2)
         switch (dayStr) {
             case 'Sat':
                 return "#A9A9A9"
             case 'Sun':
                 return "#A9A9A9"
         }
-        if(dayStr1 == this.state.currentDay ){
+        if (dayStr1 == this.state.currentDay) {
             return "#15da88"
         }
     }
 
     ShowUserColorOnSchedule = (user) => {
-        if(user == 0){
+        if (user == 0) {
             return "userloggedcolor"
         }
-       
+
     }
 
     setBlock = (month, year) => {
@@ -176,8 +191,10 @@ class User extends Component {
     }
 
     showRequestAbsentPopup = () => {
-        this.setState({ showReqAbsentPopup: !this.state.showReqAbsentPopup, 
-            requestAbsent: true })
+        this.setState({
+            showReqAbsentPopup: !this.state.showReqAbsentPopup,
+            requestAbsent: true
+        })
     }
 
     cancleRequest = () => {
@@ -187,8 +204,8 @@ class User extends Component {
             firstUser: null,
             secondUser: null,
             count: 0,
-            showReqPopup: !this.state.showReqPopup,
-            // request : true
+            showReqPopup: false,
+            request: true
         })
     }
 
@@ -197,10 +214,11 @@ class User extends Component {
             userAbsent: null,
             scheduleAbsentDetail: null,
             count: 0,
-            showReqAbsentPopup: !this.state.showReqAbsentPopup
+            showReqAbsentPopup: false,
+            requestAbsent: true
         })
     }
-    checkRequest(name, date,y) {
+    checkRequest(name, date, y) {
         const checkCount = this.state.count
         const request = this.state.request
         // if(y < this.state.currentDay){
@@ -209,19 +227,16 @@ class User extends Component {
         //         request: !this.state.request
         //     })
         // }else{
-                    if (request != true) {
+        if (request != true) {
             if (checkCount == 0) {
                 this.setFirstRequest(name, date);
             }
             else {
                 this.setSecondRequest(name, date);
             }
-        } else if (this.state.requestAbsent != true){
+        } else if (this.state.requestAbsent != true) {
             this.userRequestAbsent(name, date)
         }
-    
-
-        console.log(y)
     }
 
     setFirstRequest(name, date) {
@@ -230,7 +245,7 @@ class User extends Component {
         this.state.schedule.map(e => {
             if (e.User_ID == name.User_ID && e.Date == date) {
                 arr.push(e)
-                this.setState({ firstScheduleDetail: arr, count: 1, zIndex2: 6})
+                this.setState({ firstScheduleDetail: arr, count: 1, zIndex2: 6 })
             }
         })
     }
@@ -261,12 +276,12 @@ class User extends Component {
     }
 
     render() {
-        const { loading, count } = this.state
+        const { loading, count, alreadyReq } = this.state
         const users = this.state.user.map((name, user) => {
             return <tr className="test2">
-                <td colSpan="2"  className={"block" && this.ShowUserColorOnSchedule(user)} style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0)}} >{name.Name}</td>
+                <td colSpan="2" className={"block" && this.ShowUserColorOnSchedule(user)} style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} >{name.Name}</td>
                 {this.state.block.map((date, y) => {
-                    return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0)  }} onClick={() => this.checkRequest(name, date,y)}>
+                    return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} onClick={() => this.checkRequest(name, date, y)}>
                         {this.state.schedule.map(periodInSchedule => {
                             if (name.User_ID == periodInSchedule.User_ID && periodInSchedule.Date == date)
                                 return <div id="period-container">
@@ -323,18 +338,21 @@ class User extends Component {
                                     {
                                         this.state.secondScheduleDetail &&
                                         <RequestPopup show={this.state.showReqPopup}
+                                            alreadyReq={this.state.alreadyReq}
                                             firstScheduleDetail={this.state.firstScheduleDetail}
                                             secondScheduleDetail={this.state.secondScheduleDetail}
                                             firstUser={this.state.firstUser}
                                             secondUser={this.state.secondUser}
                                             month={this.state.month}
                                             year={this.state.year}
-                                            onClose={this.cancleRequest}></RequestPopup>
+                                            showPeriod={this.state.showPeriod}
+                                            onClose={this.cancleRequest}
+                                            schedule={this.getSchedules}></RequestPopup>
                                     }
                                     {
                                         this.state.scheduleAbsentDetail &&
-                                        <RequestAbsent show={this.state.showReqAbsentPopup} userAbsent={this.state.userAbsent} scheduleAbsentDetail={this.state.scheduleAbsentDetail}    month={this.state.month}
-                                        year={this.state.year} onClose={this.cancleAbsentRequest}></RequestAbsent>}
+                                        <RequestAbsent show={this.state.showReqAbsentPopup} alreadyReq={this.state.alreadyReq} userAbsent={this.state.userAbsent} scheduleAbsentDetail={this.state.scheduleAbsentDetail} month={this.state.month}
+                                            year={this.state.year} onClose={this.cancleAbsentRequest} schedule={this.getSchedules}></RequestAbsent>}
                                 </tbody>
                             </Table>
                         </Container>

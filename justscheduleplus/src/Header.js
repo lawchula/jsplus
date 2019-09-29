@@ -11,6 +11,7 @@ import {
 import './Css/Header.css';
 import Login from './Login';
 import Register from './Register';
+import * as jwt_decode from 'jwt-decode';
 import { DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import edit from './Images/edit.png';
 import signout from './Images/signout.png';
@@ -31,9 +32,12 @@ class Header extends Component {
       dropdownOpen: false,
       loading: true,
       haveNotification: true,
+      haveAbsentNoti: true,
       notificationOpen: false,
-      notification1: null,
-      notificationAbsent: []
+      userhaveNoti: true,
+      managerNoti: [],
+      managerNotificationAbsent: [],
+      userNotification: []
     };
   }
 
@@ -41,59 +45,126 @@ class Header extends Component {
     this.checkToken();
   }
 
-  checkToken = async () => {
+  checkToken = () => {
     let token = localStorage.getItem('sc');
     let detailtk = localStorage.getItem('tk');
 
     if (token != null && token != "undefined") {
-      const othepram = {
-        headers: {
-          tkAuth: token
-        },
-        method: "GET"
-      };
-
-      const otheprams = {
-        headers: {
-          tkAuth: detailtk
-        },
-        method: "GET"
-      };
-
-      const data = await Promise.all([
-        fetch('http://localhost:8080/name', othepram)
-          .then((response) => {
-            return response.json();
-          }),
-        fetch('http://localhost:8080/notification', otheprams)
-          .then((response) => {
-            return response.json();
-          })
-      ])
-      fetch('http://localhost:8080/notification/absent', otheprams)
-        .then(res => res.json().then(json => {
-          console.log(json)
-          this.setState({notificationAbsent: json})
-        }))
-
-      const [name, notification1] = data;
-      this.setState({ name, notification1 })
-      let userRequest = [];
-      let userReq = [];
-      this.state.notification1.map(notification => {
-        userRequest.push(notification)
-        if (userRequest[0].name != notification.name && userRequest[0].Request_ID == notification.Request_ID) {
-          userReq.push([userRequest[0], notification]);
-          userRequest = []
+      if (detailtk != null && detailtk != "undefined") {
+        var decoded = jwt_decode(detailtk)
+        if (decoded.position === "Manager") {
+          this.getManagerNoti(token, detailtk)
+        } else {
+          this.getUserNoti(token, detailtk)
         }
-      })
-      this.setState({ notification1: userReq, loading: false, haveNotification: false })
+      }else{
+        this.getNewUser(token);
+      }
     } else {
       this.setState({ loading: false })
     }
   }
 
+  getNewUser = async (token) => {
+    const othepram = {
+      headers: {
+        tkAuth: token
+      },
+      method: "GET"
+    };
+
+    const data = await Promise.all([
+      fetch('http://localhost:8080/name', othepram)
+        .then((response) => {
+          return response.json();
+        })
+      ])
+
+      const [name] = data;
+      this.setState({ name, loading: false})
+  }
+
+  getManagerNoti = async (token, detailtk) => {
+    let userRequest = [];
+    let userReq = [];
+
+    const othepram = {
+      headers: {
+        tkAuth: token
+      },
+      method: "GET"
+    };
+
+    const otheprams = {
+      headers: {
+        tkAuth: detailtk
+      },
+      method: "GET"
+    };
+
+    const data = await Promise.all([
+      fetch('http://localhost:8080/name', othepram)
+        .then((response) => {
+          return response.json();
+        }),
+      fetch('http://localhost:8080/manager/notification', otheprams)
+        .then((response) => {
+          return response.json();
+        })
+    ])
+
+    const [name, managerNoti] = data;
+    this.setState({ name, managerNoti })
+
+    this.state.managerNoti.map(notification => {
+      userRequest.push(notification)
+      if (userRequest[0].name != notification.name && userRequest[0].Request_ID == notification.Request_ID) {
+        userReq.push([userRequest[0], notification]);
+        userRequest = []
+        this.setState({ haveNotification: false })
+      }
+    })
+
+    await fetch('http://localhost:8080/manager/notification/absent', otheprams)
+      .then(res => res.json().then(json => {
+        console.log(json)
+        this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
+      }))
+    this.setState({ managerNoti: userReq, loading: false })
+  }
+
+  getUserNoti = async (token, detailtk) => {
+    const othepram = {
+      headers: {
+        tkAuth: token
+      },
+      method: "GET"
+    };
+
+    const otheprams = {
+      headers: {
+        tkAuth: detailtk
+      },
+      method: "GET"
+    };
+
+    const data = await Promise.all([
+      fetch('http://localhost:8080/name', othepram)
+        .then((response) => {
+          return response.json();
+        }),
+      fetch('http://localhost:8080/user/notification', otheprams)
+        .then((response) => {
+          return response.json();
+        })
+    ])
+
+    const [name, userNotification] = data;
+    this.setState({ name, userNotification, loading: false, userhaveNoti: false, managerNoti: "T"})
+
+  }
   clickApproveExchangeNotification = (notification) => {
+    if (!window.confirm("Do you want to approve this request?")) return
     const Url = 'http://localhost:8080/notification/approve';
 
     const othepram = {
@@ -116,6 +187,7 @@ class Header extends Component {
   }
 
   clickRejectExchangeNotification = (notification) => {
+    if (!window.confirm("Do you want to reject this request?")) return
     const Url = 'http://localhost:8080/notification/reject';
 
     const othepram = {
@@ -137,6 +209,7 @@ class Header extends Component {
   }
 
   clickApproveAbsentNotification = (notification) => {
+    if (!window.confirm("Do you want to approve this abesnt request?")) return
     const Url = 'http://localhost:8080/notification/absent/approve';
 
     const othepram = {
@@ -159,6 +232,7 @@ class Header extends Component {
   }
 
   clickRejectAbsentNotification = (notification) => {
+    if (!window.confirm("Do you want to reject this abesnt request?")) return
     const Url = 'http://localhost:8080/notification/absent/reject';
 
     const othepram = {
@@ -218,7 +292,7 @@ class Header extends Component {
 
   render() {
 
-    const { name, notification1, loading, haveNotification, notificationAbsent } = this.state
+    const { name, managerNoti, loading, userNotification, haveNotification, userhaveNoti, managerNotificationAbsent, haveAbsentNoti } = this.state
     let showname;
     let notification;
     if (!loading) {
@@ -268,6 +342,7 @@ class Header extends Component {
             </div>
             </DropdownMenu>
           </Dropdown>
+
         </NavItem>
       })
 
@@ -300,10 +375,10 @@ class Header extends Component {
             <img src={Notification} width="25" height="25" ></img>
           </DropdownToggle>
           <DropdownMenu tag="div" className="noti-box">
-
+            {managerNoti.length == 0 && managerNotificationAbsent.length == 0 ? <span className="empty-noti">This notification box is empty</span> : null}
             {!haveNotification && <React.Fragment>
               <div className="noti-description">
-                {notification1.map((notification, x) => {
+                {managerNoti.map((notification) => {
                   return <div style={{ textAlign: 'center' }}>
                     <span>{notification[0].name} {notification[0].surname} request to change from {notification[0].Date} {notification[0].Period_Time_One}-{notification[0].Period_Time_Two} with {notification[1].name} {notification[1].surname} {notification[1].Date} {notification[1].Period_Time_One}-{notification[1].Period_Time_Two} </span>
                     <div style={{ display: 'flex', marginTop: 5, justifyContent: 'center', textAlign: 'center', marginBottom: 10 }}>
@@ -314,8 +389,11 @@ class Header extends Component {
                   </div>
                 })}
               </div>
+            </React.Fragment>
+            }
+            {!haveAbsentNoti && <React.Fragment>
               <div className="noti-description">
-                {notificationAbsent.map((notification, x) => {
+                {managerNotificationAbsent.map((notification) => {
                   return <div style={{ textAlign: 'center' }}>
                     <span>{notification.name} {notification.surname} request to Absent {notification.Date} {notification.Period_Time_One}-{notification.Period_Time_Two} </span>
                     <div style={{ display: 'flex', marginTop: 5, justifyContent: 'center', textAlign: 'center', marginBottom: 10 }}>
@@ -326,8 +404,17 @@ class Header extends Component {
                   </div>
                 })}
               </div>
-            </React.Fragment>
-            }
+            </React.Fragment>}
+            {!userhaveNoti && <React.Fragment>
+              {userNotification.map((noti) => {
+                return <div style={{ textAlign: 'center' }}>
+                  <span>{noti.name} {noti.surname} {noti.Notification_Description} Date {noti.Date}/{noti.Month} : {noti.Period_Time_One}-{noti.Period_Time_Two} </span>
+                  <div style={{ display: 'flex', marginTop: 5, justifyContent: 'center', textAlign: 'center', marginBottom: 10 }}>
+                  </div>
+                  <hr style={{ margin: 0, width: 285, marginBottom: 5 }}></hr>
+                </div>
+              })}
+            </React.Fragment>}
           </DropdownMenu>
         </Dropdown>
       </div>

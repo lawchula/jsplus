@@ -11,15 +11,25 @@ class RequestAbsent extends Component {
             userRequestAbsent: '',
             dateRequestAbsent: '',
             period: [],
-            absentDescription: [],
+            absentDescription: '',
             loading: true,
+            checkValue: true,
             requestValue: [],
-            checkboxValue: []
+            checkboxValue: ''
         }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChanges = this.handleChanges.bind(this);
     }
 
-    handleChange(e) {
+    handleChange(event) {
+        let check = this.state.checkValue
+        if (check) {
+            this.setState({ checkboxValue: event, checkValue: false })
+        } else {
+            this.setState({ checkboxValue: '', checkValue: true })
+        }
+    }
+
+    handleChanges(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
@@ -46,17 +56,31 @@ class RequestAbsent extends Component {
     }
 
     insertRequest = () => {
-        let arr = [];
-        let a = '';
-        let value = this.state.checkboxValue.substring(0, 5)
-        let values = this.state.checkboxValue.substring(6, 11)
-        arr.push(value, values)
+        if (this.state.checkboxValue !== '' && this.state.absentDescription !== '') {
+            if (!window.confirm("Do you want to Request to absent?")) return
+            let arr = [];
+            let a = '';
+            let value = this.state.checkboxValue.substring(0, 5)
+            let values = this.state.checkboxValue.substring(6, 11)
+            let validate = ''
+            let check = true;
+            arr.push(value, values)
 
-        this.props.scheduleAbsentDetail.map(schedule => {
-            if (arr[0] == schedule.Period_Time_One && arr[1] == schedule.Period_Time_Two) {
-                a = schedule.Schedule_ID
-                this.state.requestValue.push(a)
+            this.props.scheduleAbsentDetail.map(schedule => {
+                if (arr[0] == schedule.Period_Time_One && arr[1] == schedule.Period_Time_Two) {
+                    a = schedule.Schedule_ID
+                    this.state.requestValue.push(a)
+                }
+            })
 
+            this.props.alreadyReq.map(e => {
+                if (e.Schedule_ID === this.state.requestValue[0]) {
+                    validate = "Period has been request to Manager Already!!!!"
+                    check = false;
+                }
+            })
+
+            if (check) {
                 const Url = 'http://localhost:8080/request/absent';
                 const othepram = {
                     headers: {
@@ -76,8 +100,12 @@ class RequestAbsent extends Component {
                             this.insertNotification();
                         }
                     })
+            } else {
+                alert(validate)
             }
-        })
+        } else {
+            alert("Please select Period to Absent!!!")
+        }
     }
 
     insertNotification = () => {
@@ -98,6 +126,7 @@ class RequestAbsent extends Component {
             .then(res => res.json())
             .then(json => {
                 if (json == "Request Success") {
+                    alert("Request Success")
                     this.onClose();
                 }
             })
@@ -107,16 +136,17 @@ class RequestAbsent extends Component {
         if (this.props.onClose !== undefined) {
             this.setState({ userRequestAbsent: '', dateRequestAbsent: '', absentDescription: [], period: [], loading: true, checkboxValue: '', requestValue: [] })
             this.props.onClose(e)
+            this.props.schedule(e);
         }
     }
 
 
     render() {
-        const { loading, absentDescription } = this.state
+        const { loading, absentDescription, period, dateRequestAbsent, userRequestAbsent, checkboxValue, checkValue } = this.state
         if (!this.props.show) {
             return null;
         }
-        const period = this.state.period.map((event) => { return <div style={{ marginLeft: 20 }}><input type="checkbox" name="checkboxValue" value={event} onChange={this.handleChange} ></input><span style={{ marginLeft: 10 }}>{event}</span></div> })
+        const showPeriod = period.map((event) => { return <div style={{ marginLeft: 20 }}><input disabled={!checkValue && event !== checkboxValue} type="checkbox" onClick={() => this.handleChange(event)} ></input><span style={{ marginLeft: 10 }}>{event}</span></div> })
 
         return (
 
@@ -128,22 +158,13 @@ class RequestAbsent extends Component {
                 <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
                             </div>
                             <div className='user-request1-absent'>
-                                <span className='request-name-absent'>{this.state.userRequestAbsent}</span>
-                                <span className='date-absent'>{this.state.dateRequestAbsent}</span>
+                                <span className='request-name-absent'>{userRequestAbsent}</span>
+                                <span className='date-absent'>{dateRequestAbsent}</span>
                                 <div style={{ display: 'flex', flexDirection: 'row', marginTop: 20, marginLeft: -15 }}>
-                                    {period}
+                                    {showPeriod}
                                 </div>
                                 <div style={{ display: 'flex', marginTop: 15 }}>
                                     <span className="givereason">Please specific reason :</span>
-                                    {/* <select className="type">
-                                        <option>Excused Absences</option>
-                                        <option>Sick Time</option>
-                                        <option>Personal Time</option>
-                                        <option>Vacation Days</option>
-                                        <option>Family and Medical Leave</option>
-                                        <option>Bereavement or Sympathy Leave</option>
-                                        <option>Jury Duty</option>
-                                    </select> */}
                                 </div>
                                 <TextField
                                     id="outlined-multiline-flexible"
@@ -156,7 +177,7 @@ class RequestAbsent extends Component {
                                     rowsMax="5"
                                     name="absentDescription"
                                     value={absentDescription}
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChanges}
                                 />
                                 <button className="select-request2-absent" onClick={this.insertRequest}>Request</button>
                             </div>

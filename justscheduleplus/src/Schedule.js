@@ -18,19 +18,20 @@ class Schedule extends Component {
             department: [],
             company: [],
             selectSchedule: [],
-            year: new Date().getFullYear(),
-            month: new Date().getMonth(),
-            countday: new Date().getDay(),
-            show: false,
             block: [],
-            showDropdown: -1,
             ShowPeriodAfterUserClick: [],
-            dropdownshouldclose: false,
             TestShow: [],
+            addperiodscheduletodb: [],
+            showPeriod: [],
+            showDropdown: -1,
+            show: false,
+            dropdownshouldclose: false,
             edit: false,
             disable: false,
-            addperiodscheduletodb: [],
-            currentDay: new Date().getDate()
+            currentDay: new Date().getDate(),
+            year: new Date().getFullYear(),
+            month: new Date().getMonth(),
+            countday: new Date().getDay()
         }
     }
 
@@ -45,7 +46,7 @@ class Schedule extends Component {
         var token = localStorage.getItem('tk');
         if (token == null || token == "undefined") {
             window.location.href = "http://localhost:3000/";
-        } else if (token !=  null && token != "undefined") {
+        } else if (token != null && token != "undefined") {
             var decoded = jwt_decode(token);
             if (decoded.position != "Manager" || decoded.position == "Admin") {
                 window.location.href = "http://localhost:3000/User";
@@ -77,10 +78,14 @@ class Schedule extends Component {
                 .then((response) => {
                     return response.json();
                 }),
+            fetch("http://localhost:8080/showperiod", othepram)
+                .then(response => {
+                    return response.json();
+                })
         ])
 
-        const [user, company, department] = data
-        this.setState({ user, company, department })
+        const [user, company, department,showPeriod] = data
+        this.setState({ user, company, department,showPeriod })
 
         this.getSchedules();
     }
@@ -156,24 +161,24 @@ class Schedule extends Component {
 
     ShowDayColorOnSchedule = (event) => {
         var dayStr = event.substr(event.length - 3)
-        var dayStr1 = event.substr(1,2)
+        var dayStr1 = event.substr(1, 2)
         switch (dayStr) {
             case 'Sat':
                 return "#A9A9A9"
             case 'Sun':
                 return "#A9A9A9"
         }
-        if(dayStr1 == this.state.currentDay ){
+        if (dayStr1 == this.state.currentDay) {
             return "#15da88"
         }
     }
 
     ShowUserColorOnSchedule = (x) => {
-        if(x == 0){
+        if (x == 0) {
             return "userloggedcolor"
         }
     }
-    
+
 
     showButtonAfterEdit = () => {
         const { edit } = this.state
@@ -187,7 +192,6 @@ class Schedule extends Component {
 
     AddPeriod = async (PeriodUserClick, x, y, event, e) => {
         this.CloseDropdown();
-        console.log(PeriodUserClick)
         const checkSelectedPeriod = this.state.selectSchedule.findIndex(period => {
             return period.Period_ID == PeriodUserClick.Period_ID &&
                 period.User_ID == event.User_ID &&
@@ -279,12 +283,12 @@ class Schedule extends Component {
 
 
     render() {
-        
+
         return (
             <div className="Schedule">
-                <Header Schedule = {this.getSchedules}/>
+                <Header Schedule={this.getSchedules} />
                 <Container className="Schedule" fluid>
-                <span className="show-position">MANAGER</span>
+                    <span className="show-position">MANAGER</span>
                     <div className="before-schedule">
                         <p className="stat"><b>STATISTIC</b></p>
                         <div className="stat-schedule">
@@ -304,12 +308,12 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr id="tr1">
-                                <th colSpan={this.state.block.length/2} >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span>})}</th>
-                                <th colSpan={this.state.block.length/2}>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
+                                <th colSpan={this.state.block.length / 2} >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
+                                <th colSpan={this.state.block.length / 2}>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
                                 <td colSpan="2" style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
                             <tr id="tr2">
-                                <th colSpan={this.state.block.length+2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                                <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -344,10 +348,10 @@ class Schedule extends Component {
                                                 this.state.showDropdown[0] === x &&
                                                 this.state.showDropdown[1] === y &&
                                                 !this.state.dropdownshouldclose &&
-                                                <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)}/>
+                                                <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)} />
                                                 :
                                                 false}
-                                    
+
                                             {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
                                                 &&
                                                 this.state.TestShow[`${event.User_ID},${e}`].map((show) =>
@@ -366,9 +370,9 @@ class Schedule extends Component {
                             })}
                         </tbody>
                     </Table>
-                    <div style={{ display: "flex", float: 'right' }}>  
-                        {this.state.edit &&  <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
-                      {this.state.edit == false ?  <button className="b-save"  onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> : ""}
+                    <div style={{ display: "flex", float: 'right' }}>
+                        {this.state.edit && <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
+                        {this.state.edit == false ? <button className="b-save" onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> : ""}
                     </div>
                 </Container>
             </div>

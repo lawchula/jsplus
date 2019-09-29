@@ -16,7 +16,8 @@ class Login extends React.Component {
       submitted: false,
       showregis: false,
       loginFail: [],
-      shake:'login-popup_inner'
+      shake: 'login-popup_inner',
+      submittedValid: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,35 +31,37 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    this.setState({ submitted: true,shake: 'login-popup_inner-shake' })
     const { username, password } = this.state;
+    this.setState({shake: 'login-popup_inner'})
     if (username !== '' && password !== '') {
-      this.setState({ submitted: false,shake: 'login-popup_inner'})
+      this.setState({ submitted: false, submittedValid: false })
+
+      const Url = 'http://localhost:8080/users/authenticate';
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          username: this.state.username,
+          password: this.state.password
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(res => res.json())
+        .then(json => {
+          if (json == "Wrong Username or Password") {
+            this.setState({ loginFail: json, shake: 'login-popup_inner-shake', username: '', password: '', submittedValid: true })
+          } else {
+            localStorage.setItem('sc', json.sc);
+            this.requestToken();
+          }
+        });
+    } else {
+      this.setState({ submitted: true, shake: 'login-popup_inner-shake' })
     }
-    
-    const Url = 'http://localhost:8080/users/authenticate';
-    const othepram = {
-      headers: {
-        "content-type": "application/json; charset=UTF-8"
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      }),
-      method: "POST"
-    };
-    fetch(Url, othepram)
-      .then(res => res.json())
-      .then(json => {
-        if (json == "Wrong Username or Password") {
-          this.setState({loginFail: json, shake: 'login-popup_inner', username: '', password: ''})
-        } else {
-          localStorage.setItem('sc', json.sc);
-          this.requestToken();
-        }
-      });
   }
-  
+
   requestToken = () => {
     const Url = 'http://localhost:8080/users/requesttk';
     const othepram = {
@@ -99,7 +102,7 @@ class Login extends React.Component {
     if (this.props.onClose !== undefined) {
       this.props.onClose(e)
     }
-    this.setState({loginFail:[],shake:'login-popup_inner',submitted:false})
+    this.setState({ loginFail: [], shake: 'login-popup_inner', submitted: false })
   }
 
   popUpRegister = (e) => {
@@ -112,10 +115,8 @@ class Login extends React.Component {
     if (!this.props.show) {
       return null;
     }
+    const { username, password, submitted, loginFail, submittedValid } = this.state;
 
-    const { loggingIn } = this.props;
-    const { username, password, submitted,loginFail } = this.state;
-    
     return (
       <div className="login-popup">
         <div className={this.state.shake}>
@@ -133,10 +134,10 @@ class Login extends React.Component {
                 <div className="help-block">Username is required</div>
               }
               <input type="password" className="password" name="password" placeholder="Password" value={password} onChange={this.handleChange}></input>
-              {submitted == true && password == '' ?
+              {submitted && password == '' ?
                 <div className="help-block">Password is required</div> : ''
               }
-               {loginFail.length > 0 && username !== '' && password !== '' ? <div className="help-block">Username or password is incorrect</div> : ''}
+              {submittedValid && loginFail.length > 0 && !username && <div className="help-block">Username or password is incorrect</div>}
               <div className="remember">
                 <input type="checkbox"  ></input>
                 <span className="remember-text">Remember me</span>

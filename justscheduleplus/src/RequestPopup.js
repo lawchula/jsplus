@@ -20,9 +20,13 @@ class RequestPopup extends Component {
             secondCheckboxValue: '',
             requestValue: [],
             requestID: '',
-            firstValue: ''
+            firstValue: '',
+            checkRequest: [],
+            checkValue: false,
+            checkValues: true,
+            checkValidate: true,
+            allperiod: []
         }
-        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount = () => {
@@ -60,50 +64,90 @@ class RequestPopup extends Component {
         }
     }
 
-    handleChange(e) {
-        const { name, value } = e.target
-        if(e.target.checked){
-            this.setState({ [name]: value })
-            if(name !== null){
-                // console.log("PASS")
-            }
-        }else{
-            this.setState({ [name]: "" })
+    handleChange = (click) => {
+        if (!this.state.checkValue) {
+            this.setState({ firstCheckboxValue: click, checkValue: true })
+            this.checkValidateRequest(click);
+        } else {
+            this.setState({ firstCheckboxValue: '', secondCheckboxValue: '', checkValue: false, checkValues: true, checkValidate: true })
         }
-        // console.log(name,value)
-       
     }
 
+    handleChange2 = (event) => {
+        if (this.state.checkValue && this.state.checkValues) {
+            this.setState({ secondCheckboxValue: event, checkValues: false })
+        } else {
+            this.setState({ secondCheckboxValue: '', checkValues: true })
+        }
+    }
+
+    checkValidateRequest = (click) => {
+        let valid = true;
+        let period = this.state.period.length
+        let allPeriod = this.props.showPeriod.length
+        if(period != allPeriod){
+            this.state.newPeriod.map(e => {
+                if(e == click){
+                    valid = false;
+                }
+            })
+        }else{
+            this.setState({ checkRequest: this.state.period, checkValidate: false })
+        }
+        if(!valid){
+            this.setState({ checkRequest: this.state.newPeriod, checkValidate: false })
+        }
+    }
 
     insertRequest = () => {
-        if (!window.confirm("Do you want to delete this period!!")) return
-        let done = false;
-        let arr = [];
-        let value = this.state.firstCheckboxValue.substring(0, 5)
-        let values = this.state.firstCheckboxValue.substring(6, 11)
-        let a = '';
-        let b = '';
-        arr.push(value, values)
-
-        Boolean(done);
-
-        this.props.firstScheduleDetail.map(schedule => {
-            if (arr[0] == schedule.Period_Time_One && arr[1] == schedule.Period_Time_Two) {
-                a = schedule.Schedule_ID
-                done = true
-            }
-        })
-
-        if (done) {
-            arr = []
-            value = this.state.secondCheckboxValue.substring(0, 5)
-            values = this.state.secondCheckboxValue.substring(6, 11)
+        if (this.state.firstCheckboxValue != '' && this.state.secondCheckboxValue != '') {
+            if (!window.confirm("Do you want to Request to change Schedule?")) return
+            let done = false;
+            let check = true;
+            let validate = '';
+            let validates = '';
+            let arr = [];
+            let value = this.state.firstCheckboxValue.substring(0, 5)
+            let values = this.state.firstCheckboxValue.substring(6, 11)
+            let a = '';
+            let b = '';
             arr.push(value, values)
-            this.props.secondScheduleDetail.map(schedules => {
-                if (arr[0] == schedules.Period_Time_One && arr[1] == schedules.Period_Time_Two) {
-                    b = schedules.Schedule_ID
-                    this.state.requestValue.push(a, b)
 
+            Boolean(done);
+
+            this.props.firstScheduleDetail.map(schedule => {
+                if (arr[0] == schedule.Period_Time_One && arr[1] == schedule.Period_Time_Two) {
+                    a = schedule.Schedule_ID
+                    done = true
+                }
+            })
+
+            if (done) {
+                arr = []
+                value = this.state.secondCheckboxValue.substring(0, 5)
+                values = this.state.secondCheckboxValue.substring(6, 11)
+                arr.push(value, values)
+                this.props.secondScheduleDetail.map(schedules => {
+                    if (arr[0] == schedules.Period_Time_One && arr[1] == schedules.Period_Time_Two) {
+                        b = schedules.Schedule_ID
+                        this.state.requestValue.push(a, b)
+                    }
+                })
+
+                this.props.alreadyReq.map(e => {
+                    if (e.Schedule_ID !== this.state.requestValue[0]) {
+                        if (e.Schedule_ID !== this.state.requestValue[1]) {
+                        } else {
+                            validates = "Second Period has been request by other USER !!!!"
+                            check = false;
+                        }
+                    } else {
+                        validate = "First Period has been request by other USER !!!!"
+                        check = false;
+                    }
+                })
+
+                if (check) {
                     const Url = 'http://localhost:8080/request';
                     const othepram = {
                         headers: {
@@ -118,14 +162,25 @@ class RequestPopup extends Component {
                         .then(res => res.json())
                         .then(json => {
                             if (json != "null") {
-                                this.setState({requestID: json})
+                                this.setState({ requestID: json })
                                 this.insertNotification();
                             }
                         })
+                } else {
+                    if (validate !== '' && validates !== '') {
+                        alert("These Period has been request by other USER!!!")
+                    } else if (validate !== '') {
+                        alert(validate)
+                    } else {
+                        alert(validates)
+                    }
                 }
-            })
+            }
+        } else {
+            alert("Please Select Period!!!!")
         }
     }
+
 
     insertNotification = () => {
         const Url = 'http://localhost:8080/insert/notification/manager';
@@ -142,29 +197,63 @@ class RequestPopup extends Component {
             method: "POST"
         };
         fetch(Url, othepram)
-        .then(res => res.json())
-        .then(json => {
-            if(json == "Request Success"){
-                this.onClose();
-            }
-        })
+            .then(res => res.json())
+            .then(json => {
+                if (json == "Request Success") {
+                    alert("Request Success")
+                    this.onClose();
+                }
+            })
     }
+
 
     onClose = (e) => {
         if (this.props.onClose !== undefined) {
             this.setState({ requestUser: '', requestdate: '', userHasBeenReq: '', dateHasBeenReq: '', period: [], newPeriod: [], loading: true, firstCheckboxValue: '', secondCheckboxValue: '', requestValue: [] })
             this.props.onClose(e)
+            this.props.schedule(e);
         }
     }
 
     render() {
-        const { loading } = this.state
+        const { loading, firstCheckboxValue, checkRequest, checkValue, period, newPeriod, checkValidate, secondCheckboxValue } = this.state
         if (!this.props.show) {
             return null;
         }
-        const period = this.state.period.map((event) => { return <div style={{ marginLeft: 20 }}><input disabled={ this.state.firstCheckboxValue !== '' && event !== this.state.firstCheckboxValue  ? true : false}  type="checkbox" name="firstCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period">{event}</span></div> })
-        const newPeriod = this.state.newPeriod.map((event) => { return <div style={{ marginLeft: 20 }} ><input disabled={ event == this.state.firstCheckboxValue || this.state.firstCheckboxValue == '' ? true:false} type="checkbox" name="secondCheckboxValue" value={event} onChange={this.handleChange}></input><span style={{ marginLeft: 10 }} className="req-period" >{event}</span></div> })
-           
+
+        const showPeriod = period.map((click) => {
+            return <div style={{ marginLeft: 20 }}>
+                <input disabled={checkValue && click != firstCheckboxValue} type="checkbox" onClick={() => this.handleChange(click)}></input>
+                <span style={{ marginLeft: 10 }} className="req-period">{click}</span>
+            </div>
+        })
+
+        const showNewPeriod = newPeriod.map((event) => {
+            let valid = true;
+            if(event !== secondCheckboxValue && secondCheckboxValue !== ''){
+                valid = false;
+            }
+            return <div style={{ marginLeft: 20 }} >
+                {checkValidate &&
+                    <React.Fragment>
+                        <input disabled={!checkValue} type="checkbox"></input>
+                        <span style={{ marginLeft: 10 }} className="req-period" >{event}</span>
+                    </React.Fragment>
+                }
+                {!checkValidate &&
+                    <React.Fragment>
+                        {checkRequest.map((e) => {
+                            if (event === e) {
+                                valid = false
+                            }
+                        })}
+                            <input disabled={!valid} type="checkbox" name="secondCheckboxValue" onClick={() => this.handleChange2(event)} ></input>
+                            <span style={{ marginLeft: 10 }} className="req-period" >{event}</span>
+                    </React.Fragment>
+                }
+            </div>
+        })
+
         return (
             <div>
                 {
@@ -174,12 +263,11 @@ class RequestPopup extends Component {
                                 <div className='request-header1'>select only one period
                                 <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
                                 </div>
-                                {/* <button onClick={this.test}>test</button> */}
                                 <div className="user-request1">
                                     <span className='request-name'>{this.state.requestUser}</span>
                                     <span className='date'>{this.state.requestdate}</span>
                                     <div style={{ display: 'flex', flexDirection: 'row', marginTop: 20, marginLeft: -15 }}>
-                                        {period}
+                                        {showPeriod}
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +279,7 @@ class RequestPopup extends Component {
                                     <span className='request-name'>{this.state.userHasBeenReq}</span>
                                     <span className='date2'>{this.state.dateHasBeenReq}</span>
                                     <div style={{ display: 'flex', flexDirection: 'row', marginTop: 20, marginLeft: -15 }}>
-                                        {newPeriod}
+                                        {showNewPeriod}
                                     </div>
                                     <button className="select-request2" onClick={this.insertRequest}>Request</button>
                                 </div>
@@ -200,7 +288,6 @@ class RequestPopup extends Component {
                         </div>
                     )
                 }
-                {/* { console.log(this.state.firstCheckboxValue)} */}
             </div>
         )
     }

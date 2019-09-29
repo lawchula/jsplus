@@ -17,7 +17,9 @@ class Register extends Component {
       showlogin: false,
       userAlreadyHave: [],
       submitted: false,
-      localUrl: 'http://localhost:8080/'
+      submitConfirm: false,
+      localUrl: 'http://localhost:8080/',
+      shake: 'register-popup_inner'
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,12 +38,12 @@ class Register extends Component {
   }
 
   handleSubmit(event) {
+    this.setState({ shake: 'register-popup_inner', submitted: true, submitConfirm: false, userAlreadyHave: [] });
     event.preventDefault();
 
-    this.setState({ submitted: true });
-    const { user,userAlreadyHave } = this.state
-    if (user.password == user.confirmPass) {
-      if (user.username && user.password) {
+    const { user } = this.state
+    if (user.username && user.password) {
+      if (user.password === user.confirmPass) {
         const Url = this.state.localUrl + 'register';
         const othepram = {
           headers: {
@@ -56,15 +58,18 @@ class Register extends Component {
           .then(res => res.json())
           .then(json => {
             if (json == "Username is already exists!!!") {
-              this.setState({ userAlreadyHave: json})
-              console.log(userAlreadyHave)
+              this.setState({ userAlreadyHave: json, user: { username: '', password: '', confirmPass: '' }, shake: 'register-popup_inner-shake', submitted: false })
             } else {
               this.setState({ user: { username: '', password: '', confirmPass: '' }, submitted: false, userAlreadyHave: [] });
+              alert("Register Success")
               this.popUpLogin();
             }
-          }
-          )
+          })
+      } else {
+        this.setState({ shake: 'register-popup_inner-shake', user: { username: '', password: '', confirmPass: '' }, submitted: false, submitConfirm: true })
       }
+    } else {
+      this.setState({ shake: 'register-popup_inner-shake', submitted: true })
     }
   }
 
@@ -83,11 +88,11 @@ class Register extends Component {
     if (!this.props.show) {
       return null;
     }
-    const { user, submitted, userAlreadyHave } = this.state;
+    const { user, submitted, userAlreadyHave, shake, submitConfirm } = this.state;
 
     return (
       <div className="register-popup">
-        <div className="register-popup_inner">
+        <div className={shake}>
           <div className="regis-header">
             <span className="header-text1">Regis</span>
             <span className="header-text2">ter</span>
@@ -106,13 +111,10 @@ class Register extends Component {
                 <div className="help-block">Password is required</div>
               }
               <input placeholder="ConfirmPassword" type="password" className="password" name="confirmPass" value={user.confirmPass} onChange={this.handleChange} />
-              {submitted && !user.password &&
-                <div className="help-block">Password is required</div>
+              {submitConfirm && !user.confirmPass && !user.password &&
+                <div className="help-block">Password is not the same</div>
               }
-              {submitted && user.confirmPass != user.password &&
-                <div className="help-block">Password is not same</div>
-              }
-              {userAlreadyHave.length > 0 ? <div className="help-block">This username is already exists</div> : ''}
+              {userAlreadyHave.length > 0 && !user.username && <div className="help-block">This username is already exists</div>}
               <button type="submit" className="signup">Sign Up</button>
             </div>
           </form>
@@ -124,9 +126,8 @@ class Register extends Component {
           </div>
           <Login onClose={this.register}></Login>
         </div>
-        {console.log(userAlreadyHave)}
       </div>
-    
+
     );
 
 

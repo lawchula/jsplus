@@ -162,6 +162,8 @@
 .noti-box{
     width: 300px;
     /* margin-top: 20px; */
+    max-height: 220px;
+    overflow-y: scroll;
 }
 .approve{
     background-color:#32CD32;
@@ -179,6 +181,12 @@
     font-weight: bold;
     border-radius: 5px;
     width: 70px;
+}
+.empty-noti{
+    font-family: 'Poppins', sans-serif;
+    color: #4054b2;
+    align-items: center;
+    margin-left: 25px;
 }
 @media only screen and (max-width: 575px) {
     #first-header{
