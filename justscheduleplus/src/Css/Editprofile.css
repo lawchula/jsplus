@@ -6,7 +6,7 @@
     #15da88 100%
   );
   background-color: #fafafb;
-  height: 91.4vh;
+  height: 100vh;
 }
 .container {
   display: flex;
@@ -59,7 +59,7 @@
     #15da88 100%
   );
   margin-left: 5px;
-  font-family: Helvetica;
+  font-family: 'Poppins', sans-serif;
   font-weight: bold;
   font-size: 12.5px;
   width: 75.58px;
@@ -88,21 +88,20 @@ label {
   margin-top: 20px;
 }
 .input-userinfor {
+  font-family: 'Poppins', sans-serif;
   outline: 0;
   border-width: 0 0 2px;
-  border: 1px solid #707070;
-  background-color: #fafafb;
+  border: 1px solid white;
+  background-color:rgba(0, 0, 0, 0);
+  padding-left: 10px;
   width: 300px;
-  height: 35px;
+  height: 50px;
   margin-bottom: 8%;
+  color: white
 }
-
-.span {
-  font-family: Helvetica;
-  font-weight: bold;
-  font-size: 11px;
-  color: #848d95;
-  margin-top: 15px;
+.input-userinfor:focus{
+  background-color: white;
+  color: #4054b2;
 }
 .edit-profilefooter {
   position: absolute;
@@ -115,20 +114,30 @@ label {
 }
 
 .confirmbutt {
-  font-family: Helvetica;
+  font-family: 'Poppins', sans-serif;
   font-weight: bold;
-  font-size: 12.5px;
-  width: 110px;
+  font-size: 14px;
+  width: 150px;
   height: 40px;
-  background-color: #f1f1f1;
-  border: 1px solid #707070;
-  border-radius: 7px;
-  color: #707070;
+  background-color:rgba(0, 0, 0, 0);
+  border: 1px solid white;
+  color: white;
+  margin-left: 30%;
+}
+.confirmbutt:hover {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  width: 150px;
+  height: 40px;
+  background-color:white;
+  border: 1px solid white;
+  color: #4054b2;
   margin-left: 30%;
 }
 .span {
   color: white;
-  font-family: Helvetica;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   margin-bottom: 1%;
 }
@@ -141,4 +150,11 @@ label {
 }
 .Name {
   background-image: url("http://placehold.it/150x20");
+}
+.Editprofile-validate {
+  font-family: 'Poppins', sans-serif;
+  font-weight: lighter;
+  color: red;
+  font-size: 12px;
+  margin: 0px;
 }
