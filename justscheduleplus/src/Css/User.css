@@ -156,3 +156,21 @@ width: auto;
     color: black;
     background-color: #15da88
 }
+.period-description{
+    display: flex;
+    border: 2px solid white;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    /* flex-direction: column; */
+    padding: 5px;
+    height: 35px;
+    font-size: 12px;
+    margin-left: 20px;
+    margin-top: 22px;
+}
+.period-color{
+    width: 20px;
+    height: 20px;
+    border-radius: 25px; 
+    border: 2px solid white;
+}

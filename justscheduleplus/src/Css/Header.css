@@ -188,6 +188,11 @@
     align-items: center;
     margin-left: 25px;
 }
+.user-notification{
+    font-family: 'Poppins', sans-serif;
+    color: #4054b2;
+    text-align: center;
+}
 @media only screen and (max-width: 575px) {
     #first-header{
         display:flex;
