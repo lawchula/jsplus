@@ -88,12 +88,12 @@ class RequestPopup extends Component {
         let firstArr = []
         let secondArr = []
         let totalArr = []
+        let checkArr = [];
+        let endArr = [];
         let valid = true;
         let validate = true;
-        let vali = true;
-        let period = firstArr.length
-        let period2 = secondArr.length
-        let allPeriod = this.props.showPeriod.length
+        // let vali = true;
+        // let allPeriod = this.props.showPeriod.length
 
 
         this.props.checkReq.map(e => {
@@ -106,53 +106,87 @@ class RequestPopup extends Component {
             secondArr.push(periodUse)
         })
 
-        if (period != allPeriod) {
-            if (period == 0) {
+        let period = firstArr.length
+        let period2 = secondArr.length
+
+        if (period !== 0) {
+            if (period2 !== 0) {
                 firstArr.map(e => {
-                    this.state.newPeriod.map(n => {
-                        if (e == n) {
+                    secondArr.map(s => {
+                        if (e === s) {
                             totalArr.push(e)
-                            valid = false;
                         } else {
-                            this.setState({ checkRequest: firstArr, checkValidate: false })
+                            checkArr.push(e)
+                            checkArr.push(s)
                         }
                     })
                 })
             } else {
-                this.setState({ checkRequest: firstArr, checkValidate: false })
+                firstArr.map(e => {
+                    checkArr.push(e)
+                })
             }
         } else {
-            this.setState({ checkRequest: firstArr, checkValidate: false })
+            secondArr.map(s => {
+                checkArr.push(s)
+            })
         }
 
-        if (period2 != allPeriod) {
-            if (period2) {
-                secondArr.map(e => {
-                    this.state.newPeriod.map(n => {
-                        if (e == n) {
-                            totalArr.push(e)
+        if (checkArr !== 0) {
+            checkArr.map(c => {
+                if (c === click) {
+                    totalArr.push(c)
+                    valid = false;
+                } else {
+                    endArr.push(c)
+                }
+            })
+        }
+
+        secondArr.map(e => {
+            if (e === click) {
+                totalArr.push(e)
+            } else {
+                endArr.push(e)
+            }
+        })
+
+        this.state.period.map(e => {
+            secondArr.map(s => {
+                if (e === s) {
+                    this.state.newPeriod.map(x => {
+                        if (click !== x) {
+                            endArr.push(x)
                             validate = false;
-                        } else {
-                            this.setState({ checkRequest: secondArr, checkValidate: false })
                         }
                     })
-                })
-            } else {
-                this.setState({ checkRequest: secondArr, checkValidate: false })
-            }
-        } else {
-            this.setState({ checkRequest: secondArr, checkValidate: false })
-        }
+                }
+            })
+        })
 
-        if (!valid && !validate) {
-            alert("Can't Change any Period")
+        this.state.newPeriod.map(e => {
+            firstArr.map(s => {
+                if (e === s) {
+                    this.state.period.map(x => {
+                        if (click !== x) {
+                            endArr.push(x)
+                            validate = false;
+                        }
+                    })
+                }
+            })
+        })
+
+        if (!valid && validate) {
             this.setState({ checkRequest: totalArr, checkValidate: false })
+        } else if (validate) {
+            this.setState({ checkRequest: endArr, checkValidate: false })
+        } else {
+            this.setState({ checkRequest: endArr, checkValidate: false })
         }
     }
 
     insertRequest = () => {
-        console.log(this.state.firstCheckboxValue)
-        console.log(this.state.secondCheckboxValue)
         if (this.state.firstCheckboxValue !== '' && this.state.secondCheckboxValue !== '') {
             if (!window.confirm("Do you want to Request to change Schedule?")) return
             let done = false;
@@ -201,7 +235,7 @@ class RequestPopup extends Component {
                 })
 
                 if (check) {
-                    const Url =  url + '/request';
+                    const Url = url + '/request';
                     const othepram = {
                         headers: {
                             "content-type": "application/json; charset=UTF-8"
@@ -281,9 +315,7 @@ class RequestPopup extends Component {
             </div>
         })
 
-        console.log("newPeriod : ", newPeriod)
         console.log("CheckRequest : ", checkRequest)
-        console.log(checkValidate)
         const showNewPeriod = newPeriod.map((event) => {
             let valid = true;
             if (event !== secondCheckboxValue && secondCheckboxValue !== '') {
@@ -303,7 +335,6 @@ class RequestPopup extends Component {
                                 valid = false
                             }
                         })}
-                        {console.log("event : ", event)}
                         <input disabled={!valid} type="checkbox" name="secondCheckboxValue" onClick={() => this.handleChange2(event)} ></input>
                         <span style={{ marginLeft: 10 }} className="req-period" >{event}</span>
                     </React.Fragment>
