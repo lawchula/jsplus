@@ -164,7 +164,9 @@ class RequestPopup extends Component {
     }
 
     insertRequest = () => {
-        if (this.state.firstCheckboxValue != '' && this.state.secondCheckboxValue != '') {
+        console.log(this.state.firstCheckboxValue)
+        console.log(this.state.secondCheckboxValue)
+        if (this.state.firstCheckboxValue !== '' && this.state.secondCheckboxValue !== '') {
             if (!window.confirm("Do you want to Request to change Schedule?")) return
             let done = false;
             let check = true;
