@@ -290,11 +290,11 @@ class Header extends Component {
     localStorage.removeItem('tk');
     localStorage.removeItem('sc');
     this.setState({ name: [] });
-    window.location.href = "http://localhost:3000/";
+    window.location.href = "/";
   }
 
   editProifile = () => {
-    window.location.href = "http://localhost:3000/EditProfile"
+    window.location.href = "/EditProfile"
   }
 
   openSchedule = () => {
@@ -302,15 +302,15 @@ class Header extends Component {
     if (token != null && token != "undefined") {
       var decoded = jwt_decode(token);
       if (decoded.position != "Manager" || decoded.position == "Admin") {
-        window.location.href = "http://localhost:3000/User";
+        window.location.href = "/User";
       } else {
-        window.location.href = "http://localhost:3000/Schedule";
+        window.location.href = "/Schedule";
       }
     }
   }
 
   homePage = () =>{
-    window.location.href = "http://localhost:3000/";
+    window.location.href = "/";
   }
 
   render() {
@@ -371,14 +371,14 @@ class Header extends Component {
 
       notification = <div>
 
-        {!userhaveNoti && userNotification.length !== 0 ? <div className="count-notification">
-          {userNotification.length}
-        </div> : null}
+    {!userhaveNoti &&   userNotification.length !== 0 ? <div className="count-notification2">
+                  {userNotification.length >= 100 ? '99+' : userNotification.length}
+            </div> : null}
 
         {!haveNotification || !haveAbsentNoti && managerNoti.length !== 0 && managerNotificationAbsent.length !== 0 ?
-          <div className="count-notification">
-            {managerNoti.length + managerNotificationAbsent.length}
-          </div> : null}
+       <div className="count-notification">
+           {managerNoti.length+managerNotificationAbsent.length}
+        </div> : null}
 
         <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
           <DropdownToggle

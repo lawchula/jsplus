@@ -78,10 +78,10 @@ class Login extends React.Component {
       .then(res => res.json())
       .then(json => {
         if (json == "Not have Profile") {
-          window.location.href = "http://localhost:3000/EditProfile";
+          window.location.href = "/EditProfile";
         }
         else if (json == "Not have Position") {
-          window.location.href = "http://localhost:3000/";
+          window.location.href = "/";
         } else {
           localStorage.setItem('tk', json.tk);
           var token = localStorage.getItem('tk')
@@ -89,9 +89,9 @@ class Login extends React.Component {
             this.setState({ loginFail: [] });
             var decoded = jwt_decode(token);
             if (decoded.position == "Manager") {
-              window.location.href = "http://localhost:3000/Schedule";
+              window.location.href = "/Schedule";
             } else {
-              window.location.href = "http://localhost:3000/User";
+              window.location.href = "/User";
             }
           }
         }

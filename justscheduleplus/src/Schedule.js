@@ -45,11 +45,11 @@ class Schedule extends Component {
     checkToken = () => {
         var token = localStorage.getItem('tk');
         if (token == null || token == "undefined") {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = "/";
         } else if (token != null && token != "undefined") {
             var decoded = jwt_decode(token);
             if (decoded.position != "Manager" || decoded.position == "Admin") {
-                window.location.href = "http://localhost:3000/User";
+                window.location.href = "/User";
             } else {
                 this.SelectDataFromDB();
             }

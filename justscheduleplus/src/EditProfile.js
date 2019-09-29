@@ -38,7 +38,7 @@ class AdminHome extends Component {
     if (token != null && token != "undefined") {
       this.getUserDetail(token);
     } else {
-      window.location.href = 'http://localhost:3000/'
+      window.location.href = '/'
     }
   }
 
@@ -100,7 +100,7 @@ class AdminHome extends Component {
               .then(res => res.json())
               .then(json => {
                 if(json === "Edit Profile Success"){
-                  window.location.href = "http://localhost:3000/"
+                  window.location.href = "/"
                 }
               })
     }
