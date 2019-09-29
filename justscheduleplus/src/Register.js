@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "./Css/Register.css";
 import error from './Images/error.png';
 import Login from './Login';
+import url from './url'
 
 
 class Register extends Component {
@@ -18,7 +19,6 @@ class Register extends Component {
       userAlreadyHave: [],
       submitted: false,
       submitConfirm: false,
-      localUrl: 'http://localhost:8080/',
       shake: 'register-popup_inner'
     };
 
@@ -44,7 +44,7 @@ class Register extends Component {
     const { user } = this.state
     if (user.username && user.password) {
       if (user.password === user.confirmPass) {
-        const Url = this.state.localUrl + 'register';
+        const Url = url + '/register';
         const othepram = {
           headers: {
             "content-type": "application/json; charset=UTF-8"

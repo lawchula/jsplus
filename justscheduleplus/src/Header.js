@@ -19,6 +19,7 @@ import signout from './Images/signout.png';
 import select from './Images/select.png';
 import schedule1 from './Images/schedule1.png';
 import Notification from './Images/notification.png';
+import url from './url';
 
 
 class Header extends Component {
@@ -75,7 +76,7 @@ class Header extends Component {
     };
 
     const data = await Promise.all([
-      fetch('http://localhost:8080/name', othepram)
+      fetch(url + '/name', othepram)
         .then((response) => {
           return response.json();
         })
@@ -104,11 +105,11 @@ class Header extends Component {
     };
 
     const data = await Promise.all([
-      fetch('http://localhost:8080/name', othepram)
+      fetch(url + '/name', othepram)
         .then((response) => {
           return response.json();
         }),
-      fetch('http://localhost:8080/manager/notification', otheprams)
+      fetch(url + '/manager/notification', otheprams)
         .then((response) => {
           return response.json();
         })
@@ -129,7 +130,7 @@ class Header extends Component {
   }
 
   getManagerAbNoti = async (otheprams, userReq) => {
-    await fetch('http://localhost:8080/manager/notification/absent', otheprams)
+    await fetch(url + '/manager/notification/absent', otheprams)
       .then(res => res.json()
         .then(json => {
           this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
@@ -152,11 +153,11 @@ class Header extends Component {
     };
 
     const data = await Promise.all([
-      fetch('http://localhost:8080/name', othepram)
+      fetch(url + '/name', othepram)
         .then((response) => {
           return response.json();
         }),
-      fetch('http://localhost:8080/user/notification', otheprams)
+      fetch(url + '/user/notification', otheprams)
         .then((response) => {
           return response.json();
         })
@@ -168,7 +169,7 @@ class Header extends Component {
   }
   clickApproveExchangeNotification = (notification) => {
     if (!window.confirm("Do you want to approve this request?")) return
-    const Url = 'http://localhost:8080/notification/approve';
+    const Url = url + '/notification/approve';
 
     const othepram = {
       headers: {
@@ -191,7 +192,7 @@ class Header extends Component {
 
   clickRejectExchangeNotification = (notification) => {
     if (!window.confirm("Do you want to reject this request?")) return
-    const Url = 'http://localhost:8080/notification/reject';
+    const Url = url + '/notification/reject';
 
     const othepram = {
       headers: {
@@ -213,7 +214,7 @@ class Header extends Component {
 
   clickApproveAbsentNotification = (notification) => {
     if (!window.confirm("Do you want to approve this absent request?")) return
-    const Url = 'http://localhost:8080/notification/absent/approve';
+    const Url = url + '/notification/absent/approve';
 
     const othepram = {
       headers: {
@@ -236,7 +237,7 @@ class Header extends Component {
 
   clickRejectAbsentNotification = (notification) => {
     if (!window.confirm("Do you want to reject this absent request?")) return
-    const Url = 'http://localhost:8080/notification/absent/reject';
+    const Url = url + '/notification/absent/reject';
 
     const othepram = {
       headers: {
@@ -309,7 +310,7 @@ class Header extends Component {
     }
   }
 
-  homePage = () =>{
+  homePage = () => {
     window.location.href = "/";
   }
 
@@ -371,14 +372,14 @@ class Header extends Component {
 
       notification = <div>
 
-    {!userhaveNoti &&   userNotification.length !== 0 ? <div className="count-notification2">
-                  {userNotification.length >= 100 ? '99+' : userNotification.length}
-            </div> : null}
+        {!userhaveNoti && userNotification.length !== 0 ? <div className="count-notification2">
+          {userNotification.length >= 100 ? '99+' : userNotification.length}
+        </div> : null}
 
         {!haveNotification || !haveAbsentNoti && managerNoti.length !== 0 && managerNotificationAbsent.length !== 0 ?
-       <div className="count-notification">
-           {managerNoti.length+managerNotificationAbsent.length}
-        </div> : null}
+          <div className="count-notification">
+            {managerNoti.length + managerNotificationAbsent.length}
+          </div> : null}
 
         <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
           <DropdownToggle
@@ -455,7 +456,7 @@ class Header extends Component {
         {
           !loading && (<React.Fragment>
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
-              <div className="JS" onClick = {this.homePage}><b>JS</b></div>
+              <div className="JS" onClick={this.homePage}><b>JS</b></div>
               <div className="Plus" ><b>+</b></div>
               <NavbarToggler onClick={this.navbarOpen} />
               <Collapse isOpen={this.state.isOpen} navbar>

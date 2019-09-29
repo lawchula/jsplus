@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import close from './Images/error.png';
 import './Css/RequestAbsent.css';
-import TextField from '@material-ui/core/TextField';;
+import TextField from '@material-ui/core/TextField';
+import url from './url';
 
 class RequestAbsent extends Component {
 
@@ -81,7 +82,7 @@ class RequestAbsent extends Component {
             })
 
             if (check) {
-                const Url = 'http://localhost:8080/request/absent';
+                const Url = url + '/request/absent';
                 const othepram = {
                     headers: {
                         "content-type": "application/json; charset=UTF-8"
@@ -109,7 +110,7 @@ class RequestAbsent extends Component {
     }
 
     insertNotification = () => {
-        const Url = 'http://localhost:8080/insert/notification/manager';
+        const Url = url + '/insert/notification/manager';
 
         var token = localStorage.getItem('tk');
         const othepram = {

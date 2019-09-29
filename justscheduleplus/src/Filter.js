@@ -9,6 +9,7 @@ import InputColor from "react-input-color";
 import { withTheme } from "@material-ui/core";
 import close from './Images/error.png';
 import remove from './Images/close.png';
+import url from './url';
 
 class Filter extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class Filter extends Component {
       method: "GET"
     };
 
-    fetch("http://localhost:8080/showperiod", othepram)
+    fetch(url + "/showperiod", othepram)
       .then(response => {
         return response.json();
       })
@@ -101,7 +102,7 @@ class Filter extends Component {
 
   onAfterInsertRow = () => {
     var token = localStorage.getItem('tk');
-    const Url = "http://localhost:8080/period";
+    const Url = url + "/period";
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8",
@@ -122,7 +123,7 @@ class Filter extends Component {
 
   DeletePeriodFromDB = event => {
     if (!window.confirm("Do you want to delete this period!!")) return;
-    const Url = "http://localhost:8080/deleteperiod";
+    const Url = url + "/deleteperiod";
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
@@ -171,7 +172,7 @@ class Filter extends Component {
                 }}
               >
                 <p
-                 className="filter-head-text"
+                  className="filter-head-text"
                 >
                   FILTER
                   <hr className="headline" />
@@ -190,14 +191,14 @@ class Filter extends Component {
                   {/* <p style={{color:"white",marginLeft:100,marginBottom:-5,marginTop:10}}>Period name</p> */}
                   <Row style={{ marginLeft: 100 }}>
                     <div
-                     className="row1"
+                      className="row1"
                     >
                       <span>
                         Period name
                       </span>
                       <span style={{ marginLeft: 20 }}>Start-period</span>
-                      <span style={{ marginLeft:32.5 }}>End-period</span>
-                      <span style={{ marginLeft:43 }}>Color</span>
+                      <span style={{ marginLeft: 32.5 }}>End-period</span>
+                      <span style={{ marginLeft: 43 }}>Color</span>
                     </div>
                   </Row>
                   <Row>
@@ -365,7 +366,7 @@ class Filter extends Component {
                             style={{
                               fontSize: 14,
                               fontWeight: "bold",
-                              textAlign:'center'
+                              textAlign: 'center'
                             }}
                           >
                             {event.Period_Name}
@@ -374,7 +375,7 @@ class Filter extends Component {
                             style={{
                               fontSize: 14,
                               fontWeight: "bold",
-                              textAlign:'center'
+                              textAlign: 'center'
                             }}
                           >
                             {" "}
@@ -384,7 +385,7 @@ class Filter extends Component {
                             style={{
                               fontSize: 14,
                               fontWeight: "bold",
-                              textAlign:'center'
+                              textAlign: 'center'
                             }}
                           >
                             {event.Period_Time_Two + " น."}
@@ -394,7 +395,7 @@ class Filter extends Component {
                               style={{
                                 width: 20,
                                 height: 20,
-                                marginLeft:40,
+                                marginLeft: 40,
                                 backgroundColor: event.Period_Color,
                                 borderRadius: 25
                               }}
@@ -402,7 +403,7 @@ class Filter extends Component {
                               {" "}
                             </div>
                           </td>
-                          <td style={{textAlign:'center'}}> 
+                          <td style={{ textAlign: 'center' }}>
                             <img
                               src={remove}
                               style={{

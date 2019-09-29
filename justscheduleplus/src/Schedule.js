@@ -8,6 +8,7 @@ import Filter from './Filter';
 import Timepicker from './Timepicker';
 import error from './Images/error.png';
 import * as jwt_decode from 'jwt-decode';
+import url from './url';
 
 class Schedule extends Component {
     constructor(props) {
@@ -66,26 +67,26 @@ class Schedule extends Component {
         };
 
         const data = await Promise.all([
-            fetch('http://localhost:8080/users', othepram)
+            fetch(url + '/users', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/company', othepram)
+            fetch(url + '/company', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/department', othepram)
+            fetch(url + '/department', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch("http://localhost:8080/showperiod", othepram)
+            fetch(url + "/showperiod", othepram)
                 .then(response => {
                     return response.json();
                 })
         ])
 
-        const [user, company, department,showPeriod] = data
-        this.setState({ user, company, department,showPeriod })
+        const [user, company, department, showPeriod] = data
+        this.setState({ user, company, department, showPeriod })
 
         this.getSchedules();
     }
@@ -100,7 +101,7 @@ class Schedule extends Component {
             },
             method: "GET"
         };
-        fetch('http://localhost:8080/showschedule', othepram)
+        fetch(url + '/showschedule', othepram)
             .then((response) => {
                 return response.json();
             })
@@ -164,7 +165,7 @@ class Schedule extends Component {
         var dayStr1 = event.substr(1, 2)
         if (dayStr1 == this.state.currentDay) {
             return "#15da88"
-        }else{
+        } else {
             switch (dayStr) {
                 case 'Sat':
                     return "#A9A9A9"
@@ -236,7 +237,7 @@ class Schedule extends Component {
     }
 
     InsertPeriodtoSchedule = () => {
-        const Url = 'http://localhost:8080/schedule';
+        const Url = url + '/schedule';
         const othepram = {
             headers: {
                 "content-type": "application/json; charset=UTF-8"
@@ -250,7 +251,6 @@ class Schedule extends Component {
         fetch(Url, othepram)
             .then(data => { return data.json() })
             .then(res => {
-                console.log(res)
                 this.setState({ TestShow: [] })
                 this.getSchedules();
             })
@@ -262,10 +262,8 @@ class Schedule extends Component {
     }
 
     DeletePeriodFromDB = (periodinschedule) => {
-        console.log(this.props.managerNotificationAbsent)
-        console.log(this.props.managerNoti)
         if (!window.confirm("Do you want to delete this period!!")) return
-        const Url = 'http://localhost:8080/schedule/delete';
+        const Url = url + '/schedule/delete';
 
         const othepram = {
             headers: {
@@ -287,14 +285,16 @@ class Schedule extends Component {
 
     render() {
 
-        const showperiod = this.state.showPeriod.map((event) => {return <div style={{display:'flex'}}>
-             <div style={{backgroundColor: event.Period_Color,marginLeft:5}} className="period-color">
-                
-             </div>
-             <span style={{marginLeft:5}}>{event.Period_Name}</span>
-             <span style={{marginLeft:5}}>{event.Period_Time_One} - </span>
-             <span style={{marginLeft:5}}>{event.Period_Time_Two}</span>
-        </div>})
+        const showperiod = this.state.showPeriod.map((event) => {
+            return <div style={{ display: 'flex' }}>
+                <div style={{ backgroundColor: event.Period_Color, marginLeft: 5 }} className="period-color">
+
+                </div>
+                <span style={{ marginLeft: 5 }}>{event.Period_Name}</span>
+                <span style={{ marginLeft: 5 }}>{event.Period_Time_One} - </span>
+                <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
+            </div>
+        })
 
         return (
             <div className="Schedule">
@@ -306,7 +306,7 @@ class Schedule extends Component {
                         <div className="stat-schedule">
                             <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
                             <div className="managerperiod-description">
-                            {showperiod}
+                                {showperiod}
                             </div>
                             <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
                             </Filter>

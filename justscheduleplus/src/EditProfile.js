@@ -4,6 +4,7 @@ import "./Css/Editprofile.css";
 import user from "./Images/user.png";
 import * as firebase from "firebase";
 import ApiKeys from "./ApiKeys";
+import url from './url';
 
 class AdminHome extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class AdminHome extends Component {
       telno: "",
       userDetail: null,
       loading: true,
-      validate:""
+      validate: ""
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -51,7 +52,7 @@ class AdminHome extends Component {
     };
 
     const data = await Promise.all([
-      fetch('http://localhost:8080/user/profile', othepram)
+      fetch(url + '/user/profile', othepram)
         .then((response) => {
           return response.json();
         }),
@@ -64,7 +65,7 @@ class AdminHome extends Component {
   }
   setProfileDetail = () => {
     let detail = this.state.userDetail
-    this.setState({ name: detail[0].name, surname: detail[0].surname, email: detail[0].Email, telno: detail[0].PhoneNumber,userImg: detail[0].UserPicture, loading: false })
+    this.setState({ name: detail[0].name, surname: detail[0].surname, email: detail[0].Email, telno: detail[0].PhoneNumber, userImg: detail[0].UserPicture, loading: false })
   }
 
   handleChange(e) {
@@ -77,32 +78,32 @@ class AdminHome extends Component {
 
     let { validate } = this.state;
 
-    if ( this.state.name == "" ||this.state.surname == "" ||this.state.email == "" ||this.state.telno == ""){
+    if (this.state.name == "" || this.state.surname == "" || this.state.email == "" || this.state.telno == "") {
       this.setState({ validate: "This field is requried" });
-    }else{
+    } else {
       var token = localStorage.getItem('tk');
-      const Url = 'http://localhost:8080/insert/user/profile';
-          const othepram = {
-              headers: {
-                  "content-type": "application/json; charset=UTF-8",
-                  tkAuth: token
-              },
-              body: JSON.stringify({
-                  name: this.state.name,
-                  surname: this.state.surname,
-                  email: this.state.email,
-                  telno: this.state.telno,
-                  picture: this.state.userImg,
-              }),
-              method: "POST"
-          };
-          fetch(Url, othepram)
-              .then(res => res.json())
-              .then(json => {
-                if(json === "Edit Profile Success"){
-                  window.location.href = "/"
-                }
-              })
+      const Url = url + '/insert/user/profile';
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8",
+          tkAuth: token
+        },
+        body: JSON.stringify({
+          name: this.state.name,
+          surname: this.state.surname,
+          email: this.state.email,
+          telno: this.state.telno,
+          picture: this.state.userImg,
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(res => res.json())
+        .then(json => {
+          if (json === "Edit Profile Success") {
+            window.location.href = "/"
+          }
+        })
     }
 
   }
@@ -145,7 +146,7 @@ class AdminHome extends Component {
   };
 
   render() {
-    const { userImg, userImgName, userImages, name, surname, email, telno, userDetail, loading,validate } = this.state;
+    const { userImg, userImgName, userImages, name, surname, email, telno, userDetail, loading, validate } = this.state;
     const validEmailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     const phoneno = /^0[0-9]{8,9}$/i;
 
@@ -190,7 +191,7 @@ class AdminHome extends Component {
 
                     <span className="Editprofile-validate">
                       {this.state.name.length > 2 ? "" : validate}
-                  </span>
+                    </span>
 
                     <input type="text" className="input-userinfor" name="surname" placeholder="Surname" value={surname} onChange={this.handleChange} />
 
@@ -208,7 +209,7 @@ class AdminHome extends Component {
                     ></input>
 
                     <span className="Editprofile-validate">
-                    {validEmailRegex.test(this.state.email) ? " " : validate}
+                      {validEmailRegex.test(this.state.email) ? " " : validate}
                     </span>
 
                     <input

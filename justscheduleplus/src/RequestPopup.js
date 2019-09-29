@@ -3,6 +3,7 @@ import './Css/RequestPopup.css';
 import close from './Images/error.png';
 import User from './User';
 import change from './Images/refresh.png';
+import url from './url';
 
 class RequestPopup extends Component {
 
@@ -74,7 +75,6 @@ class RequestPopup extends Component {
     }
 
     handleChange2 = (event) => {
-        console.log(event)
         if (this.state.checkValue && this.state.checkValues) {
             this.setState({ secondCheckboxValue: event, checkValues: false })
         } else {
@@ -83,7 +83,6 @@ class RequestPopup extends Component {
     }
 
     checkValidateRequest = (click) => {
-        console.log(this.state.newPeriod)
         let periodUser = '';
         let periodUse = '';
         let firstArr = []
@@ -98,69 +97,57 @@ class RequestPopup extends Component {
 
 
         this.props.checkReq.map(e => {
-            periodUser =  e.Period_Time_One+"-"+e.Period_Time_Two
+            periodUser = e.Period_Time_One + "-" + e.Period_Time_Two
             firstArr.push(periodUser)
         })
 
         this.props.checkHasReq.map(n => {
-            periodUse =  n.Period_Time_One+"-"+n.Period_Time_Two
+            periodUse = n.Period_Time_One + "-" + n.Period_Time_Two
             secondArr.push(periodUse)
         })
 
-        if(period != allPeriod){
-            if(period == 0){
+        if (period != allPeriod) {
+            if (period == 0) {
                 firstArr.map(e => {
                     this.state.newPeriod.map(n => {
-                        if(e == n){
+                        if (e == n) {
                             totalArr.push(e)
                             valid = false;
-                        }else{
+                        } else {
                             this.setState({ checkRequest: firstArr, checkValidate: false })
                         }
                     })
                 })
-            }else{
+            } else {
                 this.setState({ checkRequest: firstArr, checkValidate: false })
             }
-        }else{
-           this.setState({ checkRequest: firstArr, checkValidate: false })
+        } else {
+            this.setState({ checkRequest: firstArr, checkValidate: false })
         }
 
-        if(period2 != allPeriod){
-            if(period2){
+        if (period2 != allPeriod) {
+            if (period2) {
                 secondArr.map(e => {
                     this.state.newPeriod.map(n => {
-                        if(e == n){
+                        if (e == n) {
                             totalArr.push(e)
                             validate = false;
-                        }else{
+                        } else {
                             this.setState({ checkRequest: secondArr, checkValidate: false })
                         }
                     })
                 })
-            }else{
+            } else {
                 this.setState({ checkRequest: secondArr, checkValidate: false })
             }
-        }else{
+        } else {
             this.setState({ checkRequest: secondArr, checkValidate: false })
         }
 
-        if(!valid && !validate){
+        if (!valid && !validate) {
             alert("Can't Change any Period")
             this.setState({ checkRequest: totalArr, checkValidate: false })
         }
-        // if(period != allPeriod){
-        //     this.state.newPeriod.map(e => {
-        //         if(e == click){
-        //             valid = false;
-        //         }else{
-        //             this.setState({ checkRequest: this.state.period, checkValidate: false })
-        //         }
-        //     })
-        // }else{
-        //     this.setState({ checkRequest: this.state.period, checkValidate: false })
-        // }
-
     }
 
     insertRequest = () => {
@@ -212,7 +199,7 @@ class RequestPopup extends Component {
                 })
 
                 if (check) {
-                    const Url = 'http://localhost:8080/request';
+                    const Url =  url + '/request';
                     const othepram = {
                         headers: {
                             "content-type": "application/json; charset=UTF-8"
@@ -247,7 +234,7 @@ class RequestPopup extends Component {
 
 
     insertNotification = () => {
-        const Url = 'http://localhost:8080/insert/notification/manager';
+        const Url = url + '/insert/notification/manager';
 
         var token = localStorage.getItem('tk');
         const othepram = {
@@ -292,12 +279,12 @@ class RequestPopup extends Component {
             </div>
         })
 
-        console.log("newPeriod : " , newPeriod)
+        console.log("newPeriod : ", newPeriod)
         console.log("CheckRequest : ", checkRequest)
         console.log(checkValidate)
         const showNewPeriod = newPeriod.map((event) => {
             let valid = true;
-            if(event !== secondCheckboxValue && secondCheckboxValue !== ''){
+            if (event !== secondCheckboxValue && secondCheckboxValue !== '') {
                 valid = false;
             }
             return <div style={{ marginLeft: 20 }} >
@@ -314,9 +301,9 @@ class RequestPopup extends Component {
                                 valid = false
                             }
                         })}
-                        {console.log("event : ",event)}
-                            <input disabled={!valid} type="checkbox" name="secondCheckboxValue" onClick={() => this.handleChange2(event)} ></input>
-                            <span style={{ marginLeft: 10 }} className="req-period" >{event}</span>
+                        {console.log("event : ", event)}
+                        <input disabled={!valid} type="checkbox" name="secondCheckboxValue" onClick={() => this.handleChange2(event)} ></input>
+                        <span style={{ marginLeft: 10 }} className="req-period" >{event}</span>
                     </React.Fragment>
                 }
             </div>

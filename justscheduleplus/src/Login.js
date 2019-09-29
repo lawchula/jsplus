@@ -3,6 +3,7 @@ import "./Css/Login.css";
 import error from './Images/error.png';
 import * as jwt_decode from 'jwt-decode';
 import Register from './Register';
+import url from './url';
 
 
 class Login extends React.Component {
@@ -32,11 +33,11 @@ class Login extends React.Component {
     e.preventDefault();
 
     const { username, password } = this.state;
-    this.setState({shake: 'login-popup_inner'})
+    this.setState({ shake: 'login-popup_inner' })
     if (username !== '' && password !== '') {
       this.setState({ submitted: false, submittedValid: false })
 
-      const Url = 'http://localhost:8080/users/authenticate';
+      const Url = url + '/users/authenticate';
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"
@@ -63,7 +64,7 @@ class Login extends React.Component {
   }
 
   requestToken = () => {
-    const Url = 'http://localhost:8080/users/requesttk';
+    const Url = url + '/users/requesttk';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"

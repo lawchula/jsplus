@@ -6,6 +6,7 @@ import Header from './Header';
 import * as jwt_decode from 'jwt-decode';
 import RequestPopup from './RequestPopup';
 import RequestAbsent from './RequestAbsent';
+import url from './url';
 
 class User extends Component {
 
@@ -73,15 +74,15 @@ class User extends Component {
         };
 
         const data = await Promise.all([
-            fetch('http://localhost:8080/users', othepram)
+            fetch(url + '/users', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/company', othepram)
+            fetch(url + '/company', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/department', othepram)
+            fetch(url + '/department', othepram)
                 .then((response) => {
                     return response.json();
                 }),
@@ -105,15 +106,15 @@ class User extends Component {
         };
 
         const data = await Promise.all([
-            fetch('http://localhost:8080/showschedule', othepram)
+            fetch(url + '/showschedule', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/already/request', othepram)
+            fetch(url + '/already/request', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch("http://localhost:8080/showperiod", othepram)
+            fetch(url + "/showperiod", othepram)
                 .then(response => {
                     return response.json();
                 })
@@ -136,7 +137,7 @@ class User extends Component {
         var dayStr1 = event.substr(1, 2)
         if (dayStr1 == this.state.currentDay) {
             return "#15da88"
-          }else{
+        } else {
             switch (dayStr) {
                 case 'Sat':
                     return "#A9A9A9"
@@ -260,14 +261,14 @@ class User extends Component {
         this.state.schedule.map(e => {
             if (e.User_ID == name.User_ID && e.Date == date) {
                 arr.push(e)
-                this.setState({ secondScheduleDetail: arr})
+                this.setState({ secondScheduleDetail: arr })
             }
         })
 
         this.getPeriodForChange(arr);
     }
 
-    getPeriodForChange(arr){
+    getPeriodForChange(arr) {
         let userID = this.state.firstScheduleDetail[0].User_ID;
         let date = arr[0].Date
         let reqDate = this.state.firstScheduleDetail[0].Date;
@@ -276,18 +277,18 @@ class User extends Component {
         let array = [];
 
         this.state.schedule.map(period => {
-            if(period.User_ID === userID && period.Date === date){
+            if (period.User_ID === userID && period.Date === date) {
                 array.push(period)
             }
         })
 
         this.state.schedule.map(period => {
-            if(period.User_ID === reqUserID && period.Date === reqDate){
+            if (period.User_ID === reqUserID && period.Date === reqDate) {
                 arrays.push(period)
             }
         })
 
-        this.setState({ checkReq: array, checkHasReq: arrays,count: 0, request: false, zIndex: 6, zIndex2: 0 })
+        this.setState({ checkReq: array, checkHasReq: arrays, count: 0, request: false, zIndex: 6, zIndex2: 0 })
         this.showRequestPopup();
     }
 
@@ -326,14 +327,16 @@ class User extends Component {
 
         const date = this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })
 
-        const showperiod = this.state.showPeriod.map((event) => {return <div style={{display:'flex'}}>
-             <div style={{backgroundColor: event.Period_Color,marginLeft:5}} className="period-color">
-                
-             </div>
-             <span style={{marginLeft:5}}>{event.Period_Name}</span>
-             <span style={{marginLeft:5}}>{event.Period_Time_One} - </span>
-             <span style={{marginLeft:5}}>{event.Period_Time_Two}</span>
-        </div>})
+        const showperiod = this.state.showPeriod.map((event) => {
+            return <div style={{ display: 'flex' }}>
+                <div style={{ backgroundColor: event.Period_Color, marginLeft: 5 }} className="period-color">
+
+                </div>
+                <span style={{ marginLeft: 5 }}>{event.Period_Name}</span>
+                <span style={{ marginLeft: 5 }}>{event.Period_Time_One} - </span>
+                <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
+            </div>
+        })
 
         return (
             <div className="User">
@@ -348,7 +351,7 @@ class User extends Component {
                                     <button className="b-request" onClick={this.request}>Request</button>
                                     <button className="b-request" onClick={this.clickRequestAbsent} style={{ marginLeft: 10 }}>ABSENCE</button>
                                     <div className="period-description">
-                                    {showperiod}
+                                        {showperiod}
                                     </div>
                                 </div>
                                 <div id="filter">
@@ -388,8 +391,8 @@ class User extends Component {
                                             month={this.state.month}
                                             year={this.state.year}
                                             showPeriod={this.state.showPeriod}
-                                            checkReq = {this.state.checkReq} 
-                                            checkHasReq = {this.state.checkHasReq}
+                                            checkReq={this.state.checkReq}
+                                            checkHasReq={this.state.checkHasReq}
                                             onClose={this.cancleRequest}
                                             schedule={this.getSchedules}></RequestPopup>
                                     }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {DropdownToggle,DropdownMenu,DropdownItem,Dropdown} from 'reactstrap';
+import { DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import error from './Images/close.png';
 import insert from './Images/insert.png';
 import './Css/Timepicker.css';
+import url from './url';
 
 
 class Timepicker extends Component {
@@ -30,20 +31,20 @@ class Timepicker extends Component {
             },
             method: "GET"
         };
-        fetch('http://localhost:8080/showperiod', othepram)
+        fetch(url + '/showperiod', othepram)
             .then((response) => {
                 return response.json();
             })
             .then((myJson) => {
                 this.setState({ showperiod: myJson })
             });
-           
+
     }
 
     toggle = () => {
         const { dropdownOpen } = this.state
         this.setState({ dropdownOpen: !dropdownOpen })
-       
+
     }
 
     dropdownTest() {
@@ -66,10 +67,10 @@ class Timepicker extends Component {
                     (
                         <div className='dropdown'>
                             <div style={{ marginBottom: -15, marginTop: -10, marginRight: -10 }}>
-                                <img src={error} className='error'  style={{ width: 11, height: 11,}} onClick={() => this.props.CloseDropdown()}></img>
+                                <img src={error} className='error' style={{ width: 11, height: 11, }} onClick={() => this.props.CloseDropdown()}></img>
                                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
                                     <DropdownToggle tag="span">
-                                        <img src={insert} style={{width:25,height:25,marginLeft:5}}></img>
+                                        <img src={insert} style={{ width: 25, height: 25, marginLeft: 5 }}></img>
                                     </DropdownToggle>
                                     <DropdownMenu>
                                         {/* <DropdownItem header>Header</DropdownItem> */}
