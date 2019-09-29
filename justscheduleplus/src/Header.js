@@ -347,9 +347,16 @@ class Header extends Component {
       })
 
       notification = <div>
-        <div className="count-notification">
-          1
-    </div>
+        
+        {!userhaveNoti &&   userNotification.length !== 0 ? <div className="count-notification">
+              {userNotification.length}
+        </div> : null}
+
+       {!haveNotification || !haveAbsentNoti && managerNoti.length !== 0 && managerNotificationAbsent.length !== 0 ?
+       <div className="count-notification">
+           {managerNoti.length+managerNotificationAbsent.length}
+        </div> : null}
+
         <Dropdown isOpen={this.state.notificationOpen} toggle={this.openNotification} className="notification" direction="left" >
           <DropdownToggle
             tag="span"
@@ -407,8 +414,8 @@ class Header extends Component {
             </React.Fragment>}
             {!userhaveNoti && <React.Fragment>
               {userNotification.map((noti) => {
-                return <div style={{ textAlign: 'center' }}>
-                  <span>{noti.name} {noti.surname} {noti.Notification_Description} Date {noti.Date}/{noti.Month} : {noti.Period_Time_One}-{noti.Period_Time_Two} </span>
+                return <div className="user-notification">
+                  <span>Your {noti.Notification_Description} <br></br> Date {noti.Date}/{noti.Month + '/2019'} : {noti.Period_Time_One}-{noti.Period_Time_Two} </span>
                   <div style={{ display: 'flex', marginTop: 5, justifyContent: 'center', textAlign: 'center', marginBottom: 10 }}>
                   </div>
                   <hr style={{ margin: 0, width: 285, marginBottom: 5 }}></hr>

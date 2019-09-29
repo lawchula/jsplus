@@ -162,14 +162,15 @@ class Schedule extends Component {
     ShowDayColorOnSchedule = (event) => {
         var dayStr = event.substr(event.length - 3)
         var dayStr1 = event.substr(1, 2)
-        switch (dayStr) {
-            case 'Sat':
-                return "#A9A9A9"
-            case 'Sun':
-                return "#A9A9A9"
-        }
         if (dayStr1 == this.state.currentDay) {
             return "#15da88"
+        }else{
+            switch (dayStr) {
+                case 'Sat':
+                    return "#A9A9A9"
+                case 'Sun':
+                    return "#A9A9A9"
+            }
         }
     }
 
@@ -284,6 +285,15 @@ class Schedule extends Component {
 
     render() {
 
+        const showperiod = this.state.showPeriod.map((event) => {return <div style={{display:'flex'}}>
+             <div style={{backgroundColor: event.Period_Color,marginLeft:5}} className="period-color">
+                
+             </div>
+             <span style={{marginLeft:5}}>{event.Period_Name}</span>
+             <span style={{marginLeft:5}}>{event.Period_Time_One} - </span>
+             <span style={{marginLeft:5}}>{event.Period_Time_Two}</span>
+        </div>})
+
         return (
             <div className="Schedule">
                 <Header Schedule={this.getSchedules} />
@@ -293,6 +303,9 @@ class Schedule extends Component {
                         <p className="stat"><b>STATISTIC</b></p>
                         <div className="stat-schedule">
                             <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
+                            <div className="managerperiod-description">
+                            {showperiod}
+                            </div>
                             <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
                             </Filter>
                         </div>

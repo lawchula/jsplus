@@ -36,7 +36,8 @@ class User extends Component {
             loading: true,
             showReqAbsentPopup: false,
             showReqPopup: false,
-            showPeriod: []
+            showPeriod: [],
+            currentDay: new Date().getDate()
         }
     }
 
@@ -131,14 +132,15 @@ class User extends Component {
     ShowDayColorOnSchedule = (event) => {
         var dayStr = event.substr(event.length - 3)
         var dayStr1 = event.substr(1, 2)
-        switch (dayStr) {
-            case 'Sat':
-                return "#A9A9A9"
-            case 'Sun':
-                return "#A9A9A9"
-        }
         if (dayStr1 == this.state.currentDay) {
             return "#15da88"
+          }else{
+            switch (dayStr) {
+                case 'Sat':
+                    return "#A9A9A9"
+                case 'Sun':
+                    return "#A9A9A9"
+            }
         }
     }
 
@@ -296,6 +298,16 @@ class User extends Component {
         })
 
         const date = this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })
+
+        const showperiod = this.state.showPeriod.map((event) => {return <div style={{display:'flex'}}>
+             <div style={{backgroundColor: event.Period_Color,marginLeft:5}} className="period-color">
+                
+             </div>
+             <span style={{marginLeft:5}}>{event.Period_Name}</span>
+             <span style={{marginLeft:5}}>{event.Period_Time_One} - </span>
+             <span style={{marginLeft:5}}>{event.Period_Time_Two}</span>
+        </div>})
+
         return (
             <div className="User">
                 {
@@ -308,6 +320,9 @@ class User extends Component {
                                 <div className="request-schedule">
                                     <button className="b-request" onClick={this.request}>Request</button>
                                     <button className="b-request" onClick={this.clickRequestAbsent} style={{ marginLeft: 10 }}>ABSENCE</button>
+                                    <div className="period-description">
+                                    {showperiod}
+                                    </div>
                                 </div>
                                 <div id="filter">
                                     <div className="b-static">WORK HOUR:</div>
@@ -359,6 +374,7 @@ class User extends Component {
                     </React.Fragment>
                     )
                 }
+               {console.log(this.state.showPeriod)}
             </div>
         );
     }
