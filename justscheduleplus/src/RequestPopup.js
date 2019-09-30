@@ -87,13 +87,9 @@ class RequestPopup extends Component {
         let periodUse = '';
         let firstArr = []
         let secondArr = []
-        let totalArr = []
         let checkArr = [];
-        let endArr = [];
-        let valid = true;
         let validate = true;
-        // let vali = true;
-        // let allPeriod = this.props.showPeriod.length
+        this.setState({ checkValidate: true, checkRequest: [] })
 
 
         this.props.checkReq.map(e => {
@@ -106,83 +102,29 @@ class RequestPopup extends Component {
             secondArr.push(periodUse)
         })
 
-        let period = firstArr.length
-        let period2 = secondArr.length
-
-        if (period !== 0) {
-            if (period2 !== 0) {
-                firstArr.map(e => {
-                    secondArr.map(s => {
-                        if (e === s) {
-                            totalArr.push(e)
-                        } else {
-                            checkArr.push(e)
-                            checkArr.push(s)
-                        }
-                    })
-                })
-            } else {
-                firstArr.map(e => {
-                    checkArr.push(e)
-                })
-            }
-        } else {
-            secondArr.map(s => {
-                checkArr.push(s)
-            })
-        }
-
-        if (checkArr !== 0) {
-            checkArr.map(c => {
-                if (c === click) {
-                    totalArr.push(c)
-                    valid = false;
-                } else {
-                    endArr.push(c)
-                }
-            })
-        }
-
         secondArr.map(e => {
-            if (e === click) {
-                totalArr.push(e)
-            } else {
-                endArr.push(e)
+            if (click === e) {
+                validate = false;
+                checkArr.push(e)
             }
-        })
-
-        this.state.period.map(e => {
-            secondArr.map(s => {
-                if (e === s) {
-                    this.state.newPeriod.map(x => {
-                        if (click !== x) {
-                            endArr.push(x)
-                            validate = false;
-                        }
-                    })
-                }
-            })
         })
 
         this.state.newPeriod.map(e => {
             firstArr.map(s => {
                 if (e === s) {
-                    this.state.period.map(x => {
-                        if (click !== x) {
-                            endArr.push(x)
-                            validate = false;
-                        }
-                    })
+                    checkArr.push(e)
                 }
             })
         })
 
-        if (!valid && validate) {
-            this.setState({ checkRequest: totalArr, checkValidate: false })
-        } else if (validate) {
-            this.setState({ checkRequest: endArr, checkValidate: false })
+        if (!validate) {
+            alert("Can't change any Period beacause you already have!!!")
+            this.setState({ checkRequest: this.state.newPeriod, checkValidate: false })
+        } else if (checkArr.length !== 0) {
+            alert("Can't change these Period "+checkArr)
+            this.setState({ checkRequest: checkArr, checkValidate: false })
         } else {
-            this.setState({ checkRequest: endArr, checkValidate: false })
+            this.setState({ checkRequest: checkArr, checkValidate: false })
         }
     }
 
@@ -315,12 +257,11 @@ class RequestPopup extends Component {
             </div>
         })
 
-        console.log("CheckRequest : ", checkRequest)
         const showNewPeriod = newPeriod.map((event) => {
             let valid = true;
-            if (event !== secondCheckboxValue && secondCheckboxValue !== '') {
-                valid = false;
-            }
+            // if (event !== secondCheckboxValue && secondCheckboxValue !== '') {
+            //     valid = false;
+            // }
             return <div style={{ marginLeft: 20 }} >
                 {checkValidate &&
                     <React.Fragment>
