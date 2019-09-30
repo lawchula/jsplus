@@ -6,7 +6,7 @@ import { Button, Table } from 'reactstrap';
 import { Container } from 'react-grid-system';
 import Filter from './Filter';
 import Timepicker from './Timepicker';
-import error from './Images/error.png';
+import error from './Images/close.png';
 import * as jwt_decode from 'jwt-decode';
 import url from './url';
 
