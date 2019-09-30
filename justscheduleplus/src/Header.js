@@ -372,11 +372,11 @@ class Header extends Component {
 
       notification = <div>
 
-        {!userhaveNoti && userNotification.length !== 0 ? <div className="count-notification2">
+        {!userhaveNoti && userNotification.length !== 0 ? <div className="count-notification">
           {userNotification.length >= 100 ? '99+' : userNotification.length}
         </div> : null}
 
-        {!haveNotification || !haveAbsentNoti && managerNoti.length !== 0 && managerNotificationAbsent.length !== 0 ?
+        {!haveNotification || !haveAbsentNoti &&  managerNotificationAbsent.length !== 0 ?
           <div className="count-notification">
             {managerNoti.length + managerNotificationAbsent.length}
           </div> : null}
