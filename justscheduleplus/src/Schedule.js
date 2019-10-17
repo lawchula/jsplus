@@ -323,9 +323,9 @@ class Schedule extends Component {
                     <Table bordered responsive className="tests">
                         <thead>
                             <tr id="tr1">
-                                <th colSpan={this.state.block.length / 2} >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
-                                <th colSpan={this.state.block.length / 2}>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
-                                <td colSpan="2" style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
+                                <th colSpan={(this.state.block.length / 2) } >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
+                                <th colSpan={(this.state.block.length / 2) }>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
+                                <td colSpan={this.state.block.length == 31 ? 3 : 2} style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
                             <tr id="tr2">
                                 <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>

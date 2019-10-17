@@ -17,8 +17,7 @@ class CreateCompany extends Component {
             companyImages: null,
             imageName: '',
             validate: '',
-            test: ''
-
+            test: '',
         };
 
         if (!firebase.apps.length) {
@@ -49,24 +48,27 @@ class CreateCompany extends Component {
             this.setState({ validate: 'This field is requried' })
         } else {
             const Url = 'http://localhost:8080/company/insert';
+            var token = localStorage.getItem('tk');
             const othepram = {
                 headers: {
-                    "content-type": "application/json; charset=UTF-8"
+                    "content-type": "application/json; charset=UTF-8",
+                     tkauth: token
                 },
                 body: JSON.stringify({
                     createcompany: this.state.company,
-                    companypicture: this.state.companyImage
+                    companypicture: this.state.companyImage,
                 }),
                 method: "POST"
             };
             fetch(Url, othepram)
-                .then(data => { return data.json() })
-                .then(res => {
+                .then(res => res.json())
+                .then(json => {
+                    console.log(json)
+                    localStorage.setItem('tk',json.tk)
                 })
-                .catch(error => console.log(error))
         }
         console.log(validate)
-
+        window.location.href = "/Department";
     }
 
     // เอา url ของรูปจากเครื่องมา

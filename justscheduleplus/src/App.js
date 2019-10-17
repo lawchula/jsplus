@@ -8,6 +8,8 @@ import EditProfile from './EditProfile'
 import TestComponent2 from './TestComponent2';
 import Home from './Home';
 // import Request from './RequestPopup';
+import CreateCompany from './CreateCompany';
+import Department from './Department';
 
 
 
@@ -22,6 +24,7 @@ class App extends Component {
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
           <Route path = "/EditProfile" component = {EditProfile} />
+          <Route path = "/Department" component ={Department} />
         </Router>
       {/* <Schedule/> 
       {/* <User></User> */}
@@ -29,7 +32,8 @@ class App extends Component {
        {/* <Register/> */}
        {/* <Home></Home> */}
        {/* <Department></Department> */}
-       {/* <CreateDepartment></CreateDepartment> */}
+       {/* <CreateCompany></CreateCompany>  */}
+         {/* <CreateDepartment></CreateDepartment>
        {/* <NewHomePage></NewHomePage> */}
       </div>
     );

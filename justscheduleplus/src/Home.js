@@ -6,6 +6,9 @@ import "./Css/NewHomepage.css";
 import manager from "./Images/manager.png";
 import staff from "./Images/staff.png";
 import admin from "./Images/admin.png";
+import CreateCompany from './CreateCompany';
+import Login from './Login';
+import * as jwt_decode from 'jwt-decode';
 
 
 class Home extends Component {
@@ -13,7 +16,10 @@ class Home extends Component {
     super(props);
     this.state = {
       showLogin: false,
-      showregis: false
+      showregis: false,
+      showcompany: false,
+      checklog: true,
+      disable: false
     };
   }
 
@@ -21,9 +27,49 @@ class Home extends Component {
     AOS.init({
       duration: 3000
     });
+
+    let token = localStorage.getItem('sc')
+    if(token !== "undefined" && token !== null){
+      this.setState({
+        checklog: false
+      })
+      let tk = localStorage.getItem('tk');
+      console.log(tk)
+      if(tk !== "undefined" && tk !== null){
+        console.log("PASs")
+        this.setState({
+         disable: true
+        })
+      }else{
+        console.log("FAIL")
+        this.setState({
+          disable: false
+         })
+      }
+    }
+
+  }
+
+  showCreateCompany = () => {
+    if(this.state.checklog == true){
+      this.setState({
+        showLogin: !this.state.showLogin
+      })
+    }else{
+      this.setState({
+        showcompany: !this.state.showcompany
+      })
+    }
+  }
+
+  showLogin = () => {
+    this.setState({
+      showLogin: !this.state.showLogin
+    })
   }
 
   render() {
+    const {checklog} = this.state
     return (
       <div className="Home">
         <Header />
@@ -32,10 +78,10 @@ class Home extends Component {
                 <span className="h-t1">WE ARE SCHEDULE MANAGEMENT WEBSITE</span>
                 <span className="h-t2">MAKE YOUR LIFE EASIER</span>
                 <span className="h-t3">GET START NOW</span>
-                <div style={{display:'flex'}}>
-                    <button className="b-h1">CREATE COMPANY</button>
+                    <div style={{display:'flex'}}>
+                    <button className="b-h1" onClick={this.showCreateCompany} disabled={this.state.disable}>CREATE COMPANY</button>
                     <button className="b-h1" style={{marginLeft:10}}>JOIN COMPANY</button>
-                </div>
+                </div> 
             </div>
           </div>
         <div className="h-content">
@@ -87,6 +133,8 @@ class Home extends Component {
             </div>
           </div>
         </div>
+        <CreateCompany show={this.state.showcompany} onClose={this.showCreateCompany}></CreateCompany>
+        <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
     </div>
     );
   }
