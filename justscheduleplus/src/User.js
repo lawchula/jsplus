@@ -121,6 +121,7 @@ class User extends Component {
         ])
 
         const [schedule, alreadyReq, showPeriod] = data
+        console.log(schedule)
         this.setState({ schedule, alreadyReq, showPeriod, loading: false })
     }
 
