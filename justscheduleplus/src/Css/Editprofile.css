@@ -1,10 +1,5 @@
 .bodypage {
-  background-image: -webkit-linear-gradient(
-    -120deg,
-    #8647f9 0%,
-    #4e91c1 64%,
-    #15da88 100%
-  );
+  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
   background-color: #fafafb;
   height: 100vh;
 }
@@ -33,10 +28,10 @@
   height: 150px;
   border: 1px solid #bdc7d8;
   border-radius: 100px;
-  margin-left: 27px;
   display: flex;
   justify-content: center;
   margin-top: 30px;
+ 
 }
 .edit-userimg {
   width: 150px;

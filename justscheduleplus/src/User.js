@@ -6,6 +6,7 @@ import Header from './Header';
 import * as jwt_decode from 'jwt-decode';
 import RequestPopup from './RequestPopup';
 import RequestAbsent from './RequestAbsent';
+import url from './url'
 
 class User extends Component {
 
@@ -21,7 +22,7 @@ class User extends Component {
             alreadyReq: [],
             block: [],
             year: new Date().getFullYear(),
-            month: new Date().getMonth(),
+            month: new Date().getMonth()-1,
             count: 0,
             zIndex: 6,
             zIndex2: 0,
@@ -37,7 +38,9 @@ class User extends Component {
             showReqAbsentPopup: false,
             showReqPopup: false,
             showPeriod: [],
-            currentDay: new Date().getDate()
+            currentDay: new Date().getDate(),
+            checkReq:[],
+            checkHasReq:[]
         }
     }
 
@@ -50,11 +53,11 @@ class User extends Component {
     async checkToken() {
         var token = localStorage.getItem('tk');
         if (token == null || token == "undefined") {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = "/";
         } else if (token != null && token != "undefined") {
             var decoded = jwt_decode(token);
             if (decoded.position == "Manager" || decoded.position == "Admin") {
-                window.location.href = "http://localhost:3000/Schedule";
+                window.location.href = "/Schedule";
             } else {
                 await this.SelectDataFromDB();
             }
@@ -71,15 +74,15 @@ class User extends Component {
         };
 
         const data = await Promise.all([
-            fetch('http://localhost:8080/users', othepram)
+            fetch(url+'/users', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/company', othepram)
+            fetch(url+'/company', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/department', othepram)
+            fetch(url+'/department', othepram)
                 .then((response) => {
                     return response.json();
                 }),
@@ -103,15 +106,15 @@ class User extends Component {
         };
 
         const data = await Promise.all([
-            fetch('http://localhost:8080/showschedule', othepram)
+            fetch(url+'/showschedule', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch('http://localhost:8080/already/request', othepram)
+            fetch(url+'/already/request', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch("http://localhost:8080/showperiod", othepram)
+            fetch(url+"/showperiod", othepram)
                 .then(response => {
                     return response.json();
                 })
@@ -258,11 +261,40 @@ class User extends Component {
         this.state.schedule.map(e => {
             if (e.User_ID == name.User_ID && e.Date == date) {
                 arr.push(e)
-                this.setState({ secondScheduleDetail: arr, count: 0, request: false, zIndex: 6, zIndex2: 0 })
-                this.showRequestPopup();
+                this.setState({secondScheduleDetail:arr})
+                // this.setState({ secondScheduleDetail: arr, count: 0, request: false, zIndex: 6, zIndex2: 0 })
+                // this.showRequestPopup();
             }
         })
+
+        this.getPeriodForChange(arr);
     }
+
+    getPeriodForChange(arr){
+        let userID = this.state.firstScheduleDetail[0].User_ID;
+        let date = arr[0].Date
+        let reqDate = this.state.firstScheduleDetail[0].Date;
+        let reqUserID  = arr[0],User_ID
+        let arrays = [];
+        let array = [];
+
+        this.state.schedule.map(period => {
+            if(period.User_ID === userID && period.Date === date){
+                array.push(period)
+            }
+        })
+
+        this.state.schedule.map(period => {
+            if(period.User_ID === reqUserID && period.Date === reqDate){
+                array.push(period)
+            }
+        })
+
+        this.setState({checkReq:array,checkHasReq:arrays,count:0,request:false,zIndex:6,zIndex2:0})
+        this.showRequestPopup();
+    }
+
+
 
     userRequestAbsent(name, date) {
         const arr = []
@@ -360,6 +392,8 @@ class User extends Component {
                                             secondUser={this.state.secondUser}
                                             month={this.state.month}
                                             year={this.state.year}
+                                            checkReq={this.state.checkReq}
+                                            checkHasReq={this.state.checkHasReq}
                                             showPeriod={this.state.showPeriod}
                                             onClose={this.cancleRequest}
                                             schedule={this.getSchedules}></RequestPopup>
