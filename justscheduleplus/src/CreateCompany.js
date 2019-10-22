@@ -3,6 +3,7 @@ import './Css/CreateCompany.css';
 import close from './Images/error.png';
 import * as firebase from 'firebase';
 import ApiKeys from './ApiKeys';
+import url from './url';
 
 
 class CreateCompany extends Component {
@@ -40,19 +41,19 @@ class CreateCompany extends Component {
         console.log(this.state.company)
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault()
         let { company, validate } = this.state
-        // console.log(company.companyName + company.companyEmail + company.companyTel)
+
         if (company.companyName == "" || company.companyEmail == "" || company.companyTel == "") {
             this.setState({ validate: 'This field is requried' })
         } else {
-            const Url = 'http://localhost:8080/company/insert';
-            var token = localStorage.getItem('tk');
+            const Url = url + '/company/insert';
+            var token = localStorage.getItem('sc');
             const othepram = {
                 headers: {
                     "content-type": "application/json; charset=UTF-8",
-                     tkauth: token
+                    tkauth: token
                 },
                 body: JSON.stringify({
                     createcompany: this.state.company,
@@ -64,11 +65,10 @@ class CreateCompany extends Component {
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)
-                    localStorage.setItem('tk',json.tk)
+                    localStorage.setItem('tk', json.tk)
+                    // window.location.href = "/Department";
                 })
         }
-        console.log(validate)
-        window.location.href = "/Department";
     }
 
     // เอา url ของรูปจากเครื่องมา

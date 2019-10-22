@@ -91,7 +91,9 @@ class Login extends React.Component {
             var decoded = jwt_decode(token);
             if (decoded.position == "Manager") {
               window.location.href = "/Schedule";
-            } else {
+            } else if(decoded.position === "Admin"){
+              window.location.href = "/Department";
+            }else{
               window.location.href = "/User";
             }
           }
