@@ -4,16 +4,18 @@
     height: 100vh;
     display: flex;
     flex-direction: row;
+    width: 100%;
+    max-width: 100%;
 }
 .company-description{
-    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
     height: 100vh;
     width: 210px;
     display: flex;
     flex-direction: column;
     align-items: left;
     padding-top: 30px;
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
     color: white;
     font-weight: 600;
 }
@@ -22,7 +24,7 @@
     height: 150px;
     border: 1px solid #bdc7d8;
     border-radius: 100px;
-    margin-left: 27px;
+    margin-left: 15px;
 }
 .description{
     margin-left: 15px;
@@ -35,26 +37,67 @@
 }
 .department{
     display: flex;
-    flex-direction: row;
     justify-content: flex-start;
     color:#848d95;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: 100%;
+    padding: 20px;
 }
 .create-department{
-    width:150px;
-    height: 150px;
     border:2px solid #bdc7d8;
     border-radius: 100px;
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
-    padding-top: 57px;
+    padding-top:65px;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    padding: 80px;
 }
 .create-department-container{
+    width:400px;
+    height: 230px;
+    padding:20px;
+    padding-left:110px; 
+    font-family: 'Poppins', sans-serif;
+}
+.departments{
+    width: 400px;
+    height: 250px;
+    background-color:white;
+    border: 1px solid #bdc7d8;
     margin-top: 20px;
-    margin-left: 40px;
-    font-family: Helvetica;
+    margin-left: 5px;
+}
+.dp-img1{
+    width: 400px;
+    height: 160px;
+    background-color: #bdc7d8;;
+}
+.dp-sh{
+    font-family: 'Poppins', sans-serif;
+    color: #4054b2;
+    padding: 10px;
+    width: 400px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+}
+.b-mn{
+    margin-left: 280px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+    margin-top: -30px;
+    width:90px;
+}
+.b-mn:hover{
+    margin-left: 280px;
+    background: #4054b2;
+    border: 1px solid #4054b2;
     color: white;
-    /* font-weight: lighter; */
-    height: auto;
-    color: #848d95;
+    margin-top: -30px;
+    width:90px;
 }
