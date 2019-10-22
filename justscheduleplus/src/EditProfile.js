@@ -193,7 +193,7 @@ class AdminHome extends Component {
                 <div className="zindex"></div>
 
                 <div className="edit-profile">
-                  {userImg == "" ? (<img className="edit-userimg" src={user}></img>) : (<img className="edit-userimg" src={userImg}></img>)}
+                  {userImg == "" ?  " " : (<img className="edit-userimg" src={userImg}></img>)}
                 </div>
 
                 <label htmlFor="upload-photo">
@@ -270,11 +270,15 @@ class AdminHome extends Component {
                 </form>
               </div>
             </div>
+            {console.log(userImg)}
           </React.Fragment>
+          
           }
         </div>
       );
+      
     }
+    
   }
 
   export default AdminHome;

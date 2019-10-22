@@ -10,6 +10,7 @@ import Home from './Home';
 // import Request from './RequestPopup';
 import CreateCompany from './CreateCompany';
 import Department from './Department';
+import DepartmentDP from './DepartmentDescription';
 
 
 
@@ -35,6 +36,7 @@ class App extends Component {
        {/* <CreateCompany></CreateCompany>  */}
          {/* <CreateDepartment></CreateDepartment>
        {/* <NewHomePage></NewHomePage> */}
+       {/* <DepartmentDP></DepartmentDP> */}
       </div>
     );
   }

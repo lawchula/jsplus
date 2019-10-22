@@ -127,7 +127,6 @@ class Schedule extends Component {
                 return response.json();
             })
             .then((myJson) => {
-                console.log(myJson)
                 this.setState({ selectSchedule: myJson })
             });
     }

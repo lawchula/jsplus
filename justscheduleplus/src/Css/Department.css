@@ -6,7 +6,7 @@
     flex-direction: row;
 }
 .company-description{
-    background-image:linear-gradient(#07889b,#66b9bf);
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
     height: 100vh;
     width: 210px;
     display: flex;

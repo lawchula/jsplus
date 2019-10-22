@@ -7,6 +7,7 @@ import 'aos/dist/aos.css';
 import CreateDepartment from './CreateDepartment';
 import Request from './RequestPopup';
 import RequestAbsent from './RequestAbsent';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
 
 
 
@@ -21,7 +22,11 @@ class TestComponent2 extends Component {
       showcompany: false,
       showdepartment: false,
       showrequest: false,
-      showrequestabsent: false
+      showrequestabsent: false,
+      months:["Januray","February","March","April","May","June","July","August","September","October","November","December"],  
+      dropdownOpen: false,
+      month: 0,
+      nameofmonth: "test"
     }
   }
 
@@ -66,7 +71,53 @@ class TestComponent2 extends Component {
     })
   }
 
- 
+  toggle = () => {
+    const { dropdownOpen } = this.state
+    this.setState({ dropdownOpen: !dropdownOpen })
+}
+
+ getMonth = (event) =>{
+    console.log(event)
+    let check = 0
+    if(event == "Januray"){
+      check = 1
+    }else if(event == "February"){
+      check = 2
+    }else if(event ==  "March"){
+      check = 3
+    }else if(event ==  "April"){
+      check = 4
+    }
+    else if(event ==  "May"){
+      check = 5
+    }
+    else if(event ==  "June"){
+      check = 6
+    }
+    else if(event ==  "July"){
+      check = 7
+    }
+    else if(event ==  "August"){
+      check = 8
+    }
+    else if(event ==  "September"){
+      check = 9
+    }
+    else if(event ==  "October"){
+      check = 10
+    }
+    else if(event ==  "November"){
+      check = 11
+    }else{
+      check =12
+    }
+    
+    this.setState({nameofmonth: event})
+    
+    console.log(check)
+    
+   
+ }
 
   render() {
 
@@ -85,9 +136,18 @@ class TestComponent2 extends Component {
         <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
         <Register show={this.state.showregis} onClose={this.showRegister}></Register>
         <CreateDepartment show={this.state.showdepartment} onClose={this.showCreateDepartment}></CreateDepartment>
-        <div data-aos='fade-right' style={{height:300,width:300,backgroundColor:'red',marginTop:1000}}> 
+        {/* <div data-aos='fade-right' style={{height:300,width:300,backgroundColor:'red',marginTop:1000}}> 
 
-        </div>
+        </div> */}
+
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
+            <DropdownToggle tag="span">
+             <span>{this.state.nameofmonth}</span>
+               </DropdownToggle>
+               <DropdownMenu>
+               {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event)}>{event} </DropdownItem> })}
+                 </DropdownMenu>
+                  </Dropdown>
        
       </div>
     );
