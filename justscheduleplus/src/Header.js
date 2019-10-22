@@ -20,6 +20,7 @@ import select from './Images/select.png';
 import schedule1 from './Images/schedule1.png';
 import Notification from './Images/notification.png';
 import url from './url';
+import logo from './Images/logo.png'
 
 
 class Header extends Component {
@@ -456,8 +457,7 @@ class Header extends Component {
         {
           !loading && (<React.Fragment>
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
-              <div className="JS" onClick={this.homePage}><b>JS</b></div>
-              <div className="Plus" ><b>+</b></div>
+              <div className="JS" onClick={this.homePage}><img src={logo} style={{height:100,width:100}}></img></div>
               <NavbarToggler onClick={this.navbarOpen} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar >

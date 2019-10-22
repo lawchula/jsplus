@@ -9,6 +9,7 @@ import Timepicker from './Timepicker';
 import error from './Images/close.png';
 import * as jwt_decode from 'jwt-decode';
 import url from './url';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
 
 class Schedule extends Component {
     constructor(props) {
@@ -32,7 +33,10 @@ class Schedule extends Component {
             currentDay: new Date().getDate(),
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
-            countday: new Date().getDay()
+            countday: new Date().getDay(),
+            months:["Januray","February","March","April","May","June","July","August","September","October","November","December"],
+            dropdownOpen: false,
+            
         }
     }
 
@@ -40,6 +44,7 @@ class Schedule extends Component {
         this.getDaysInMonth(this.state.month, this.state.year)
         this.setBlock(this.state.month, this.state.year)
         await this.checkToken();
+        console.log(this.state.month)
     }
 
 
@@ -56,6 +61,22 @@ class Schedule extends Component {
             }
         }
     }
+
+    getMonth = (event,i) =>{
+        const test = i
+        this.setState({month:test})
+        this.getDaysInMonth(test,this.state.year) 
+        this.forceUpdate()       
+    } 
+
+    getNameofMonth = (month) => {
+        this.getSchedules();
+       const monthNames = ["January", "February", "March", "April", "May", "June",
+           "July", "August", "September", "October", "November", "December"
+       ];
+       return monthNames[month]
+      
+   }
 
     SelectDataFromDB = async () => {
         var token = localStorage.getItem('tk');
@@ -122,23 +143,20 @@ class Schedule extends Component {
             date.setDate(date.getDate() + 1);
         }
         this.setState({ day: days })
+      
+      
 
-    }
-
-    getNameofMonth = (month) => {
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        return monthNames[month]
     }
 
     setBlock = (month, year) => {
+       
         var count = new Date(year, month + 1, 0).getDate();
         var a = []
         for (var i = 1; i <= count; i++) {
             a.push(i)
         }
         this.setState({ block: a })
+       
     }
 
     showPopup = () => {
@@ -283,6 +301,11 @@ class Schedule extends Component {
             .catch(error => console.log(error))
     }
 
+    toggle = () => {
+        const { dropdownOpen } = this.state
+        this.setState({ dropdownOpen: !dropdownOpen })
+    }
+
 
     render() {
 
@@ -329,7 +352,17 @@ class Schedule extends Component {
                                 <td colSpan={this.state.block.length == 31 ? 3 : 2} style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
                             </tr>
                             <tr id="tr2">
-                                <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th>
+                                {/* <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th> */}
+                               <th colSpan={this.state.block.length + 2}>  
+                               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
+                                        <DropdownToggle tag="span">
+                                        <span>{this.getNameofMonth(this.state.month) + " "+ this.state.year}</span>
+                                        </DropdownToggle>
+                                        <DropdownMenu>
+                                        {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event,i)}>{event} </DropdownItem> })}
+                                            </DropdownMenu>
+                                            </Dropdown>
+                                            </th>
                             </tr>
                         </thead>
                         <tbody>

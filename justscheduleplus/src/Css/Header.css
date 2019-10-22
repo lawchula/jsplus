@@ -9,13 +9,7 @@
     font-weight: bold;
     font-size: 35px;
     cursor: pointer;
-}
-.Plus{
-    font-family: 'Poppins', sans-serif;
-    font-weight: bold;
-    color:  #4054b2;
-    font-size: 35px;
-    cursor: pointer;
+    position: absolute;
 }
 .button1{
     background-color: #E37222;
@@ -34,6 +28,7 @@
     left:100px;
     font-weight: bold;  
     padding-top:7px;
+    margin-left: 20px;
 }
 .firstheader-item{
     color: black;
