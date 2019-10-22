@@ -1,0 +1,110 @@
+.department-description{
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+.dp-ds-container{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+}
+.dp-header{
+ display: flex;
+ width: 450px;
+ height: 200px;
+ border: 1px solid white;
+ padding: 10px;
+ margin-top: 30px;
+ margin-left: 30px;
+}
+.dp-img{
+    margin-top: 27px;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #bdc7d8;
+    border-radius: 100px;
+}
+.dp-description{
+    font-family: 'Poppins', sans-serif;
+    color: white;
+   margin-top: 5px;
+}
+.tb-container{
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.table-dp{
+    font-family: 'Poppins', sans-serif;
+    margin-top: 60px;
+    background-color: white;
+    width: 20px;
+}
+#table-header{
+    font-family: 'Poppins', sans-serif;
+    background-color: #DCDCDC;
+}
+
+table.table-bordered{
+    border:1px solid blue;
+}
+.table-bordered td{
+    border: 1px solid #DCDCDC !important;
+}
+.table-bordered th{
+    border: 1px solid white !important;
+    font-weight: bold;
+}
+.add-staff{
+    position: absolute;
+    right:0;
+    margin-right: 30px;
+    font-family: 'Poppins', sans-serif;
+}
+.add-staff-butt:hover{
+    width: 150px;
+    height: 40px;
+    background: none;
+    border: 1px solid white;
+    color: white;
+}
+.add-staff-butt{
+    width: 150px;
+    height: 40px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+}
+.manage-staff1{
+    font-size: 12.5px; 
+    width: 65px;
+    height: 30px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+    margin-left: -32px;
+}
+.manage-staff2{
+    font-size: 12.5px; 
+    width: 65px;
+    height: 30px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+    margin-left: 27px;
+}
+.manage-staff3{
+    font-size: 12.5px; 
+    width: 65px;
+    height: 30px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+    margin-left: -10px;
+}
+.add-staff2{
+  position: absolute;
+ left: 250px;
+ margin-top: 15px;
+}
