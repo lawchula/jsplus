@@ -9,8 +9,8 @@ import TestComponent2 from './TestComponent2';
 import Home from './Home';
 // import Request from './RequestPopup';
 import CreateCompany from './CreateCompany';
+import Company from './Company';
 import Department from './Department';
-import DepartmentDP from './DepartmentDescription';
 
 
 
@@ -25,7 +25,8 @@ class App extends Component {
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
           <Route path = "/EditProfile" component = {EditProfile} />
-          <Route path = "/Department" component ={Department} />
+          <Route path = "/Company" component ={Company} />
+          <Route path = "/Department" component = {Department} />
         </Router>
       {/* <Schedule/> 
       {/* <User></User> */}

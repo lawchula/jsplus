@@ -1,104 +1,198 @@
-import React, { Component } from 'react';
-import './Css/Department.css';
-import * as firebase from 'firebase';
-import plus from './Images/plus.png';
-import CreateDepartment from './CreateDepartment';
+import React, { Component } from "react";
+import './Css/DepartmentDescription.css';
+import { Table } from 'reactstrap';
 import Header from './Header';
+import manager from './Images/setmanager.png';
+import staff from './Images/setstaff.png';
+import remove from './Images/delete.png';
+import edit from './Images/configuration.png';
 import url from './url';
+
 
 class Department extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            company:[],
-            showdepartment: false,
-            department:[{name:"test",telno:"029131944",member:"10"}]
+            // user:[{id:'1',name:"Teetuch Jeeravarangkul3",email:'lawchula@hotmail.com',telno:'0917767191',position:'Manager'},
+            //     {id:'2',name:"Teetuch Jeeravarangkul",email:'lawchula@hotmail.com',telno:'0917767191',position:'Front-end Developer'},
+            // {id:'3',name:"Teetuch Jeeravarangkul2",email:'lawchula@hotmail.com',telno:'0917767191',position:'Front-end Developer'}],
+            user: [],
+            edit: true,
+            addstaff: false,
+            test: 0,
+            test2: [],
+            loading: true,
+            department: []
         }
     }
 
     componentDidMount() {
-        console.log("TEST")
-        this.getCompanyFromDB()
+        const { manageDepartment } = this.props.location.state
+        this.setState({ department: manageDepartment })
+        this.getDepartmentDes(manageDepartment);
     }
 
-    getCompanyFromDB = async () => {
-        var token = localStorage.getItem('tk')
+    getDepartmentDes = async (manageDepartment) => {
+        let departID = manageDepartment.Department_ID
+        console.log(departID)
+        // var token = localStorage.getItem('tk')
         const othepram = {
             headers: {
-                tkAuth: token,
+                departid: departID
             },
             method: "GET"
         };
-        console.log(token)
-        console.log(url)
         const data = await Promise.all([
-            fetch(url + '/get/company', othepram)
+            fetch(url + '/get/department/user', othepram)
                 .then((response) => {
                     return response.json();
                 })
         ])
 
-        const [company] = data
-        this.setState({ company, loading: false })
+        const [user] = data
+        this.setState({ user, loading: false })
+    }
+    remove = (key) => {
+        this.state.user.splice(key, 1);
+        this.forceUpdate();
     }
 
-    showCreateDepartment = () => {
+    editTable = (key) => {
         this.setState({
-          showdepartment: !this.state.showdepartment
+            test: key
         })
-      }
+    }
+
+    addStaff = () => {
+        this.setState({
+            addstaff: !this.state.addstaff
+        })
+    }
+
+    cancleEdit = () => {
+        this.setState({
+            test: ""
+        })
+    }
+
+    handleChange = (event, key) => {
+        event.preventDefault();
+        // let  {user}  = this.state;
+        // user[event.target.name ]= event.target.value
+        // user[key].name = event.target.value
+        // user[key].email = event.target.value
+        // user[key].telno = event.target.value
+        // user[key].position = event.target.value
+        // this.setState({user})
+        //  user[event.target.name] = event.target.value;
+        //  this.setState({ user });
+        // console.log(event.target.name)
+        // console.log(event.target.value)
+        // console.log(user)
+
+    }
+    submit = () => {
+        this.setState({
+            test: ""
+        })
+    }
 
 
-    render(){
-        const {company,department} = this.state
-        const compayname = company.map((event,i) =>  {return <span className="second-description" key={i}>{ event.Company_Name}</span>})
-        const companymail = company.map((event,i) =>  {return <span className="second-description" key={i}>{event.Company_Mail}</span>})
-        const companytel = company.map((event,i) =>  {return <span className="second-description" key={i}>{event.Company_Tel}</span>})
-        const companypicture = company.map((event,i) =>  {return <img key={i} className="company-pictures" src={event.Company_Picture} ></img>})
-        const departments = department.map((event,i) => {return <div className="departments">
-             <div className="dp-img1">
+    render() {
 
-            </div>
-            <div className="dp-sh">
-              <span>Department : {event.name}</span>
-              <span>Telno : {event.telno} </span>
-              <span>Member : {event.member}</span>
-              <button className="b-mn">Manage</button>
-            </div>
+        const { edit, addstaff, test, department,user } = this.state
+        console.log(user)
+        const manage = user.map((e, key) => {
+            return <tr>
+                <td>{e.id == test ? <input defaultValue={e.name} name="name" onChange={event => this.handleChange(event, key)} ></input> : e.name}</td>
+                <td>{e.id == test ? <input defaultValue={e.Email} name="email" onChange={event => this.handleChange(event, key)}></input> : e.Email}</td>
+                <td>{e.id == test ? <input defaultValue={e.PhoneNumber} name="telno" onChange={event => this.handleChange(event, key)}></input> : e.PhoneNumber}</td>
+                <td>{e.id == test ? <input defaultValue={e.Position_Name} name="position" onChange={event => this.handleChange(event, key)}></input> : e.Position_Name}</td>
+                <td>
+                    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                        <img src={e.position == "Manager" ? manager : staff}></img>
+                        {e.id == test ? <div style={{ display: 'flex' }}>
+                            <button className="manage-staff3" onClick={this.cancleEdit}>cancel</button>
+                            <button className="manage-staff2" onClick={this.submit}>save</button> </div>
+                            :
+                            <div style={{ display: 'flex' }}>
+                                <button className="manage-staff1" onClick={() => this.remove(key)} >remove</button>
+                                <button className="manage-staff2" onClick={() => this.editTable(e.id)}>edit</button>
+                            </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+        })
 
-        </div>} )
-       
-
-
+        let manager = '';
+        let member = user.length
+        user.map(manager => {
+            if(manager.Position_Name === "Manager"){
+                manager = manager.name + ' ' + manager.surname
+            }
+        })
 
         return (
-            <div className="department-container">
-                <div className="company-description">
-                    {companypicture}
-                    <span className="description" style={{marginTop:20}}>Company :</span>
-                    {compayname}
-                    <span className="description">Email :</span>
-                    {companymail}
-                    <span className="description">Telno :</span>
-                    {companytel}
-                </div>
-                <div className="department">
-                    <div className="create-department-container">
-                        <div className="create-department" onClick={this.showCreateDepartment}> 
-                           <img src={plus} style={{height:32}}></img>
+            <div className="department-description">
+                <Header></Header>
+                <div className="dp-ds-container">
+                    <div className="dp-header">
+                        <div className="col-5">
+                            <div className="dp-img">
+                            <img className="department-pictures" src={department.Department_Picture}></img>
+                            </div>
                         </div>
-                        <span style={{marginLeft:10}}>create department</span>
+                        <div className="dp-description col-9">
+                            <span>Depaertment :</span>
+                            <span>{department.Department_Name}</span>
+                            <br></br>
+                            <br></br>
+                            <span>Telno :</span>
+                            <span>{department.Department_TelNo}</span>
+                            <br></br>
+                            <br></br>
+                            <span>Manager :</span>
+                            {manager}
+                            <br></br>
+                            <br></br>
+                            <span>Member :</span>
+                            {member}
                         </div>
-                        {departments}
-                        
+                    </div>
                 </div>
-                <CreateDepartment show={this.state.showdepartment} onClose={this.showCreateDepartment}></CreateDepartment>
+                <div className="tb-container">
+                    {addstaff == false ?
+                        <div className="add-staff">
+                            <button className="add-staff-butt" onClick={this.addStaff}>Add Staff+</button>
+                        </div>
+                        :
+                        <div className="add-staff2">
+                            <input placeholder="Name" ></input>
+                            <input placeholder="Surname" style={{ marginLeft: 10 }}></input>
+                            <input placeholder="Email" style={{ marginLeft: 10 }}></input>
+                            <input placeholder="Telno" style={{ marginLeft: 10 }}></input>
+                            <input placeholder="Position" style={{ marginLeft: 10 }}></input>
+                            <button className="add-staff-butt" onClick={this.addStaff} style={{ marginLeft: 10 }}>Add</button>
+                        </div>
+                    }
+                    <Table bordered responsive className="table-dp">
+                        <tbody>
+                            <tr id="table-header">
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>TELNO</th>
+                                <th>POSITION</th>
+                                <th>MANAGE</th>
+                            </tr>
+                            {manage}
+                        </tbody>
+                    </Table>
+                </div>
             </div>
-
         );
     }
-
 }
 
 export default Department

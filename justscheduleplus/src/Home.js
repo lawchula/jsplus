@@ -34,14 +34,11 @@ class Home extends Component {
         checklog: false
       })
       let tk = localStorage.getItem('tk');
-      console.log(tk)
       if(tk !== "undefined" && tk !== null){
-        console.log("PASs")
         this.setState({
          disable: true
         })
       }else{
-        console.log("FAIL")
         this.setState({
           disable: false
          })

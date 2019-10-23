@@ -38,7 +38,6 @@ class CreateCompany extends Component {
         let { company } = this.state
         company[event.target.name] = event.target.value
         this.setState({ company })
-        console.log(this.state.company)
     }
 
     handleSubmit = async (event) => {
@@ -64,9 +63,9 @@ class CreateCompany extends Component {
             fetch(Url, othepram)
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
                     localStorage.setItem('tk', json.tk)
-                    // window.location.href = "/Department";
+                    alert("Create Company Success")
+                    window.location.href = "/Company";
                 })
         }
     }
