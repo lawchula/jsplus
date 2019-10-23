@@ -26,7 +26,7 @@ width: auto;
 .tests{
     background-color: white;
     margin-top: 30px;
-    overflow-x: auto;
+    overflow: hidden;
     table-layout: fixed;
 }
 .fix{
@@ -38,7 +38,7 @@ width: auto;
     height: 50px;
     font-family: 'Poppins', sans-serif;
     background-color: #4054b2;
-     color: white;
+    color: white;
     font-weight:bold;
     font-size:13px;
 }
@@ -80,7 +80,7 @@ width: auto;
     background-color: #4054b2;
     
     color: white;
-    text-align:center;
+    text-align: center;
 }
 #name-schedule{
     /* background-color: #eeaa7b; */
@@ -202,5 +202,8 @@ width: auto;
     height: 20px;
     border-radius: 25px; 
     border: 2px solid white;
+}
+.table-td{
+    background-color: white;
 }
 

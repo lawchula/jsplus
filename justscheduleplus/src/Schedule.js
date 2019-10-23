@@ -10,6 +10,7 @@ import error from './Images/close.png';
 import * as jwt_decode from 'jwt-decode';
 import url from './url';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 class Schedule extends Component {
     constructor(props) {
@@ -66,6 +67,7 @@ class Schedule extends Component {
         const test = i
         this.setState({month:test})
         this.getDaysInMonth(test,this.state.year) 
+        this.setBlock(test,this.state.year);
         this.forceUpdate()       
     } 
 
@@ -343,7 +345,7 @@ class Schedule extends Component {
                             <div className="b-static">REMAIN:</div>
                         </div>
                     </div>
-                    <Table bordered responsive className="tests">
+                    <Table bordered responsive className="tests" id="table-to-xls">
                         <thead>
                             <tr id="tr1">
                                 <th colSpan={(this.state.block.length / 2) } >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
@@ -353,15 +355,15 @@ class Schedule extends Component {
                             <tr id="tr2">
                                 {/* <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th> */}
                                <th colSpan={this.state.block.length + 2}>  
-                               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
+                               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='right' size="sm">
                                         <DropdownToggle tag="span">
                                         <span>{this.getNameofMonth(this.state.month) + " "+ this.state.year}</span>
                                         </DropdownToggle>
                                         <DropdownMenu>
-                                        {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event,i)}>{event} </DropdownItem> })}
+                                        {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event,i)}>{this.state.dropdownOpen == false ? null : event} </DropdownItem> })}
                                             </DropdownMenu>
                                             </Dropdown>
-                                            </th>
+                                    </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -375,7 +377,7 @@ class Schedule extends Component {
                                     <td colSpan="2" className={this.ShowUserColorOnSchedule(x)} >{event.Name}</td>
                                     {/* เอาค่าวันที่มา set เป็นช่อง */}
                                     {this.state.block.map((e, y) => {
-                                        return <td style={{ backgroundColor: 'white' }} onClick={() => this.SendMultidimension(x, y)}>
+                                        return <td className="table-td" onClick={() => this.SendMultidimension(x, y)}>
                                             {/* เอาค่า period จาก db มาแสดง */}
                                             {this.state.selectSchedule.map(periodinschedule => {
                                                 if (event.User_ID == periodinschedule.User_ID && periodinschedule.Date == e)
@@ -420,7 +422,8 @@ class Schedule extends Component {
                     </Table>
                     <div style={{ display: "flex", float: 'right' }}>
                         {this.state.edit && <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
-                        {this.state.edit == false ? <button className="b-save" onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> : ""}
+                        {this.state.edit == false ? <div> <button className="b-save" style={{marginRight:10}} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> 
+                          <ReactHTMLTableToExcel  table="table-to-xls"   filename="Schedule" sheet="sheet 2"buttonText="Export" className="b-save"/> </div> : ""}
                     </div>
                 </Container>
             </div>

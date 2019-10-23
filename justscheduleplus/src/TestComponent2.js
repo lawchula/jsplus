@@ -8,6 +8,7 @@ import CreateDepartment from './CreateDepartment';
 import Request from './RequestPopup';
 import RequestAbsent from './RequestAbsent';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
+import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 
 
 
@@ -26,7 +27,11 @@ class TestComponent2 extends Component {
       months:["Januray","February","March","April","May","June","July","August","September","October","November","December"],  
       dropdownOpen: false,
       month: 0,
-      nameofmonth: "test"
+      nameofmonth: "test",
+      cols:[],
+      rows:[],
+      user:{name:"",surname:"",email:"",position:""},
+      users:[]
     }
   }
 
@@ -76,55 +81,50 @@ class TestComponent2 extends Component {
     this.setState({ dropdownOpen: !dropdownOpen })
 }
 
- getMonth = (event) =>{
-    console.log(event)
-    let check = 0
-    if(event == "Januray"){
-      check = 1
-    }else if(event == "February"){
-      check = 2
-    }else if(event ==  "March"){
-      check = 3
-    }else if(event ==  "April"){
-      check = 4
-    }
-    else if(event ==  "May"){
-      check = 5
-    }
-    else if(event ==  "June"){
-      check = 6
-    }
-    else if(event ==  "July"){
-      check = 7
-    }
-    else if(event ==  "August"){
-      check = 8
-    }
-    else if(event ==  "September"){
-      check = 9
-    }
-    else if(event ==  "October"){
-      check = 10
-    }
-    else if(event ==  "November"){
-      check = 11
-    }else{
-      check =12
-    }
-    
-    this.setState({nameofmonth: event})
-    
-    console.log(check)
-    
+  fileHandler = (event) => {
+    let fileObj = event.target.files[0];
+
+    //just pass the fileObj as parameter
+    ExcelRenderer(fileObj, (err, resp) => {
+      if(err){
+        console.log(err);            
+      }
+      else{
+        this.setState({
+          cols: resp.cols,
+          rows: resp.rows
+        });
+        console.log(this.state.rows.length)
+      }
+    });               
+
+  }
    
- }
+  test = (event) => {
+   
+
+    for(let i=0; i <event.length;i++){
+      var a = {}
+      a.name = event[i][0]
+      a.surname = event[i][1]
+      a.email = event[i][2]
+      a.position = event[i][3]
+      this.state.users.push(a)
+      console.log(event[i])
+
+    }
+    console.log(this.state.users)
+     
+  }
+
+
 
   render() {
 
 
     return (
       <div>
-        <button onClick={this.showLogin}>Test</button>
+        <button onClick={this.test(this.state.rows)}>Test</button>
         <button onClick={this.showRegister}>Test</button>
         <button onClick={this.showCreateCompany}>Company</button>
         <button onClick={this.showCreateDepartment}>Department</button>
@@ -140,14 +140,9 @@ class TestComponent2 extends Component {
 
         </div> */}
 
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' style={{ marginTop: -12, marginLeft: -13 }} size="sm">
-            <DropdownToggle tag="span">
-             <span>{this.state.nameofmonth}</span>
-               </DropdownToggle>
-               <DropdownMenu>
-               {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event)}>{event} </DropdownItem> })}
-                 </DropdownMenu>
-                  </Dropdown>
+      <input type="file" onChange={this.fileHandler.bind(this)} style={{"padding":"10px"}} />
+      <OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />
+      {this.state.rows.map((e)=>  {return <div>{e}<br></br></div>})}
        
       </div>
     );

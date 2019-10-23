@@ -191,6 +191,7 @@ class Department extends Component {
                     </Table>
                 </div>
             </div>
+
         );
     }
 }
