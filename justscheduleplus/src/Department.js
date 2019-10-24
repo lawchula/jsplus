@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import './Css/DepartmentDescription.css';
 import { Table } from 'reactstrap';
 import Header from './Header';
-import manager from './Images/setmanager.png';
-import staff from './Images/setstaff.png';
+import setmanager from './Images/setmanager.png';
+import setstaff from './Images/setstaff.png';
 import remove from './Images/delete.png';
 import edit from './Images/configuration.png';
 import url from './url';
+import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 
 
 class Department extends Component {
@@ -23,7 +24,10 @@ class Department extends Component {
             test: 0,
             test2: [],
             loading: true,
-            department: []
+            department: [],
+            cols:[],
+            rows:[],
+            newusers:[]
         }
     }
 
@@ -98,33 +102,79 @@ class Department extends Component {
         })
     }
 
+    fileHandler = (event) => {
+        let fileObj = event.target.files[0];
+    
+        //just pass the fileObj as parameter
+        ExcelRenderer(fileObj, (err, resp) => {
+          if(err){
+            console.log(err);            
+          }
+          else{
+            this.setState({
+              cols: resp.cols,
+              rows: resp.rows
+            });
+            console.log(this.state.rows.length)
+          }
+        });          
+      }
+
+    addUserfromExcel = (event) =>{
+        for(let i=0; i <event.length;i++){
+          var a = {}
+          a.name = event[i][0]
+          a.surname = event[i][1]
+          a.email = event[i][2]
+          a.telno = event[i][3]
+          a.position = event[i][4]
+          this.state.newusers.push(a)
+          console.log(event[i])
+        }
+        console.log(this.state.rows)
+        console.log(this.state.newusers)
+        this.state.rows = []
+        this.state.cols = []
+       }
+    
+
 
     render() {
 
-        const { edit, addstaff, test, department,user } = this.state
+        const { edit, addstaff, test, department,user,newusers } = this.state
         console.log(user)
         const manage = user.map((e, key) => {
             return <tr>
-                <td>{e.id == test ? <input defaultValue={e.name} name="name" onChange={event => this.handleChange(event, key)} ></input> : e.name}</td>
-                <td>{e.id == test ? <input defaultValue={e.Email} name="email" onChange={event => this.handleChange(event, key)}></input> : e.Email}</td>
-                <td>{e.id == test ? <input defaultValue={e.PhoneNumber} name="telno" onChange={event => this.handleChange(event, key)}></input> : e.PhoneNumber}</td>
-                <td>{e.id == test ? <input defaultValue={e.Position_Name} name="position" onChange={event => this.handleChange(event, key)}></input> : e.Position_Name}</td>
+                <td>{e.User_ID == test ? <div style={{display:"flex"}}>
+                                            <input style={{width:120}} defaultValue={e.name} name="name" onChange={event => this.handleChange(event, key)} ></input>
+                                            <input style={{width:120,marginLeft:5}} defaultValue={e.surname} name="name" onChange={event => this.handleChange(event, key)} ></input>  
+                                         </div> : e.name+" " + e.surname}</td>
+                <td>{e.User_ID== test ? <input defaultValue={e.Email} name="email" onChange={event => this.handleChange(event, key)}></input> : e.Email}</td>
+                <td>{e.User_ID == test ? <input defaultValue={e.PhoneNumber} name="telno" onChange={event => this.handleChange(event, key)}></input> : e.PhoneNumber}</td>
+                <td>{e.User_ID == test ? <input defaultValue={e.Position_Name} name="position" onChange={event => this.handleChange(event, key)}></input> : e.Position_Name}</td>
                 <td>
                     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <img src={e.position == "Manager" ? manager : staff}></img>
-                        {e.id == test ? <div style={{ display: 'flex' }}>
+                        <img src={e.Position_Name == "Manager" ? setmanager : setstaff}></img>
+                        {e.User_ID == test ? <div style={{ display: 'flex' }}>
                             <button className="manage-staff3" onClick={this.cancleEdit}>cancel</button>
                             <button className="manage-staff2" onClick={this.submit}>save</button> </div>
                             :
                             <div style={{ display: 'flex' }}>
-                                <button className="manage-staff1" onClick={() => this.remove(key)} >remove</button>
-                                <button className="manage-staff2" onClick={() => this.editTable(e.id)}>edit</button>
+                                <button className="manage-staff3" onClick={() => this.remove(key)} >remove</button>
+                                <button className="manage-staff2" onClick={() => this.editTable(e.User_ID)}>edit</button>
                             </div>
                         }
                     </div>
                 </td>
             </tr>
         })
+
+        // const newuser =  newusers.map((e, key) => {return <tr>
+        //     <td>{e.name}</td>
+        //     <td>{e.surame}</td>
+        //     <td>{e.email}</td>
+        //     <td>{e.position}</td>
+        // </tr>})
 
         let manager = '';
         let member = user.length
@@ -141,7 +191,7 @@ class Department extends Component {
                     <div className="dp-header">
                         <div className="col-5">
                             <div className="dp-img">
-                            <img className="department-pictures" src={department.Department_Picture}></img>
+                            {/* <img className="department-pictures" src={department.Department_Picture}></img> */}
                             </div>
                         </div>
                         <div className="dp-description col-9">
@@ -166,6 +216,8 @@ class Department extends Component {
                     {addstaff == false ?
                         <div className="add-staff">
                             <button className="add-staff-butt" onClick={this.addStaff}>Add Staff+</button>
+                            <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>Import</button>
+                            <input type="file" onChange={this.fileHandler.bind(this)} style={{"padding":"10px"}} />                      
                         </div>
                         :
                         <div className="add-staff2">
@@ -187,8 +239,16 @@ class Department extends Component {
                                 <th>MANAGE</th>
                             </tr>
                             {manage}
+                            {newusers.map((e, key) => {return <tr>
+                                <td>{e.name +" " +e.surname}</td>
+                                <td>{e.email}</td>
+                                <td>{e.telno}</td>
+                                <td>{e.position}</td>
+                                <td><span style={{color:"#4054b2"}}>Please save data</span></td>
+                            </tr>})}
                         </tbody>
                     </Table>
+                    <button>Save</button>
                 </div>
             </div>
 

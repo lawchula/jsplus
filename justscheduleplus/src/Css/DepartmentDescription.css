@@ -75,6 +75,15 @@
     background: white;
     border: 1px solid #4054b2;
     color: #4054b2;
+    margin-right: 10px;
+}
+.add-staff-butt2{
+    width: 150px;
+    height: 40px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+    display: none;
 }
 .manage-staff1{
     font-size: 12.5px; 
