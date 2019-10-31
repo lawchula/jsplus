@@ -11,6 +11,7 @@ import * as jwt_decode from 'jwt-decode';
 import url from './url';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import Generate from './Generate';
 
 function suffleArray(array) {
     let i = array.length - 1;
@@ -49,7 +50,9 @@ class Schedule extends Component {
             months: ["Januray", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             dropdownOpen: false,
             userRequest: [],
-            loading: true
+            loading: true,
+            showGenerate: false,
+            daysname:[]
         }
     }
 
@@ -158,8 +161,9 @@ class Schedule extends Component {
 
         while (date.getMonth() === month) {
             Showday = new Date(date).toDateString().substr("0", "3");
-            days.push(new Date(date).toDateString().substr("7", "4") + Showday);
+            days.push(new Date(date).toDateString().substr("7", "4"));
             date.setDate(date.getDate() + 1);
+            this.state.daysname.push(Showday)
         }
         this.setState({ day: days })
     }
@@ -194,9 +198,10 @@ class Schedule extends Component {
         this.props.dropdownTest()
     }
 
-    ShowDayColorOnSchedule = (event) => {
-        var dayStr = event.substr(event.length - 3)
-        var dayStr1 = event.substr(1, 2)
+    ShowDayColorOnSchedule = (num,name) => {
+        console.log(name)
+        var dayStr = name
+        var dayStr1 = num
         if (dayStr1 == this.state.currentDay) {
             return "#15da88"
         } else {
@@ -423,10 +428,17 @@ class Schedule extends Component {
         this.setState({ TestShow: show, loading: false })
     }
 
+    showGenerate = () => {
+        this.setState({
+            showGenerate: !this.state.showGenerate
+        })
+    }
+
 
     render() {
 
         const { loading } = this.state
+        const daysname =  this.state.daysname.map((event1, i) => { return event1 })
         let showperiod = []
         if (!loading) {
             showperiod = this.state.showPeriod.map((event) => {
@@ -453,12 +465,13 @@ class Schedule extends Component {
                             <p className="stat"><b>STATISTIC</b></p>
                             <div className="stat-schedule">
                                 <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
-                                <button onClick={this.testGenerate}>Generate</button>
+                                <button className="b-filter" onClick={this.showGenerate}>Generate</button>
                                 <div className="managerperiod-description">
                                     {showperiod}
                                 </div>
                                 <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} >
                                 </Filter>
+                                <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} user={this.state.user.length}></Generate>
                             </div>
                             <div id="filter">
                                 {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
@@ -493,7 +506,11 @@ class Schedule extends Component {
                             <tbody>
                                 <tr>
                                     <th className="name" colSpan="2" id="name-schedule">NAME</th>
-                                    {this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })}
+                                    {this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event,daysname[i]) }} className="day">
+                                                                                    <div style={{display:'flex',flexDirection:'column'}}>
+                                                                                    <span>{event}</span>
+                                                                                    <span>{daysname[i]}</span>
+                                                                                     </div></th> })}
                                 </tr>
                                 {this.state.user.map((event, x) => {
                                     return <tr className="test2">

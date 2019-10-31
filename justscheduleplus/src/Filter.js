@@ -262,30 +262,17 @@ class Filter extends Component {
                         onChange={event => this.handleChange(event)}
                       ></input>
 
-                      <TextField
-                        style={{
-                          marginTop: 0,
-                          marginLeft: 10,
-                          width: 110,
-                          height: 30,
-                          backgroundColor: "white",
-                          borderColor: "#007bff",
-                          borderRadius: 5
-                        }}
-                        id="time"
-                        name="periodOne"
-                        type="time"
-                        value={this.state.period.periodOne}
-                        onChange={event => this.handleChange(event)}
-                        variant="outlined"
-                        InputProps={{
-                          shrink: true,
-                          style: { height: 30, width: 110 }
-                        }}
-                        inputProps={{
-                          step: 300 // 5 min
-                        }}
-                      />
+                      <input 
+                      style={{marginLeft:10}}
+                      className="InputPeriod"
+                      type="time" 
+                      id="time" 
+                      name="periodOne"
+                      min="00:01" 
+                      max="23:59"  
+                      value={this.state.period.periodOne}  
+                      onChange={event => this.handleChange(event)}
+                      required/>
 
                       <span
                         style={{
@@ -298,29 +285,16 @@ class Filter extends Component {
                         -{" "}
                       </span>
 
-                      <TextField
-                        style={{
-                          marginTop: 0,
-                          marginLeft: 5,
-                          width: 110,
-                          height: 30,
-                          backgroundColor: "white",
-                          borderRadius: 5
-                        }}
-                        id="time"
-                        name="periodTwo"
-                        type="time"
-                        value={this.state.period.periodTwo}
-                        onChange={event => this.handleChange(event)}
-                        variant="outlined"
-                        InputProps={{
-                          shrink: true,
-                          style: { height: 30, width: 110 }
-                        }}
-                        inputProps={{
-                          step: 300 // 5 min
-                        }}
-                      />
+                      <input 
+                      className="InputPeriod"
+                      type="time" 
+                      id="time" 
+                      name="periodTwo"
+                      min="00:01" 
+                      max="23:59"  
+                      value={this.state.period.periodTwo}  
+                      onChange={event => this.handleChange(event)}
+                      required/>
 
                       <InputColor
                         initialHexColor={this.state.period.color}

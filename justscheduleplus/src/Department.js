@@ -8,6 +8,8 @@ import remove from './Images/delete.png';
 import edit from './Images/configuration.png';
 import url from './url';
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
+import Position from './Position';
 
 
 class Department extends Component {
@@ -27,14 +29,25 @@ class Department extends Component {
             department: [],
             cols:[],
             rows:[],
-            newusers:[]
+            newusers:[],
+            subject: "Your administrator create your account for Justscheduleplus",
+            dropdownOpen:false,
+            addposition: 0,
+            newuser:{name:"",surname:"",email:"",telno:""},
+            showposition:false,
+            positions: [],
+            newuserp:[],
+            changeposition: {},
+            positionname:null,
         }
     }
 
     componentDidMount() {
         const { manageDepartment } = this.props.location.state
-        this.setState({ department: manageDepartment })
-        this.getDepartmentDes(manageDepartment);
+        this.setState({ department: manageDepartment})
+        this.getDepartmentDes(manageDepartment)
+        this.getPosition(manageDepartment)
+        console.log(this.props.location.state)
     }
 
     getDepartmentDes = async (manageDepartment) => {
@@ -55,8 +68,73 @@ class Department extends Component {
         ])
 
         const [user] = data
-        this.setState({ user, loading: false })
+        this.setState({ user, loading: false, })
     }
+
+    getPosition = (manageDepartment) => {
+        let departID = manageDepartment.Department_ID
+        const othepram = {
+          headers: {
+            departid: departID
+          },
+          method: "GET"
+        };
+    
+        fetch(url + "/get/position", othepram)
+          .then(response => {
+            return response.json();
+          })
+          .then(myJson => {
+              console.log(myJson)
+            this.setState({ positions: myJson });
+            this.setState({newuserp: myJson})
+          });
+      };
+
+      saveEdit = () =>{
+        const Url = url + "/update/user/position";
+        const {changeposition} = this.state
+        const othepram = {
+            headers: {
+              "content-type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify({
+              userid: changeposition.userid,
+              newposition: changeposition.newposition
+            }),
+            method: "POST"
+          };
+          fetch(Url, othepram)
+            .then(res => {
+              this.setState({ changeposition: [],test:0 });
+              console.log('saved');
+              this.componentDidMount()
+            //   this.cancelEdit();
+            })
+            .catch(error => console.log(error));
+      }
+
+      insertUser = () => {
+        const Url = url + "/insert/user";
+        const othepram = {
+            headers: {
+              "content-type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify({
+              user: this.state.newusers,
+            }),
+            method: "POST"
+          };
+          fetch(Url, othepram)
+            .then(res => {
+              this.sendEmail()
+              this.setState({ newusers: [] });
+              this.componentDidMount()
+            })
+            .catch(error => console.log(error));
+      }
+
+
     remove = (key) => {
         this.state.user.splice(key, 1);
         this.forceUpdate();
@@ -70,7 +148,8 @@ class Department extends Component {
 
     addStaff = () => {
         this.setState({
-            addstaff: !this.state.addstaff
+            addstaff: !this.state.addstaff,
+            val : null
         })
     }
 
@@ -80,22 +159,6 @@ class Department extends Component {
         })
     }
 
-    handleChange = (event, key) => {
-        event.preventDefault();
-        // let  {user}  = this.state;
-        // user[event.target.name ]= event.target.value
-        // user[key].name = event.target.value
-        // user[key].email = event.target.value
-        // user[key].telno = event.target.value
-        // user[key].position = event.target.value
-        // this.setState({user})
-        //  user[event.target.name] = event.target.value;
-        //  this.setState({ user });
-        // console.log(event.target.name)
-        // console.log(event.target.value)
-        // console.log(user)
-
-    }
     submit = () => {
         this.setState({
             test: ""
@@ -106,58 +169,197 @@ class Department extends Component {
         let fileObj = event.target.files[0];
     
         //just pass the fileObj as parameter
-        ExcelRenderer(fileObj, (err, resp) => {
-          if(err){
-            console.log(err);            
-          }
-          else{
-            this.setState({
-              cols: resp.cols,
-              rows: resp.rows
-            });
-            console.log(this.state.rows.length)
-          }
-        });          
+        if(fileObj == null){
+            return " "
+        }else{
+            ExcelRenderer(fileObj, (err, resp) => {
+                if(err){
+                  console.log(err);            
+                }
+                else{
+                  this.setState({
+                    cols: resp.cols,
+                    rows: resp.rows
+                  });
+                  // console.log(this.state.rows.length)
+                }
+              });          
+        }
       }
 
     addUserfromExcel = (event) =>{
         for(let i=0; i <event.length;i++){
-          var a = {}
-          a.name = event[i][0]
-          a.surname = event[i][1]
-          a.email = event[i][2]
-          a.telno = event[i][3]
-          a.position = event[i][4]
-          this.state.newusers.push(a)
-          console.log(event[i])
+            if(event[i].length > 0 ){
+                var a = {}
+                const random = Math.floor(Math.random() * 9999999)+1
+                const password =  event[i][0].substring(0,1) + event[i][1].substring(0,1)+random
+                a.name = event[i][0]
+                a.surname = event[i][1]
+                a.email = event[i][2]
+                a.telno = event[i][3]
+                a.position =  "Please select position"
+                a.username = event[i][2]
+                a.id = this.state.newusers.length
+                a.positionid = null
+                a.password = password
+                this.state.newusers.push(a)
+            }
         }
-        console.log(this.state.rows)
-        console.log(this.state.newusers)
         this.state.rows = []
         this.state.cols = []
        }
+
+       sendEmail = () => {
+        for(let i=0; i<this.state.newusers.length; i++){
+        const Url = 'http://localhost:8080/sendEmail';
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({
+                email: this.state.newusers[i].email,
+                subject: this.state.subject,
+                username: this.state.newusers[i].email,
+                password: this.state.newusers[i].password
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram)
+            .then(data => { return data.json() })
+            .then(res => {
+            })
+            .catch(error => console.log(error))
+        }
+    }
+
+    toggle = (id,key) => {
+        const { dropdownOpen } = this.state
+        console.log(dropdownOpen)
+        this.setState({ 
+            dropdownOpen: !dropdownOpen,
+            addposition: key
+        })
+        // console.log(id,key)
+        // const test = id
+        // if(key == 0){
+           
+        //     console.log(id,key)
+        // }else{
+        //     return null
+        }
+    
+    handleChange = (event) => {
+       event.preventDefault();
+       const {newuser} = this.state
+       newuser[event.target.name] = event.target.value
+       newuser.id = this.state.newusers.length
+       newuser.position =  "Please select position"
+       newuser.positionid = null
+       this.setState({newuser})
+       this.setState({val:null})
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        const {newuser} = this.state
+        if(newuser.name.trim() == "" || newuser.surname.trim() == "" || newuser.email.trim() == "" || newuser.telno.trim() == ""){
+            this.setState({val:"Please fill information"})
+            newuser.name = ""
+            newuser.surname = ""
+            newuser.email = ""
+            newuser.telno = ""
+        }else{
+        const random = Math.floor(Math.random() * 9999999)+1
+        const password =  this.state.newuser.name.substring(0,1) + this.state.newuser.surname.substring(0,1) +random
+        newuser.username = this.state.newuser.email
+        newuser.password = password
+        this.state.newusers.push(this.state.newuser)
+        this.setState({addstaff: false,val:null})
+        this.state.newuser = {name:"",surname:"",email:"",telno:""}
+        }
+    }
+
+    showPosition = () => {
+        this.setState({
+         showposition: !this.state.showposition
+        })
+      }
+
+      selectPosition = (event,key,id,pid) => {
+          console.log(event.target.innerText,key,id)
+            const{newusers} = this.state
+            let newposition = {}
+            newposition.key = key
+            newposition.name  = event.target.innerText
+            newposition.id  = id
+            newposition.pid = pid
+            if(newusers[key].positionid == null){
+                newusers[key].positionid =   newposition.pid 
+                newusers[key].position = newposition.name
+            }else{
+                     if(newusers[key].id == newposition.id){
+                        newusers[key].positionid =   newposition.pid 
+                        newusers[key].position= newposition.name
+                    }else{
+                        newusers[key].positionid =   newposition.pid 
+                        newusers[key].position = newposition.name
+                    }
+                
+            }
+            console.log(newusers)
+      }
+
+      changePosition = (event,key,p) =>{
+         
+           const id = this.state.user[key].User_ID
+           const pid = p
+           const pname = event.target.innerText
+           this.state.changeposition.userid =  id
+           this.state.changeposition.newposition = pid
+           this.setState({
+               positionname: pname
+           })
+            // console.log(this.state.user[key].User_ID,this.state.positions[key].Position_ID,p)
+      }
+
+
+
+    
+        
+    
+
+ 
     
 
 
     render() {
 
-        const { edit, addstaff, test, department,user,newusers } = this.state
-        console.log(user)
+        const { edit, addstaff, test, department,user,newusers,positions,dropdownOpen,changeposition,positionname,newuser,editDepartment,changeDepartment } = this.state
         const manage = user.map((e, key) => {
             return <tr>
-                <td>{e.User_ID == test ? <div style={{display:"flex"}}>
-                                            <input style={{width:120}} defaultValue={e.name} name="name" onChange={event => this.handleChange(event, key)} ></input>
-                                            <input style={{width:120,marginLeft:5}} defaultValue={e.surname} name="name" onChange={event => this.handleChange(event, key)} ></input>  
-                                         </div> : e.name+" " + e.surname}</td>
-                <td>{e.User_ID== test ? <input defaultValue={e.Email} name="email" onChange={event => this.handleChange(event, key)}></input> : e.Email}</td>
-                <td>{e.User_ID == test ? <input defaultValue={e.PhoneNumber} name="telno" onChange={event => this.handleChange(event, key)}></input> : e.PhoneNumber}</td>
-                <td>{e.User_ID == test ? <input defaultValue={e.Position_Name} name="position" onChange={event => this.handleChange(event, key)}></input> : e.Position_Name}</td>
+                <td>{e.name+" " + e.surname}</td>
+                <td>{e.Email}</td>
+                <td>{e.PhoneNumber}</td>
+                <td>{e.User_ID == test ? <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' size="sm">
+                                         <DropdownToggle tag="span">
+                                        {positionname == null ? <span>{e.Position_Name}</span>:<span>{positionname}</span>}
+                                        </DropdownToggle>
+                                        <DropdownMenu>
+                                        {positions.map((p) => {
+                                                return   <DropdownItem onClick={(event) => this.changePosition(event,key,p.Position_ID)}>
+                                                            <div style={{display:"flex",flexDirection:"column"}}>
+                                                            <span>{p.Position_Name}</span>
+                                                            </div>
+                                                        </DropdownItem>
+                                            })}
+                                        </DropdownMenu>
+                                        </Dropdown> : e.Position_Name}</td>
                 <td>
                     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                         <img src={e.Position_Name == "Manager" ? setmanager : setstaff}></img>
                         {e.User_ID == test ? <div style={{ display: 'flex' }}>
                             <button className="manage-staff3" onClick={this.cancleEdit}>cancel</button>
-                            <button className="manage-staff2" onClick={this.submit}>save</button> </div>
+                            <button className="manage-staff2" onClick={this.saveEdit}>save</button> </div>
                             :
                             <div style={{ display: 'flex' }}>
                                 <button className="manage-staff3" onClick={() => this.remove(key)} >remove</button>
@@ -168,13 +370,6 @@ class Department extends Component {
                 </td>
             </tr>
         })
-
-        // const newuser =  newusers.map((e, key) => {return <tr>
-        //     <td>{e.name}</td>
-        //     <td>{e.surame}</td>
-        //     <td>{e.email}</td>
-        //     <td>{e.position}</td>
-        // </tr>})
 
         let manager = '';
         let member = user.length
@@ -216,19 +411,26 @@ class Department extends Component {
                     {addstaff == false ?
                         <div className="add-staff">
                             <button className="add-staff-butt" onClick={this.addStaff}>Add Staff+</button>
+                            <button className="add-staff-butt" onClick={this.showPosition}>Position</button>
                             <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>Import</button>
-                            <input type="file" onChange={this.fileHandler.bind(this)} style={{"padding":"10px"}} />                      
+                            <label htmlFor="upload-excel"  className="add-staff-excel">Import</label>
+                            <input type="file" id="upload-excel" onChange={this.fileHandler.bind(this)} style={{"padding":"10px"}} />                      
                         </div>
                         :
                         <div className="add-staff2">
-                            <input placeholder="Name" ></input>
-                            <input placeholder="Surname" style={{ marginLeft: 10 }}></input>
-                            <input placeholder="Email" style={{ marginLeft: 10 }}></input>
-                            <input placeholder="Telno" style={{ marginLeft: 10 }}></input>
-                            <input placeholder="Position" style={{ marginLeft: 10 }}></input>
-                            <button className="add-staff-butt" onClick={this.addStaff} style={{ marginLeft: 10 }}>Add</button>
+                            <div>
+                            <input placeholder="Name"  name="name" value={newuser.name}  onChange={event => this.handleChange(event)}></input>
+                            <input placeholder="Surname" name="surname" value={newuser.surname} style={{ marginLeft: 10 }}  onChange={event => this.handleChange(event)}></input>
+                            <input type="email" placeholder="Email" value={newuser.email} name="email" style={{ marginLeft: 10 }}  onChange={event => this.handleChange(event)}></input>
+                            <input placeholder="Telno" name="telno" value={newuser.telno}  style={{ marginLeft: 10 }}  onChange={event => this.handleChange(event)}></input>
+                            <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.addStaff}>Cancel</button>
+                            <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.handleSubmit}>Add</button>
+
+                            </div>
+                            <span className="val2">{this.state.val}</span>
                         </div>
                     }
+                    <br></br>
                     <Table bordered responsive className="table-dp">
                         <tbody>
                             <tr id="table-header">
@@ -243,13 +445,29 @@ class Department extends Component {
                                 <td>{e.name +" " +e.surname}</td>
                                 <td>{e.email}</td>
                                 <td>{e.telno}</td>
-                                <td>{e.position}</td>
+                                <td><Dropdown isOpen={this.state.dropdownOpen && key == this.state.addposition} toggle={() => this.toggle(e.id,key)} direction='down' size="sm">
+                                         <DropdownToggle tag="span" >
+                                        <span>{e.position}</span>
+                                        </DropdownToggle>
+                                        {key == this.state.addposition ?  <DropdownMenu>
+                                            {this.state.newuserp.map((p,index) => {
+                                                return   <DropdownItem  onClick={(event)=> this.selectPosition(event,key,e.id,p.Position_ID)}>
+                                                            <div style={{display:"flex",flexDirection:"column"}}>
+                                                                <span>{p.Position_Name}</span>
+                                                            </div>
+                                                        </DropdownItem>
+                                            })}
+                                        </DropdownMenu>: null}
+                                        </Dropdown>
+                                        </td>
                                 <td><span style={{color:"#4054b2"}}>Please save data</span></td>
                             </tr>})}
                         </tbody>
                     </Table>
-                    <button>Save</button>
+                    <button className="add-staff-butt" onClick={this.insertUser}>Save</button>
+                    <button className="add-staff-butt" onClick={this.sendEmail}>sendEmail</button>
                 </div>
+                <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
             </div>
 
         );
