@@ -82,7 +82,8 @@ class RequestAbsent extends Component {
 
             if (check) {
                 if (!window.confirm("Do you want to Request to absent?")) return
-                const Url = url + '/request/absent';
+                //(/user/request/absent)
+                const Url = url + '/user/request/absent';
                 const othepram = {
                     headers: {
                         "content-type": "application/json; charset=UTF-8"
@@ -103,7 +104,8 @@ class RequestAbsent extends Component {
                     })
             } else {
                 if (!window.confirm("This Period has been request by other user, Do you want to Request to absent?")) return
-                const Url = url + '/request/absent';
+                //(/user/request/absent)
+                const Url = url + '/user/request/absent';
                 const othepram = {
                     headers: {
                         "content-type": "application/json; charset=UTF-8"
@@ -129,7 +131,8 @@ class RequestAbsent extends Component {
     }
 
     insertNotification = () => {
-        const Url = url + '/insert/notification/manager';
+        //(/user/manager/notification/insert)
+        const Url = url + '/user/manager/notification/insert';
 
         var token = localStorage.getItem('tk');
         const othepram = {

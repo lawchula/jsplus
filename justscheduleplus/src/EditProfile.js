@@ -88,7 +88,7 @@ class AdminHome extends Component {
         var token = localStorage.getItem('tk');
         var detailtk = localStorage.getItem('sc');
         if (token != null && token != "undefined") {
-          const Url = url + '/insert/user/profile';
+          const Url = url + '/user/profile/update';
           const othepram = {
             headers: {
               "content-type": "application/json; charset=UTF-8",
@@ -111,7 +111,7 @@ class AdminHome extends Component {
               }
             })
         }else{
-          const Url = url + '/insert/user/profile';
+          const Url = url + '/user/profile/update';
           const othepram = {
             headers: {
               "content-type": "application/json; charset=UTF-8",
