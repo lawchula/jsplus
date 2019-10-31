@@ -77,7 +77,7 @@ class Header extends Component {
     };
 
     const data = await Promise.all([
-      fetch(url + '/name', othepram)
+      fetch(url + '/user/name', othepram)
         .then((response) => {
           return response.json();
         })
@@ -106,11 +106,11 @@ class Header extends Component {
     };
 
     const data = await Promise.all([
-      fetch(url + '/name', othepram)
+      fetch(url + '/user/name', othepram)
         .then((response) => {
           return response.json();
         }),
-      fetch(url + '/manager/notification', otheprams)
+      fetch(url + '/user/manager/notification', otheprams)
         .then((response) => {
           return response.json();
         })
@@ -131,7 +131,7 @@ class Header extends Component {
   }
 
   getManagerAbNoti = async (otheprams, userReq) => {
-    await fetch(url + '/manager/notification/absent', otheprams)
+    await fetch(url + '/user/manager/notification/absent', otheprams)
       .then(res => res.json()
         .then(json => {
           this.setState({ managerNotificationAbsent: json, haveAbsentNoti: false })
@@ -155,11 +155,11 @@ class Header extends Component {
     };
 
     const data = await Promise.all([
-      fetch(url + '/name', othepram)
+      fetch(url + '/user/name', othepram)
         .then((response) => {
           return response.json();
         }),
-      fetch(url + '/user/notification', otheprams)
+      fetch(url + '/user/staff/notification', otheprams)
         .then((response) => {
           return response.json();
         })
@@ -193,7 +193,8 @@ class Header extends Component {
 
     if (autoReject.length !== 0 || autoAbsentReject !== 0) {
       if (!window.confirm("This period is has another request!,Do you want to approve this request?")) return
-      const Url = url + '/notification/approve';
+      //(/user/manager/exchangenotification/approve)
+      const Url = url + '/user/manager/exchangenotification/approve';
 
       const othepram = {
         headers: {
@@ -209,7 +210,8 @@ class Header extends Component {
       this.autoRejectRequest(managerNoti, autoReject, autoAbsentReject);
     } else {
       if (!window.confirm("Do you want to approve this request?")) return
-      const Url = url + '/notification/approve';
+      //(/user/manager/exchangenotification/approve)
+      const Url = url + '/user/manager/exchangenotification/approve';
 
       const othepram = {
         headers: {
@@ -233,7 +235,8 @@ class Header extends Component {
 
   clickRejectExchangeNotification = (notification) => {
     if (!window.confirm("Do you want to reject this request?")) return
-    const Url = url + '/notification/reject';
+    //(/user/manager/exchangenotification/reject)
+    const Url = url + '/user/manager/exchangenotification/reject';
 
     const othepram = {
       headers: {
@@ -268,7 +271,8 @@ class Header extends Component {
 
     if (autoReject.length !== 0) {
       if (!window.confirm("This period is has another request!, Do you want to approve this absent request?")) return
-      const Url = url + '/notification/absent/approve';
+      //(/user/manager/absentnotification/approve)
+      const Url = url + '/user/manager/absentnotification/approve';
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"
@@ -286,7 +290,8 @@ class Header extends Component {
         })
     } else {
       if (!window.confirm("Do you want to approve this absent request?")) return
-      const Url = url + '/notification/absent/approve';
+      //(/user/manager/absentnotification/approve)
+      const Url = url + '/user/manager/absentnotification/approve';
 
       const othepram = {
         headers: {
@@ -310,7 +315,8 @@ class Header extends Component {
 
   clickRejectAbsentNotification = (notification) => {
     if (!window.confirm("Do you want to reject this absent request?")) return
-    const Url = url + '/notification/absent/reject';
+    //(/user/manager/absentnotification/reject)
+    const Url = url + '/user/manager/absentnotification/reject';
 
     const othepram = {
       headers: {
@@ -325,6 +331,7 @@ class Header extends Component {
       .then(data => { return data.json() })
       .then(res => {
         this.setState({ loading: true, haveNotification: true })
+        alert('Reject Success')
         this.checkToken();
       })
       .catch(error => console.log(error))
@@ -342,7 +349,7 @@ class Header extends Component {
         })
       })
 
-      const Url = url + '/notification/reject';
+      const Url = url + '/user/manager/exchangenotification/reject';
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"
@@ -372,7 +379,7 @@ class Header extends Component {
   }
 
   autoRejectAbsentRequest(autoAbsentReject){
-    const Url = url + '/notification/absent/reject';
+    const Url = url + '/user/manager/absentnotification/reject';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
@@ -387,8 +394,9 @@ class Header extends Component {
       .then(json => {
         if(json !== "null"){
           this.setState({ loading: true, haveNotification: true })
-          this.checkToken();
           alert("Approve Success")
+          this.props.Schedule();
+          this.checkToken();
           autoAbsentReject = []
         }
       })

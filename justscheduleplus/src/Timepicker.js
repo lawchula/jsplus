@@ -24,21 +24,8 @@ class Timepicker extends Component {
     }
 
     componentDidMount() {
-        var token = localStorage.getItem('tk');
-        const othepram = {
-            headers: {
-                tkAuth: token
-            },
-            method: "GET"
-        };
-        fetch(url + '/showperiod', othepram)
-            .then((response) => {
-                return response.json();
-            })
-            .then((myJson) => {
-                this.setState({ showperiod: myJson })
-            });
-
+        const { period } = this.props
+        this.setState({ showperiod: period })
     }
 
     toggle = () => {

@@ -44,7 +44,8 @@ class Register extends Component {
     const { user } = this.state
     if (user.username && user.password) {
       if (user.password === user.confirmPass) {
-        const Url = url + '/register';
+        //(/user/register)
+        const Url = url + '/user/register';
         const othepram = {
           headers: {
             "content-type": "application/json; charset=UTF-8"

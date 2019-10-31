@@ -177,7 +177,8 @@ class RequestPopup extends Component {
                 })
 
                 if (check) {
-                    const Url = url + '/request';
+                    //(/user/request/exchangeschedule)
+                    const Url = url + '/user/request/exchangeschedule';
                     const othepram = {
                         headers: {
                             "content-type": "application/json; charset=UTF-8"
@@ -197,7 +198,7 @@ class RequestPopup extends Component {
                         })
                 } else {
                         if (!window.confirm("This Period has been request by other user, Do you want to request??")) return
-                        const Url = url + '/request';
+                        const Url = url + '/user/request/exchangeschedule';
                         const othepram = {
                             headers: {
                                 "content-type": "application/json; charset=UTF-8",
@@ -224,7 +225,8 @@ class RequestPopup extends Component {
 
 
     insertNotification = () => {
-        const Url = url + '/insert/notification/manager';
+        //(/user/manager/notification/insert)
+        const Url = url + '/user/manager/notification/insert';
 
         var token = localStorage.getItem('tk');
         const othepram = {

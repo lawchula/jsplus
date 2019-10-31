@@ -36,7 +36,8 @@ class Login extends React.Component {
     if (username !== '' && password !== '') {
       this.setState({ submitted: false, submittedValid: false })
 
-      const Url = url + '/users/authenticate';
+      //(/user/login/authenticate)
+      const Url = url + '/user/login/authenticate';
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"
@@ -63,7 +64,8 @@ class Login extends React.Component {
   }
 
   requestToken = () => {
-    const Url = url + '/users/requesttk';
+    //(/user/login/authenticated)
+    const Url = url + '/user/login/authenticated';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"

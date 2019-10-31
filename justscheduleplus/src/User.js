@@ -74,7 +74,7 @@ class User extends Component {
         };
 
         const data = await Promise.all([
-            fetch(url+'/users', othepram)
+            fetch(url+'/user', othepram)
                 .then((response) => {
                     return response.json();
                 }),
@@ -106,15 +106,16 @@ class User extends Component {
         };
 
         const data = await Promise.all([
-            fetch(url+'/showschedule', othepram)
+            fetch(url+'/schedule', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch(url+'/already/request', othepram)
+                //(/user/request)
+            fetch(url+'/user/request', othepram)
                 .then((response) => {
                     return response.json();
                 }),
-            fetch(url+"/showperiod", othepram)
+            fetch(url+"/period", othepram)
                 .then(response => {
                     return response.json();
                 })
