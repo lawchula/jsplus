@@ -22,7 +22,7 @@ class User extends Component {
             alreadyReq: [],
             block: [],
             year: new Date().getFullYear(),
-            month: new Date().getMonth()-1,
+            month: new Date().getMonth(),
             count: 0,
             zIndex: 6,
             zIndex2: 0,
@@ -121,7 +121,6 @@ class User extends Component {
         ])
 
         const [schedule, alreadyReq, showPeriod] = data
-        console.log(schedule)
         this.setState({ schedule, alreadyReq, showPeriod, loading: false })
     }
 
@@ -409,7 +408,6 @@ class User extends Component {
                     </React.Fragment>
                     )
                 }
-               {console.log(this.state.showPeriod)}
             </div>
         );
     }

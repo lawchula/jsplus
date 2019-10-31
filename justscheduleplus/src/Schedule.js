@@ -9,8 +9,19 @@ import Timepicker from './Timepicker';
 import error from './Images/close.png';
 import * as jwt_decode from 'jwt-decode';
 import url from './url';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
+function suffleArray(array) {
+    let i = array.length - 1;
+    for (; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
 
 class Schedule extends Component {
     constructor(props) {
@@ -35,17 +46,17 @@ class Schedule extends Component {
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
             countday: new Date().getDay(),
-            months:["Januray","February","March","April","May","June","July","August","September","October","November","December"],
+            months: ["Januray", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             dropdownOpen: false,
-            
+            userRequest: [],
+            loading: true
         }
     }
 
-    async componentDidMount() {
-        this.getDaysInMonth(this.state.month, this.state.year)
-        this.setBlock(this.state.month, this.state.year)
-        await this.checkToken();
-        console.log(this.state.month)
+    componentDidMount() {
+        this.getDaysInMonth();
+        this.setBlock();
+        this.checkToken();
     }
 
 
@@ -55,7 +66,7 @@ class Schedule extends Component {
             window.location.href = "/";
         } else if (token != null && token != "undefined") {
             var decoded = jwt_decode(token);
-            if (decoded.position != "Manager" || decoded.position == "Admin") {
+            if (decoded.position !== "Manager" || decoded.position == "Admin") {
                 window.location.href = "/User";
             } else {
                 this.SelectDataFromDB();
@@ -63,28 +74,29 @@ class Schedule extends Component {
         }
     }
 
-    getMonth = (event,i) =>{
-        const test = i
-        this.setState({month:test})
-        this.getDaysInMonth(test,this.state.year) 
-        this.setBlock(test,this.state.year);
-        this.forceUpdate()       
-    } 
-
     getNameofMonth = (month) => {
-        this.getSchedules();
-       const monthNames = ["January", "February", "March", "April", "May", "June",
-           "July", "August", "September", "October", "November", "December"
-       ];
-       return monthNames[month]
-      
-   }
+        // this.getSchedules();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        return monthNames[month]
+
+    }
 
     SelectDataFromDB = async () => {
         var token = localStorage.getItem('tk');
         const othepram = {
             headers: {
                 tkAuth: token
+            },
+            method: "GET"
+        };
+        let month = this.state.month;
+
+        const otheprams = {
+            headers: {
+                tkAuth: token,
+                month: month
             },
             method: "GET"
         };
@@ -105,16 +117,19 @@ class Schedule extends Component {
             fetch(url + "/showperiod", othepram)
                 .then(response => {
                     return response.json();
+                }),
+            fetch(url + '/manager/notification/schedule', otheprams)
+                .then((response) => {
+                    return response.json();
                 })
         ])
 
-        const [user, company, department, showPeriod] = data
-        this.setState({ user, company, department, showPeriod })
-
+        const [user, company, department, showPeriod, userRequest] = data
+        this.setState({ user, company, department, showPeriod, userRequest })
         this.getSchedules();
     }
 
-    getSchedules = () => {
+    getSchedules = async () => {
         var token = localStorage.getItem('tk');
         let month = this.state.month;
         const othepram = {
@@ -124,40 +139,39 @@ class Schedule extends Component {
             },
             method: "GET"
         };
-        fetch(url + '/showschedule', othepram)
-            .then((response) => {
-                return response.json();
-            })
-            .then((myJson) => {
-                this.setState({ selectSchedule: myJson })
-            });
+        const data = await Promise.all([
+            fetch(url + '/showschedule', othepram)
+                .then((response) => {
+                    return response.json();
+                })
+        ])
+
+        const [selectSchedule] = data;
+        this.setState({ selectSchedule, loading: false })
     }
 
-    getDaysInMonth = (month, year) => {
+    getDaysInMonth() {
+        const { month, year } = this.state
         var date = new Date(year, month, 1);
         var days = [];
-        var TestShowday = [];
+        var Showday = [];
 
         while (date.getMonth() === month) {
-            TestShowday = new Date(date).toDateString().substr("0", "3");
-            days.push(new Date(date).toDateString().substr("7", "4") + TestShowday);
+            Showday = new Date(date).toDateString().substr("0", "3");
+            days.push(new Date(date).toDateString().substr("7", "4") + Showday);
             date.setDate(date.getDate() + 1);
         }
         this.setState({ day: days })
-      
-      
-
     }
 
-    setBlock = (month, year) => {
-       
+    setBlock() {
+        const { month, year } = this.state
         var count = new Date(year, month + 1, 0).getDate();
         var a = []
         for (var i = 1; i <= count; i++) {
             a.push(i)
         }
         this.setState({ block: a })
-       
     }
 
     showPopup = () => {
@@ -282,24 +296,60 @@ class Schedule extends Component {
     }
 
     DeletePeriodFromDB = (periodinschedule) => {
-        if (!window.confirm("Do you want to delete this period!!")) return
-        const Url = url + '/schedule/delete';
-
-        const othepram = {
-            headers: {
-                "content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify({
-                DeletePeriodDB: periodinschedule
-            }),
-            method: "POST"
-        };
-        fetch(Url, othepram)
-            .then(data => { return data.json() })
-            .then(res => {
-                this.getSchedules();
+        const { userRequest } = this.state
+        let hasRequest = []
+        if (userRequest.length !== 0) {
+            userRequest.map(userReq => {
+                if (userReq.Schedule_ID === periodinschedule.Schedule_ID) {
+                    hasRequest.push(userReq)
+                }
             })
-            .catch(error => console.log(error))
+        }
+        if (hasRequest.length !== 0) {
+            if (!window.confirm("This period has Request!! Do you want to delete this period?")) return
+            let token = localStorage.getItem('tk')
+            const Url = url + '/schedule/deleted';
+
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8",
+                    tkauth: token
+                },
+                body: JSON.stringify({
+                    reject: hasRequest,
+                    approve: hasRequest
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(data => { return data.json() })
+                .then(res => {
+                    alert("Delete Success!!")
+                    window.location.href = "/Schedule"
+                })
+                .catch(error => console.log(error))
+        } else {
+            if (!window.confirm("Do you want to delete this period!!")) return
+            let token = localStorage.getItem('tk')
+            const Url = url + '/schedule/delete';
+
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8",
+                    tkauth: token
+                },
+                body: JSON.stringify({
+                    DeletePeriodDB: periodinschedule
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(data => { return data.json() })
+                .then(res => {
+                    this.getSchedules();
+                })
+                .catch(error => console.log(error))
+        }
     }
 
     toggle = () => {
@@ -307,125 +357,201 @@ class Schedule extends Component {
         this.setState({ dropdownOpen: !dropdownOpen })
     }
 
+    testGenerate = () => {
+        const { month, year, user, showPeriod } = this.state
+
+        var date = new Date(year, month, 1);
+        let day = []
+        let collectDay = ""
+        let days = 0
+
+        let personPerDay = [2]
+        let dayOff = [1]
+        let periodPerDay = [2]
+
+        while (date.getMonth() === this.state.month) {
+            collectDay = new Date(date).toDateString().substr("7", "4")
+            days = parseInt(collectDay)
+            date.setDate(date.getDate() + 1);
+            day.push(days)
+        }
+
+        dayOff.map(e => {
+            day.splice(day.indexOf(e), 1);
+        })
+
+        const users = user
+        const periods = showPeriod
+        const groupBy = (array, key) => {
+            return array.reduce((result, currentValue) => {
+                (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                    currentValue
+                );
+                return result;
+            }, {});
+        };
+
+        const personGroupedByPosition = groupBy(users, 'Position_Name');
+
+        const show = { ...this.state.TestShow }
+
+        for (let i = 0; i < day.length; i++) {
+            var b = suffleArray(periods)
+            if (personPerDay.length !== 0) {
+                var a = suffleArray(personGroupedByPosition["Doctor"])
+                for (let x = 0; x < personPerDay[0]; x++) {
+                    if (periods.length > 1) {
+                        for (let y = 0; y < periodPerDay[0]; y++) {
+                            const oldShow = show[`${a[x].User_ID},${day[i]}`]
+                            if (Array.isArray(oldShow)) {
+                                if (oldShow.findIndex(show => {
+                                    return show.Period_Name == periods[y].Period_Name
+                                }) === -1)
+                                    show[`${a[x].User_ID},${day[i]}`] = [...oldShow, periods[y]].sort(function (a, b) {
+                                        let t1 = parseInt(a.Period_Time_One.replace(':', ''));
+                                        let t2 = parseInt(b.Period_Time_One.replace(':', ''));
+                                        return t1 - t2;
+                                    })
+                            } else {
+                                show[`${a[x].User_ID},${day[i]}`] = [periods[y]]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        this.setState({ TestShow: show, loading: false })
+    }
+
 
     render() {
 
-        const showperiod = this.state.showPeriod.map((event) => {
-            return <div style={{ display: 'flex' }}>
-                <div style={{ backgroundColor: event.Period_Color, marginLeft: 5 }} className="period-color">
+        const { loading } = this.state
+        let showperiod = []
+        if (!loading) {
+            showperiod = this.state.showPeriod.map((event) => {
+                return <div style={{ display: 'flex' }}>
+                    <div style={{ backgroundColor: event.Period_Color, marginLeft: 5 }} className="period-color">
 
+                    </div>
+                    <span style={{ marginLeft: 5 }}>{event.Period_Name}</span>
+                    <span style={{ marginLeft: 5 }}>{event.Period_Time_One} - </span>
+                    <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
                 </div>
-                <span style={{ marginLeft: 5 }}>{event.Period_Name}</span>
-                <span style={{ marginLeft: 5 }}>{event.Period_Time_One} - </span>
-                <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
-            </div>
-        })
+            })
+            console.log(this.state.TestShow)
+
+        }
 
         return (
             <div className="Schedule">
                 <Header Schedule={this.getSchedules} />
-                <Container className="Schedule" fluid>
-                    <span className="show-position">MANAGER</span>
-                    <div className="before-schedule">
-                        <p className="stat"><b>STATISTIC</b></p>
-                        <div className="stat-schedule">
-                            <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
-                            <div className="managerperiod-description">
-                                {showperiod}
+                {!loading &&
+                    <Container className="Schedule" fluid>
+                        <span className="show-position">MANAGER</span>
+                        <div className="before-schedule">
+                            <p className="stat"><b>STATISTIC</b></p>
+                            <div className="stat-schedule">
+                                <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
+                                <button onClick={this.testGenerate}>Generate</button>
+                                <div className="managerperiod-description">
+                                    {showperiod}
+                                </div>
+                                <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} >
+                                </Filter>
                             </div>
-                            <Filter show={this.state.show} onClose={this.showPopup} getSchedule={this.getSchedules.bind(this)}>
-                            </Filter>
-                        </div>
-                        <div id="filter">
-                            {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
+                            <div id="filter">
+                                {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
                             <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
                             <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button> */}
-                            <div className="b-static">WORK HOUR:</div>
-                            <div className="b-static">DONE:</div>
-                            <div className="b-static">REMAIN:</div>
+                                <div className="b-static">WORK HOUR:</div>
+                                <div className="b-static">DONE:</div>
+                                <div className="b-static">REMAIN:</div>
+                            </div>
                         </div>
-                    </div>
-                    <Table bordered responsive className="tests" id="table-to-xls">
-                        <thead>
-                            <tr id="tr1">
-                                <th colSpan={(this.state.block.length / 2) } >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
-                                <th colSpan={(this.state.block.length / 2) }>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
-                                <td colSpan={this.state.block.length == 31 ? 3 : 2} style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
-                            </tr>
-                            <tr id="tr2">
-                                {/* <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th> */}
-                               <th colSpan={this.state.block.length + 2}>  
-                               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='right' size="sm">
-                                        <DropdownToggle tag="span">
-                                        <span>{this.getNameofMonth(this.state.month) + " "+ this.state.year}</span>
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                        {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event,i)}>{this.state.dropdownOpen == false ? null : event} </DropdownItem> })}
+                        <Table bordered responsive className="tests" id="table-to-xls">
+                            <thead>
+                                <tr id="tr1">
+                                    <th colSpan={(this.state.block.length / 2)} >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
+                                    <th colSpan={(this.state.block.length / 2)}>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
+                                    <td colSpan={this.state.block.length == 31 ? 3 : 2} style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
+                                </tr>
+                                <tr id="tr2">
+                                    {/* <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th> */}
+                                    <th colSpan={this.state.block.length + 2}>
+                                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='right' size="sm">
+                                            <DropdownToggle tag="span">
+                                                <span>{this.getNameofMonth(this.state.month) + " " + this.state.year}</span>
+                                            </DropdownToggle>
+                                            <DropdownMenu>
+                                                {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event, i)}>{this.state.dropdownOpen == false ? null : event} </DropdownItem> })}
                                             </DropdownMenu>
-                                            </Dropdown>
+                                        </Dropdown>
                                     </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th className="name" colSpan="2" id="name-schedule">NAME</th>
-                                {this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })}
-                            </tr>
-                            {this.state.user.map((event, x) => {
-                                return <tr className="test2">
-                                    {/* เอาค่า username มาแสดง*/}
-                                    <td colSpan="2" className={this.ShowUserColorOnSchedule(x)} >{event.Name}</td>
-                                    {/* เอาค่าวันที่มา set เป็นช่อง */}
-                                    {this.state.block.map((e, y) => {
-                                        return <td className="table-td" onClick={() => this.SendMultidimension(x, y)}>
-                                            {/* เอาค่า period จาก db มาแสดง */}
-                                            {this.state.selectSchedule.map(periodinschedule => {
-                                                if (event.User_ID == periodinschedule.User_ID && periodinschedule.Date == e)
-                                                    return <div id="period-container">
-                                                        <div style={{ backgroundColor: periodinschedule.Period_Color }} id="period-time">{periodinschedule.Period_Time_One + "-" + periodinschedule.Period_Time_Two}</div>
-                                                        <div id="edit">
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th className="name" colSpan="2" id="name-schedule">NAME</th>
+                                    {this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event) }} className="day">{event} </th> })}
+                                </tr>
+                                {this.state.user.map((event, x) => {
+                                    return <tr className="test2">
+                                        {/* เอาค่า username มาแสดง*/}
+                                        <td colSpan="2" className={this.ShowUserColorOnSchedule(x)} >{event.Name}</td>
+                                        {/* เอาค่าวันที่มา set เป็นช่อง */}
+                                        {this.state.block.map((e, y) => {
+                                            return <td className="table-td" onClick={() => this.SendMultidimension(x, y)}>
+                                                {/* เอาค่า period จาก db มาแสดง */}
+                                                {this.state.selectSchedule.map(periodinschedule => {
+                                                    if (event.User_ID == periodinschedule.User_ID && periodinschedule.Date == e)
+                                                        return <div id="period-container">
+                                                            <div style={{ backgroundColor: periodinschedule.Period_Color }} id="period-time">{periodinschedule.Period_Time_One + "-" + periodinschedule.Period_Time_Two}</div>
+                                                            <div id="edit">
+                                                                {this.state.edit ?
+                                                                    <div>
+                                                                        <img src={error} id="edit-icon" onClick={() => this.DeletePeriodFromDB(periodinschedule)}></img>
+                                                                    </div>
+                                                                    :
+                                                                    <div id="wtf"></div>}
+                                                            </div>
+                                                        </div>
+                                                })}
+                                                {/* เรียกปุ่ม dropdown มา set เวลาลง ตาราง  */}
+                                                {this.state.edit === false ?
+                                                    this.state.showDropdown[0] === x &&
+                                                    this.state.showDropdown[1] === y &&
+                                                    !this.state.dropdownshouldclose &&
+                                                    <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)} />
+                                                    :
+                                                    false}
+
+                                                {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
+                                                    &&
+                                                    this.state.TestShow[`${event.User_ID},${e}`].map((show) =>
+                                                        <div id="period-container">
+                                                            <div style={{ width: 35, backgroundColor: show.Period_Color }} id="period-time">{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
                                                             {this.state.edit ?
                                                                 <div>
-                                                                    <img src={error} id="edit-icon" onClick={() => this.DeletePeriodFromDB(periodinschedule)}></img>
+                                                                    <img src={error} id="edit-icon2" onClick={() => this.DeletePeriodInSchedule(show, event, e)}></img>
                                                                 </div>
                                                                 :
                                                                 <div id="wtf"></div>}
-                                                        </div>
-                                                    </div>
-                                            })}
-                                            {/* เรียกปุ่ม dropdown มา set เวลาลง ตาราง  */}
-                                            {this.state.edit === false ?
-                                                this.state.showDropdown[0] === x &&
-                                                this.state.showDropdown[1] === y &&
-                                                !this.state.dropdownshouldclose &&
-                                                <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)} />
-                                                :
-                                                false}
-
-                                            {Array.isArray(this.state.TestShow[`${event.User_ID},${e}`])
-                                                &&
-                                                this.state.TestShow[`${event.User_ID},${e}`].map((show) =>
-                                                    <div id="period-container">
-                                                        <div style={{ width: 35, backgroundColor: show.Period_Color }} id="period-time">{show.Period_Time_One + "-" + show.Period_Time_Two}</div>
-                                                        {this.state.edit ?
-                                                            <div>
-                                                                <img src={error} id="edit-icon2" onClick={() => this.DeletePeriodInSchedule(show, event, e)}></img>
-                                                            </div>
-                                                            :
-                                                            <div id="wtf"></div>}
-                                                    </div>)}
-                                        </td>
-                                    })}
-                                </tr>
-                            })}
-                        </tbody>
-                    </Table>
-                    <div style={{ display: "flex", float: 'right' }}>
-                        {this.state.edit && <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
-                        {this.state.edit == false ? <div> <button className="b-save" style={{marginRight:10}} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button> 
-                          <ReactHTMLTableToExcel  table="table-to-xls"   filename="Schedule" sheet="sheet 2"buttonText="Export" className="b-save"/> </div> : ""}
-                    </div>
-                </Container>
+                                                        </div>)
+                                                }
+                                            </td>
+                                        })}
+                                    </tr>
+                                })}
+                            </tbody>
+                        </Table>
+                        <div style={{ display: "flex", float: 'right' }}>
+                            {this.state.edit && <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
+                            {this.state.edit == false ? <div> <button className="b-save" style={{ marginRight: 10 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button>
+                                <ReactHTMLTableToExcel table="table-to-xls" filename="Schedule" sheet="sheet 2" buttonText="Export" className="b-save" /> </div> : ""}
+                        </div>
+                    </Container>
+                }
             </div>
         );
     }

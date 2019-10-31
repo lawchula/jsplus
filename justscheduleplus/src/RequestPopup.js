@@ -121,7 +121,7 @@ class RequestPopup extends Component {
             alert("Can't change any Period beacause you already have!!!")
             this.setState({ checkRequest: this.state.newPeriod, checkValidate: false })
         } else if (checkArr.length !== 0) {
-            alert("Can't change these Period "+checkArr)
+            alert("Can't change these Period " + checkArr)
             this.setState({ checkRequest: checkArr, checkValidate: false })
         } else {
             this.setState({ checkRequest: checkArr, checkValidate: false })
@@ -196,13 +196,25 @@ class RequestPopup extends Component {
                             }
                         })
                 } else {
-                    if (validate !== '' && validates !== '') {
-                        alert("These Period has been request by other USER!!!")
-                    } else if (validate !== '') {
-                        alert(validate)
-                    } else {
-                        alert(validates)
-                    }
+                        if (!window.confirm("This Period has been request by other user, Do you want to request??")) return
+                        const Url = url + '/request';
+                        const othepram = {
+                            headers: {
+                                "content-type": "application/json; charset=UTF-8",
+                            },
+                            body: JSON.stringify({
+                                request: this.state.requestValue
+                            }),
+                            method: "POST"
+                        };
+                        fetch(Url, othepram)
+                            .then(res => res.json())
+                            .then(json => {
+                                if (json != "null") {
+                                    this.setState({ requestID: json })
+                                    this.insertNotification();
+                                }
+                            })
                 }
             }
         } else {

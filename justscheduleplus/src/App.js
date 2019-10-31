@@ -20,7 +20,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <Router>
+        <Router>
           <Route exact path="/" component = {Home} />
           <Route path = "/Schedule" component = {Schedule} />
           <Route path = "/User" component = {User} />
@@ -30,7 +30,7 @@ class App extends Component {
         </Router>
       {/* <Schedule/> 
       {/* <User></User> */}
-       <TestComponent2/>
+       {/* <TestComponent2/> */}
        {/* <Register/> */}
        {/* <Home></Home> */}
        {/* <Department></Department> */}

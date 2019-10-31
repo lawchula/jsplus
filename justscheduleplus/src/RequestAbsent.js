@@ -58,7 +58,6 @@ class RequestAbsent extends Component {
 
     insertRequest = () => {
         if (this.state.checkboxValue !== '' && this.state.absentDescription !== '') {
-            if (!window.confirm("Do you want to Request to absent?")) return
             let arr = [];
             let a = '';
             let value = this.state.checkboxValue.substring(0, 5)
@@ -82,6 +81,7 @@ class RequestAbsent extends Component {
             })
 
             if (check) {
+                if (!window.confirm("Do you want to Request to absent?")) return
                 const Url = url + '/request/absent';
                 const othepram = {
                     headers: {
@@ -102,7 +102,26 @@ class RequestAbsent extends Component {
                         }
                     })
             } else {
-                alert(validate)
+                if (!window.confirm("This Period has been request by other user, Do you want to Request to absent?")) return
+                const Url = url + '/request/absent';
+                const othepram = {
+                    headers: {
+                        "content-type": "application/json; charset=UTF-8"
+                    },
+                    body: JSON.stringify({
+                        request: this.state.requestValue,
+                        description: this.state.absentDescription
+                    }),
+                    method: "POST"
+                };
+                fetch(Url, othepram)
+                    .then(res => res.json())
+                    .then(json => {
+                        if (json != "null") {
+                            this.setState({ requestID: json })
+                            this.insertNotification();
+                        }
+                    })
             }
         } else {
             alert("Please select Period to Absent!!!")

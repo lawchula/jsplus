@@ -122,29 +122,70 @@ class Filter extends Component {
   };
 
   DeletePeriodFromDB = event => {
-    if (!window.confirm("Do you want to delete this period!!")) return;
-    const Url = url + "/deleteperiod";
-    const othepram = {
-      headers: {
-        "content-type": "application/json; charset=UTF-8"
-      },
-      body: JSON.stringify({
-        DeletePeriod: event
-      }),
-      method: "POST"
-    };
-    fetch(Url, othepram)
-      .then(data => {
-        return data.json();
+    const { userRequest } = this.props
+    let hasRequest = []
+
+    if (userRequest.length !== 0) {
+      userRequest.map(userReq => {
+        if (userReq.Period_ID === event.Period_ID) {
+          hasRequest.push(userReq)
+        }
       })
-      .then(res => {
-        let periods = this.state.showPeriod.filter(period => {
-          return period.Period_ID != event.Period_ID;
-        });
-        this.setState({ showPeriod: periods });
-        this.props.getSchedule();
-      })
-      .catch(error => console.log(error));
+    }
+
+    if (hasRequest.length !== 0) {
+      if (!window.confirm("This Period has request, Do you want to delete this period!!")) return;
+      const Url = url + "/delete/period";
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          DeletePeriod: event,
+          reject: hasRequest,
+          approve: hasRequest
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(data => {
+          return data.json();
+        })
+        .then(res => {
+          let periods = this.state.showPeriod.filter(period => {
+            return period.Period_ID != event.Period_ID;
+          });
+          alert("Delete Success")
+          this.setState({ showPeriod: periods });
+          // this.props.getSchedule();
+        })
+        .catch(error => console.log(error));
+    } else {
+      if (!window.confirm("Do you want to delete this period!!")) return;
+      const Url = url + "/deleteperiod";
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          DeletePeriod: event
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(data => {
+          return data.json();
+        })
+        .then(res => {
+          let periods = this.state.showPeriod.filter(period => {
+            return period.Period_ID != event.Period_ID;
+          });
+          alert("Delete Success")
+          this.setState({ showPeriod: periods });
+          // this.props.getSchedule();
+        })
+        .catch(error => console.log(error));
+    }
   };
 
   render() {

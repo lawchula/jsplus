@@ -10,7 +10,6 @@ class Login extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       username: '',
       password: '',
@@ -92,7 +91,7 @@ class Login extends React.Component {
             if (decoded.position == "Manager") {
               window.location.href = "/Schedule";
             } else if(decoded.position === "Admin"){
-              window.location.href = "/Department";
+              window.location.href = "/Company";
             }else{
               window.location.href = "/User";
             }

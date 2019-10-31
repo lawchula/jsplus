@@ -138,6 +138,7 @@ class Header extends Component {
         }))
     this.setState({ managerNoti: userReq, loading: false })
   }
+
   getUserNoti = async (token, detailtk) => {
     const othepram = {
       headers: {
@@ -163,32 +164,71 @@ class Header extends Component {
           return response.json();
         })
     ])
-
     const [name, userNotification] = data;
     this.setState({ name, userNotification, loading: false, userhaveNoti: false, managerNoti: "T" })
-
   }
-  clickApproveExchangeNotification = (notification) => {
-    if (!window.confirm("Do you want to approve this request?")) return
-    const Url = url + '/notification/approve';
 
-    const othepram = {
-      headers: {
-        "content-type": "application/json; charset=UTF-8"
-      },
-      body: JSON.stringify({
-        approve: notification
-      }),
-      method: "POST"
-    };
-    fetch(Url, othepram)
-      .then(data => { return data.json() })
-      .then(res => {
-        this.setState({ loading: true, haveNotification: true })
-        this.checkToken();
-        this.props.Schedule();
+  clickApproveExchangeNotification = async (notification) => {
+    let autoReject = []
+    let autoAbsentReject = []
+    const { managerNoti, managerNotificationAbsent } = this.state
+
+    managerNoti.map(noti => {
+      noti.map(e => {
+        if (e.Request_ID !== notification[0].Request_ID && e.Schedule_ID === notification[0].Schedule_ID) {
+          autoReject.push(e)
+        } else if (e.Request_ID !== notification[1].Request_ID && e.Schedule_ID === notification[1].Schedule_ID) {
+          autoReject.push(e)
+        }
       })
-      .catch(error => console.log(error))
+    })
+
+    managerNotificationAbsent.map(noti => {
+      if (noti.Request_ID !== notification[0].Request_ID && noti.Schedule_ID === notification[0].Schedule_ID) {
+        autoAbsentReject.push(noti)
+      } else if (noti.Request_ID !== notification[1].Request_ID && noti.Schedule_ID === notification[1].Schedule_ID) {
+        autoAbsentReject.push(noti)
+      }
+    })
+
+    if (autoReject.length !== 0 || autoAbsentReject !== 0) {
+      if (!window.confirm("This period is has another request!,Do you want to approve this request?")) return
+      const Url = url + '/notification/approve';
+
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          approve: notification
+        }),
+        method: "POST"
+      };
+      await fetch(Url, othepram)
+        .then(data => { return data.json() })
+      this.autoRejectRequest(managerNoti, autoReject, autoAbsentReject);
+    } else {
+      if (!window.confirm("Do you want to approve this request?")) return
+      const Url = url + '/notification/approve';
+
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          approve: notification
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(data => { return data.json() })
+        .then(res => {
+          this.setState({ loading: true, haveNotification: true })
+          this.checkToken();
+          this.props.Schedule();
+        })
+        .catch(error => console.log(error))
+    }
   }
 
   clickRejectExchangeNotification = (notification) => {
@@ -213,27 +253,59 @@ class Header extends Component {
       .catch(error => console.log(error))
   }
 
-  clickApproveAbsentNotification = (notification) => {
-    if (!window.confirm("Do you want to approve this absent request?")) return
-    const Url = url + '/notification/absent/approve';
+  clickApproveAbsentNotification = async (notification) => {
+    let autoReject = []
+    let autoAbsentReject = []
+    const { managerNoti } = this.state
 
-    const othepram = {
-      headers: {
-        "content-type": "application/json; charset=UTF-8"
-      },
-      body: JSON.stringify({
-        approve: notification
-      }),
-      method: "POST"
-    };
-    fetch(Url, othepram)
-      .then(data => { return data.json() })
-      .then(res => {
-        this.setState({ loading: true, haveNotification: true })
-        this.checkToken();
-        this.props.Schedule();
+    managerNoti.map(e => {
+      e.map(t => {
+        if (t.Request_ID !== notification.Request_ID && t.Schedule_ID === notification.Schedule_ID) {
+          autoReject.push(t)
+        }
       })
-      .catch(error => console.log(error))
+    })
+
+    if (autoReject.length !== 0) {
+      if (!window.confirm("This period is has another request!, Do you want to approve this absent request?")) return
+      const Url = url + '/notification/absent/approve';
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          approve: notification
+        }),
+        method: "POST"
+      };
+      await fetch(Url, othepram)
+        .then(data => { return data.json() })
+        .then(res => {
+          this.setState({ loading: true, haveNotification: true })
+          this.autoRejectRequest(managerNoti, autoReject, autoAbsentReject);
+        })
+    } else {
+      if (!window.confirm("Do you want to approve this absent request?")) return
+      const Url = url + '/notification/absent/approve';
+
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          approve: notification
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(data => { return data.json() })
+        .then(res => {
+          this.setState({ loading: true, haveNotification: true })
+          this.checkToken();
+          this.props.Schedule();
+        })
+        .catch(error => console.log(error))
+    }
   }
 
   clickRejectAbsentNotification = (notification) => {
@@ -254,6 +326,71 @@ class Header extends Component {
       .then(res => {
         this.setState({ loading: true, haveNotification: true })
         this.checkToken();
+      })
+      .catch(error => console.log(error))
+  }
+
+  autoRejectRequest = (managerNoti, autoReject, autoAbsentReject) => {
+    if (autoReject.length !== 0) {
+      managerNoti.map(e => {
+        autoReject.map(x => {
+          if (e[0].Request_ID === x.Request_ID) {
+            let a = ''
+            a = e[0].User_ID
+            x.User_ID = a
+          }
+        })
+      })
+
+      const Url = url + '/notification/reject';
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          reject: autoReject
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(res => res.json())
+        .then(json => {
+          if (json != "null") {
+            if (autoAbsentReject.length !== 0) {
+              this.autoRejectAbsentRequest(autoAbsentReject)
+            } else {
+              this.setState({ loading: true, haveNotification: true })
+              this.checkToken();
+              alert("Approve Success")
+              autoReject = []
+            }
+          }
+        })
+    }else if(autoAbsentReject.length !== 0){
+      this.autoRejectAbsentRequest(autoAbsentReject)
+    }
+  }
+
+  autoRejectAbsentRequest(autoAbsentReject){
+    const Url = url + '/notification/absent/reject';
+    const othepram = {
+      headers: {
+        "content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        reject: autoAbsentReject[0]
+      }),
+      method: "POST"
+    };
+    fetch(Url, othepram)
+      .then(res => res.json())
+      .then(json => {
+        if(json !== "null"){
+          this.setState({ loading: true, haveNotification: true })
+          this.checkToken();
+          alert("Approve Success")
+          autoAbsentReject = []
+        }
       })
       .catch(error => console.log(error))
   }
@@ -377,7 +514,7 @@ class Header extends Component {
           {userNotification.length >= 100 ? '99+' : userNotification.length}
         </div> : null}
 
-        {!haveNotification || !haveAbsentNoti &&  managerNotificationAbsent.length !== 0 ?
+        {!haveNotification || !haveAbsentNoti && managerNotificationAbsent.length !== 0 ?
           <div className="count-notification">
             {managerNoti.length + managerNotificationAbsent.length}
           </div> : null}
@@ -457,7 +594,7 @@ class Header extends Component {
         {
           !loading && (<React.Fragment>
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
-              <div className="JS" onClick={this.homePage}><img src={logo} style={{height:100,width:100}}></img></div>
+              <div className="JS" onClick={this.homePage}><img src={logo} style={{ height: 100, width: 100 }}></img></div>
               <NavbarToggler onClick={this.navbarOpen} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar >
