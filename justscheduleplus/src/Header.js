@@ -373,12 +373,12 @@ class Header extends Component {
             }
           }
         })
-    }else if(autoAbsentReject.length !== 0){
+    } else if (autoAbsentReject.length !== 0) {
       this.autoRejectAbsentRequest(autoAbsentReject)
     }
   }
 
-  autoRejectAbsentRequest(autoAbsentReject){
+  autoRejectAbsentRequest(autoAbsentReject) {
     const Url = url + '/user/manager/absentnotification/reject';
     const othepram = {
       headers: {
@@ -392,7 +392,7 @@ class Header extends Component {
     fetch(Url, othepram)
       .then(res => res.json())
       .then(json => {
-        if(json !== "null"){
+        if (json !== "null") {
           this.setState({ loading: true, haveNotification: true })
           alert("Approve Success")
           this.props.Schedule();
@@ -448,9 +448,12 @@ class Header extends Component {
     var token = localStorage.getItem('tk');
     if (token != null && token != "undefined") {
       var decoded = jwt_decode(token);
-      if (decoded.position != "Manager" || decoded.position == "Admin") {
-        window.location.href = "/User";
-      } else {
+      if (decoded.position === "Manager") {
+        window.location.href = "/Schedule";
+      } else if (decoded.position === "Admin") {
+        window.location.href = "/Company";
+      }
+      else {
         window.location.href = "/Schedule";
       }
     }

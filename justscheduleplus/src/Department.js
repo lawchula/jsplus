@@ -7,8 +7,8 @@ import setstaff from './Images/setstaff.png';
 import remove from './Images/delete.png';
 import edit from './Images/configuration.png';
 import url from './url';
-import {OutTable, ExcelRenderer} from 'react-excel-renderer';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
+import { OutTable, ExcelRenderer } from 'react-excel-renderer';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import Position from './Position';
 
 
@@ -17,9 +17,6 @@ class Department extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            // user:[{id:'1',name:"Teetuch Jeeravarangkul3",email:'lawchula@hotmail.com',telno:'0917767191',position:'Manager'},
-            //     {id:'2',name:"Teetuch Jeeravarangkul",email:'lawchula@hotmail.com',telno:'0917767191',position:'Front-end Developer'},
-            // {id:'3',name:"Teetuch Jeeravarangkul2",email:'lawchula@hotmail.com',telno:'0917767191',position:'Front-end Developer'}],
             user: [],
             edit: true,
             addstaff: false,
@@ -27,32 +24,30 @@ class Department extends Component {
             test2: [],
             loading: true,
             department: [],
-            cols:[],
-            rows:[],
-            newusers:[],
+            cols: [],
+            rows: [],
+            newusers: [],
             subject: "Your administrator create your account for Justscheduleplus",
-            dropdownOpen:false,
+            dropdownOpen: false,
             addposition: 0,
-            newuser:{name:"",surname:"",email:"",telno:""},
-            showposition:false,
+            newuser: { name: "", surname: "", email: "", telno: "" },
+            showposition: false,
             positions: [],
-            newuserp:[],
+            newuserp: [],
             changeposition: {},
-            positionname:null,
+            positionname: null,
         }
     }
 
     componentDidMount() {
         const { manageDepartment } = this.props.location.state
-        this.setState({ department: manageDepartment})
+        this.setState({ department: manageDepartment })
         this.getDepartmentDes(manageDepartment)
         this.getPosition(manageDepartment)
-        console.log(this.props.location.state)
     }
 
     getDepartmentDes = async (manageDepartment) => {
         let departID = manageDepartment.Department_ID
-        console.log(departID)
         // var token = localStorage.getItem('tk')
         const othepram = {
             headers: {
@@ -61,7 +56,7 @@ class Department extends Component {
             method: "GET"
         };
         const data = await Promise.all([
-            fetch(url + '/get/department/user', othepram)
+            fetch(url + '/department/user', othepram)
                 .then((response) => {
                     return response.json();
                 })
@@ -74,65 +69,63 @@ class Department extends Component {
     getPosition = (manageDepartment) => {
         let departID = manageDepartment.Department_ID
         const othepram = {
-          headers: {
-            departid: departID
-          },
-          method: "GET"
+            headers: {
+                departid: departID
+            },
+            method: "GET"
         };
-    
-        fetch(url + "/get/position", othepram)
-          .then(response => {
-            return response.json();
-          })
-          .then(myJson => {
-              console.log(myJson)
-            this.setState({ positions: myJson });
-            this.setState({newuserp: myJson})
-          });
-      };
 
-      saveEdit = () =>{
-        const Url = url + "/update/user/position";
-        const {changeposition} = this.state
+        fetch(url + "/position", othepram)
+            .then(response => {
+                return response.json();
+            })
+            .then(myJson => {
+                this.setState({ positions: myJson });
+                this.setState({ newuserp: myJson })
+            });
+    };
+
+    saveEdit = () => {
+        const Url = url + "/user/position/update";
+        const { changeposition } = this.state
         const othepram = {
             headers: {
-              "content-type": "application/json; charset=UTF-8",
+                "content-type": "application/json; charset=UTF-8",
             },
             body: JSON.stringify({
-              userid: changeposition.userid,
-              newposition: changeposition.newposition
+                userid: changeposition.userid,
+                newposition: changeposition.newposition
             }),
             method: "POST"
-          };
-          fetch(Url, othepram)
+        };
+        fetch(Url, othepram)
             .then(res => {
-              this.setState({ changeposition: [],test:0 });
-              console.log('saved');
-              this.componentDidMount()
-            //   this.cancelEdit();
+                this.setState({ changeposition: [], test: 0 });
+                this.componentDidMount()
+                //   this.cancelEdit();
             })
             .catch(error => console.log(error));
-      }
+    }
 
-      insertUser = () => {
-        const Url = url + "/insert/user";
+    insertUser = () => {
+        const Url = url + "/user/insert";
         const othepram = {
             headers: {
-              "content-type": "application/json; charset=UTF-8",
+                "content-type": "application/json; charset=UTF-8",
             },
             body: JSON.stringify({
-              user: this.state.newusers,
+                user: this.state.newusers,
             }),
             method: "POST"
-          };
-          fetch(Url, othepram)
+        };
+        fetch(Url, othepram)
             .then(res => {
-              this.sendEmail()
-              this.setState({ newusers: [] });
-              this.componentDidMount()
+                this.sendEmail()
+                this.setState({ newusers: [] });
+                this.componentDidMount()
             })
             .catch(error => console.log(error));
-      }
+    }
 
 
     remove = (key) => {
@@ -149,7 +142,7 @@ class Department extends Component {
     addStaff = () => {
         this.setState({
             addstaff: !this.state.addstaff,
-            val : null
+            val: null
         })
     }
 
@@ -167,37 +160,34 @@ class Department extends Component {
 
     fileHandler = (event) => {
         let fileObj = event.target.files[0];
-    
-        //just pass the fileObj as parameter
-        if(fileObj == null){
+        if (fileObj == null) {
             return " "
-        }else{
+        } else {
             ExcelRenderer(fileObj, (err, resp) => {
-                if(err){
-                  console.log(err);            
+                if (err) {
+                    console.log(err);
                 }
-                else{
-                  this.setState({
-                    cols: resp.cols,
-                    rows: resp.rows
-                  });
-                  // console.log(this.state.rows.length)
+                else {
+                    this.setState({
+                        cols: resp.cols,
+                        rows: resp.rows
+                    });
                 }
-              });          
+            });
         }
-      }
+    }
 
-    addUserfromExcel = (event) =>{
-        for(let i=0; i <event.length;i++){
-            if(event[i].length > 0 ){
+    addUserfromExcel = (event) => {
+        for (let i = 0; i < event.length; i++) {
+            if (event[i].length > 0) {
                 var a = {}
-                const random = Math.floor(Math.random() * 9999999)+1
-                const password =  event[i][0].substring(0,1) + event[i][1].substring(0,1)+random
+                const random = Math.floor(Math.random() * 9999999) + 1
+                const password = event[i][0].substring(0, 1) + event[i][1].substring(0, 1) + random
                 a.name = event[i][0]
                 a.surname = event[i][1]
                 a.email = event[i][2]
                 a.telno = event[i][3]
-                a.position =  "Please select position"
+                a.position = "Please select position"
                 a.username = event[i][2]
                 a.id = this.state.newusers.length
                 a.positionid = null
@@ -207,153 +197,131 @@ class Department extends Component {
         }
         this.state.rows = []
         this.state.cols = []
-       }
+    }
 
-       sendEmail = () => {
-        for(let i=0; i<this.state.newusers.length; i++){
-        const Url = 'http://localhost:8080/sendEmail';
-        const othepram = {
-            headers: {
-                "content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify({
-                email: this.state.newusers[i].email,
-                subject: this.state.subject,
-                username: this.state.newusers[i].email,
-                password: this.state.newusers[i].password
-            }),
-            method: "POST"
-        };
-        fetch(Url, othepram)
-            .then(data => { return data.json() })
-            .then(res => {
-            })
-            .catch(error => console.log(error))
+    sendEmail = () => {
+        for (let i = 0; i < this.state.newusers.length; i++) {
+            const Url = url + '/sendEmail';
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify({
+                    email: this.state.newusers[i].email,
+                    subject: this.state.subject,
+                    username: this.state.newusers[i].email,
+                    password: this.state.newusers[i].password
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(data => { return data.json() })
+                .then(res => {
+                })
+                .catch(error => console.log(error))
         }
     }
 
-    toggle = (id,key) => {
+    toggle = (id, key) => {
         const { dropdownOpen } = this.state
-        console.log(dropdownOpen)
-        this.setState({ 
+        this.setState({
             dropdownOpen: !dropdownOpen,
             addposition: key
         })
-        // console.log(id,key)
-        // const test = id
-        // if(key == 0){
-           
-        //     console.log(id,key)
-        // }else{
-        //     return null
-        }
-    
+    }
+
     handleChange = (event) => {
-       event.preventDefault();
-       const {newuser} = this.state
-       newuser[event.target.name] = event.target.value
-       newuser.id = this.state.newusers.length
-       newuser.position =  "Please select position"
-       newuser.positionid = null
-       this.setState({newuser})
-       this.setState({val:null})
+        event.preventDefault();
+        const { newuser } = this.state
+        newuser[event.target.name] = event.target.value
+        newuser.id = this.state.newusers.length
+        newuser.position = "Please select position"
+        newuser.positionid = null
+        this.setState({ newuser })
+        this.setState({ val: null })
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        const {newuser} = this.state
-        if(newuser.name.trim() == "" || newuser.surname.trim() == "" || newuser.email.trim() == "" || newuser.telno.trim() == ""){
-            this.setState({val:"Please fill information"})
+        const { newuser } = this.state
+        if (newuser.name.trim() == "" || newuser.surname.trim() == "" || newuser.email.trim() == "" || newuser.telno.trim() == "") {
+            this.setState({ val: "Please fill information" })
             newuser.name = ""
             newuser.surname = ""
             newuser.email = ""
             newuser.telno = ""
-        }else{
-        const random = Math.floor(Math.random() * 9999999)+1
-        const password =  this.state.newuser.name.substring(0,1) + this.state.newuser.surname.substring(0,1) +random
-        newuser.username = this.state.newuser.email
-        newuser.password = password
-        this.state.newusers.push(this.state.newuser)
-        this.setState({addstaff: false,val:null})
-        this.state.newuser = {name:"",surname:"",email:"",telno:""}
+        } else {
+            const random = Math.floor(Math.random() * 9999999) + 1
+            const password = this.state.newuser.name.substring(0, 1) + this.state.newuser.surname.substring(0, 1) + random
+            newuser.username = this.state.newuser.email
+            newuser.password = password
+            this.state.newusers.push(this.state.newuser)
+            this.setState({ addstaff: false, val: null })
+            this.state.newuser = { name: "", surname: "", email: "", telno: "" }
         }
     }
 
     showPosition = () => {
         this.setState({
-         showposition: !this.state.showposition
+            showposition: !this.state.showposition
         })
-      }
+    }
 
-      selectPosition = (event,key,id,pid) => {
-          console.log(event.target.innerText,key,id)
-            const{newusers} = this.state
-            let newposition = {}
-            newposition.key = key
-            newposition.name  = event.target.innerText
-            newposition.id  = id
-            newposition.pid = pid
-            if(newusers[key].positionid == null){
-                newusers[key].positionid =   newposition.pid 
+    selectPosition = (event, key, id, pid) => {
+        const { newusers } = this.state
+        let newposition = {}
+        newposition.key = key
+        newposition.name = event.target.innerText
+        newposition.id = id
+        newposition.pid = pid
+        if (newusers[key].positionid == null) {
+            newusers[key].positionid = newposition.pid
+            newusers[key].position = newposition.name
+        } else {
+            if (newusers[key].id == newposition.id) {
+                newusers[key].positionid = newposition.pid
                 newusers[key].position = newposition.name
-            }else{
-                     if(newusers[key].id == newposition.id){
-                        newusers[key].positionid =   newposition.pid 
-                        newusers[key].position= newposition.name
-                    }else{
-                        newusers[key].positionid =   newposition.pid 
-                        newusers[key].position = newposition.name
-                    }
-                
+            } else {
+                newusers[key].positionid = newposition.pid
+                newusers[key].position = newposition.name
             }
-            console.log(newusers)
-      }
 
-      changePosition = (event,key,p) =>{
-         
-           const id = this.state.user[key].User_ID
-           const pid = p
-           const pname = event.target.innerText
-           this.state.changeposition.userid =  id
-           this.state.changeposition.newposition = pid
-           this.setState({
-               positionname: pname
-           })
-            // console.log(this.state.user[key].User_ID,this.state.positions[key].Position_ID,p)
-      }
+        }
+    }
 
-
-
-    
-        
-    
-
- 
-    
-
+    changePosition = (event, key, p) => {
+        const id = this.state.user[key].User_ID
+        const pid = p
+        const pname = event.target.innerText
+        this.state.changeposition.userid = id
+        this.state.changeposition.newposition = pid
+        this.setState({
+            positionname: pname
+        })
+    }
 
     render() {
 
-        const { edit, addstaff, test, department,user,newusers,positions,dropdownOpen,changeposition,positionname,newuser,editDepartment,changeDepartment } = this.state
+        const { edit, addstaff, test, department, user, newusers, positions, dropdownOpen, changeposition, positionname, newuser, editDepartment, changeDepartment } = this.state
         const manage = user.map((e, key) => {
             return <tr>
-                <td>{e.name+" " + e.surname}</td>
+                <td>{e.name + " " + e.surname}</td>
                 <td>{e.Email}</td>
                 <td>{e.PhoneNumber}</td>
                 <td>{e.User_ID == test ? <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' size="sm">
-                                         <DropdownToggle tag="span">
-                                        {positionname == null ? <span>{e.Position_Name}</span>:<span>{positionname}</span>}
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                        {positions.map((p) => {
-                                                return   <DropdownItem onClick={(event) => this.changePosition(event,key,p.Position_ID)}>
-                                                            <div style={{display:"flex",flexDirection:"column"}}>
-                                                            <span>{p.Position_Name}</span>
-                                                            </div>
-                                                        </DropdownItem>
-                                            })}
-                                        </DropdownMenu>
-                                        </Dropdown> : e.Position_Name}</td>
+                    <DropdownToggle tag="span">
+                        {positionname == null ? <span>{e.Position_Name}</span> : <span>{positionname}</span>}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        {positions.map((p) => {
+                            return <DropdownItem onClick={(event) => this.changePosition(event, key, p.Position_ID)}>
+                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <span>{p.Position_Name}</span>
+                                </div>
+                            </DropdownItem>
+                        })}
+                    </DropdownMenu>
+                </Dropdown> : e.Position_Name}</td>
                 <td>
                     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                         <img src={e.Position_Name == "Manager" ? setmanager : setstaff}></img>
@@ -374,7 +342,7 @@ class Department extends Component {
         let manager = '';
         let member = user.length
         user.map(manager => {
-            if(manager.Position_Name === "Manager"){
+            if (manager.Position_Name === "Manager") {
                 manager = manager.name + ' ' + manager.surname
             }
         })
@@ -386,7 +354,7 @@ class Department extends Component {
                     <div className="dp-header">
                         <div className="col-5">
                             <div className="dp-img">
-                            {/* <img className="department-pictures" src={department.Department_Picture}></img> */}
+                                {/* <img className="department-pictures" src={department.Department_Picture}></img> */}
                             </div>
                         </div>
                         <div className="dp-description col-9">
@@ -413,18 +381,18 @@ class Department extends Component {
                             <button className="add-staff-butt" onClick={this.addStaff}>Add Staff+</button>
                             <button className="add-staff-butt" onClick={this.showPosition}>Position</button>
                             <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>Import</button>
-                            <label htmlFor="upload-excel"  className="add-staff-excel">Import</label>
-                            <input type="file" id="upload-excel" onChange={this.fileHandler.bind(this)} style={{"padding":"10px"}} />                      
+                            <label htmlFor="upload-excel" className="add-staff-excel">Import</label>
+                            <input type="file" id="upload-excel" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
                         </div>
                         :
                         <div className="add-staff2">
                             <div>
-                            <input placeholder="Name"  name="name" value={newuser.name}  onChange={event => this.handleChange(event)}></input>
-                            <input placeholder="Surname" name="surname" value={newuser.surname} style={{ marginLeft: 10 }}  onChange={event => this.handleChange(event)}></input>
-                            <input type="email" placeholder="Email" value={newuser.email} name="email" style={{ marginLeft: 10 }}  onChange={event => this.handleChange(event)}></input>
-                            <input placeholder="Telno" name="telno" value={newuser.telno}  style={{ marginLeft: 10 }}  onChange={event => this.handleChange(event)}></input>
-                            <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.addStaff}>Cancel</button>
-                            <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.handleSubmit}>Add</button>
+                                <input placeholder="Name" name="name" value={newuser.name} onChange={event => this.handleChange(event)}></input>
+                                <input placeholder="Surname" name="surname" value={newuser.surname} style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
+                                <input type="email" placeholder="Email" value={newuser.email} name="email" style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
+                                <input placeholder="Telno" name="telno" value={newuser.telno} style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
+                                <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.addStaff}>Cancel</button>
+                                <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.handleSubmit}>Add</button>
 
                             </div>
                             <span className="val2">{this.state.val}</span>
@@ -441,27 +409,29 @@ class Department extends Component {
                                 <th>MANAGE</th>
                             </tr>
                             {manage}
-                            {newusers.map((e, key) => {return <tr>
-                                <td>{e.name +" " +e.surname}</td>
-                                <td>{e.email}</td>
-                                <td>{e.telno}</td>
-                                <td><Dropdown isOpen={this.state.dropdownOpen && key == this.state.addposition} toggle={() => this.toggle(e.id,key)} direction='down' size="sm">
-                                         <DropdownToggle tag="span" >
-                                        <span>{e.position}</span>
+                            {newusers.map((e, key) => {
+                                return <tr>
+                                    <td>{e.name + " " + e.surname}</td>
+                                    <td>{e.email}</td>
+                                    <td>{e.telno}</td>
+                                    <td><Dropdown isOpen={this.state.dropdownOpen && key == this.state.addposition} toggle={() => this.toggle(e.id, key)} direction='down' size="sm">
+                                        <DropdownToggle tag="span" >
+                                            <span>{e.position}</span>
                                         </DropdownToggle>
-                                        {key == this.state.addposition ?  <DropdownMenu>
-                                            {this.state.newuserp.map((p,index) => {
-                                                return   <DropdownItem  onClick={(event)=> this.selectPosition(event,key,e.id,p.Position_ID)}>
-                                                            <div style={{display:"flex",flexDirection:"column"}}>
-                                                                <span>{p.Position_Name}</span>
-                                                            </div>
-                                                        </DropdownItem>
+                                        {key == this.state.addposition ? <DropdownMenu>
+                                            {this.state.newuserp.map((p, index) => {
+                                                return <DropdownItem onClick={(event) => this.selectPosition(event, key, e.id, p.Position_ID)}>
+                                                    <div style={{ display: "flex", flexDirection: "column" }}>
+                                                        <span>{p.Position_Name}</span>
+                                                    </div>
+                                                </DropdownItem>
                                             })}
-                                        </DropdownMenu>: null}
-                                        </Dropdown>
-                                        </td>
-                                <td><span style={{color:"#4054b2"}}>Please save data</span></td>
-                            </tr>})}
+                                        </DropdownMenu> : null}
+                                    </Dropdown>
+                                    </td>
+                                    <td><span style={{ color: "#4054b2" }}>Please save data</span></td>
+                                </tr>
+                            })}
                         </tbody>
                     </Table>
                     <button className="add-staff-butt" onClick={this.insertUser}>Save</button>

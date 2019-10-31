@@ -20,11 +20,25 @@ class Position extends Component {
   }
 
   componentDidMount() {
-    // this.setState({
-    //     departmentId:this.props.test.Department_ID
-    // })
     this.getPosition()
   }
+  
+  getPosition = () => {
+    const othepram = {
+      headers: {
+        departid: this.props.test.Department_ID
+      },
+      method: "GET"
+    };
+
+    fetch(url + "/position", othepram)
+      .then(response => {
+        return response.json();
+      })
+      .then(myJson => {
+        this.setState({ positions: myJson });
+      });
+  };
 
   onClose = e => {
     if (this.props.onClose != undefined) {
@@ -41,31 +55,14 @@ class Position extends Component {
     }
   }
 
-  handleChange = (event, name) => {
+  handleChange = (event) => {
     event.preventDefault();
     this.setState({ newposition: event.target.value })
   }
 
-  getPosition = () => {
-    const othepram = {
-      headers: {
-        departid: this.props.test.Department_ID
-      },
-      method: "GET"
-    };
-
-    fetch(url + "/get/position", othepram)
-      .then(response => {
-        return response.json();
-      })
-      .then(myJson => {
-        console.log(myJson)
-        this.setState({ positions: myJson });
-      });
-  };
 
   insertPosition = () => {
-    const Url = url + "/insert/position";
+    const Url = url + "/position/insert";
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8",
@@ -89,16 +86,14 @@ class Position extends Component {
       check: id,
       edituser: Position_Name
     })
-    console.log('id', id)
   }
 
   cancelEdit = () => {
-    console.log('cabcel')
     this.setState({ check: 0, validate2: null })
   }
 
   saveEdit = (event) => {
-    const Url = url + "/update/position";
+    const Url = url + "/position/update";
     if (this.state.edituser.trim() == "") {
       this.setState({ validate2: "Please insert position" })
     } else {
@@ -115,7 +110,6 @@ class Position extends Component {
       fetch(Url, othepram)
         .then(res => {
           this.setState({ edituser: null, validate: null });
-          console.log('saved');
           this.cancelEdit();
           this.getPosition();
         })
@@ -124,7 +118,6 @@ class Position extends Component {
   }
 
   changePosition = (event) => {
-    console.log(event.target.value)
     this.setState({ edituser: event.target.value })
   }
 
@@ -132,12 +125,7 @@ class Position extends Component {
     if (!this.props.show) {
       return null;
     }
-
-
     const { newposition, newpositions, positions, check } = this.state
-    console.log('check', this.state.check)
-    console.log("state" + this.state.edituser)
-
 
     return (
       <div className="position-popup">

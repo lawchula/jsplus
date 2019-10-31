@@ -50,7 +50,7 @@ class Filter extends Component {
       method: "GET"
     };
 
-    fetch(url + "/showperiod", othepram)
+    fetch(url + "/period", othepram)
       .then(response => {
         return response.json();
       })
@@ -102,7 +102,7 @@ class Filter extends Component {
 
   onAfterInsertRow = () => {
     var token = localStorage.getItem('tk');
-    const Url = url + "/period";
+    const Url = url + "/period/insert";
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8",
@@ -135,7 +135,7 @@ class Filter extends Component {
 
     if (hasRequest.length !== 0) {
       if (!window.confirm("This Period has request, Do you want to delete this period!!")) return;
-      const Url = url + "/delete/period";
+      const Url = url + "/period/delete/autoreject";
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"
@@ -162,7 +162,7 @@ class Filter extends Component {
         .catch(error => console.log(error));
     } else {
       if (!window.confirm("Do you want to delete this period!!")) return;
-      const Url = url + "/deleteperiod";
+      const Url = url + "/period/delete";
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"

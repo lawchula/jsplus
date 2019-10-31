@@ -12,19 +12,16 @@ class CreateCompany extends Component {
         super(props);
         this.state = {
             company: { companyName: '', companyEmail: '', companyTel: '' },
-            //ใช้ตอนรับค่ามาจาก firebase
             companyImage: '',
-            //ใช้ตอนอัพโหลดไป firebase
             companyImages: null,
             imageName: '',
             validate: '',
             test: '',
         };
-
+        
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.FirebaseConfig)
         }
-
     }
 
     onClose = (e) => {
@@ -42,7 +39,7 @@ class CreateCompany extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault()
-        let { company, validate } = this.state
+        let { company } = this.state
 
         if (company.companyName == "" || company.companyEmail == "" || company.companyTel == "") {
             this.setState({ validate: 'This field is requried' })
@@ -70,7 +67,6 @@ class CreateCompany extends Component {
         }
     }
 
-    // เอา url ของรูปจากเครื่องมา
     fileSelectedHandler = (event) => {
         this.setState({
             companyImages: URL.createObjectURL(event.target.files[0]),
@@ -78,30 +74,22 @@ class CreateCompany extends Component {
         })
     }
 
-    //upload image โดยใช้ firebase
     uploadImages = async (event, imgname) => {
         const response = await fetch(event);
         const blob = await response.blob();
 
         var ref = firebase.storage().ref().child('images/' + imgname);
         return ref.put(blob)
-        console.log('success')
     }
 
-    //เรียกใช้ uploadImages เอา companyImages ใส่ใน parameter
     confirmUploadImage = () => {
         this.uploadImages(this.state.companyImages, this.state.imageName)
             .then(() => {
-                console.log('Upload Success !!')
-                console.log('name' + this.state.imageName)
-                //get url ของรูปมาถ้า Upload สำเร็จ (ต้องเอา url ของรูปมาเก็บใน state แล้วนำมา show **ตอนนี้ยังไม่ได้ทำ)
                 firebase.storage().ref().child('images/' + this.state.imageName).getDownloadURL()
                     .then((imageURL) => {
                         this.setState({
                             companyImage: imageURL
                         })
-                        console.log(imageURL)
-                        console.log("from state = " + this.state.companyImage)
                     })
             })
             .catch((error) => {
@@ -109,14 +97,12 @@ class CreateCompany extends Component {
             })
     }
 
-
-
     render() {
         if (!this.props.show) {
             return null;
         }
-
         const { company, companyImages, imageName, validate, companyImage } = this.state
+
         return (
             <div className="createcompany-popup">
                 <div className="createcompany-popup_inner">

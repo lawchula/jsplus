@@ -52,7 +52,7 @@ class Schedule extends Component {
             userRequest: [],
             loading: true,
             showGenerate: false,
-            daysname:[]
+            daysname: []
         }
     }
 
@@ -78,11 +78,11 @@ class Schedule extends Component {
     }
 
     getNameofMonth = (month) => {
-        // this.getSchedules();
         const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
         return monthNames[month]
+        // this.getSchedules();
 
     }
 
@@ -105,7 +105,7 @@ class Schedule extends Component {
         };
 
         const data = await Promise.all([
-            fetch(url + '/users', othepram)
+            fetch(url + '/user', othepram)
                 .then((response) => {
                     return response.json();
                 }),
@@ -117,11 +117,11 @@ class Schedule extends Component {
                 .then((response) => {
                     return response.json();
                 }),
-            fetch(url + "/showperiod", othepram)
+            fetch(url + "/period", othepram)
                 .then(response => {
                     return response.json();
                 }),
-            fetch(url + '/manager/notification/schedule', otheprams)
+            fetch(url + '/schedule/manager/notification/', otheprams)
                 .then((response) => {
                     return response.json();
                 })
@@ -143,7 +143,7 @@ class Schedule extends Component {
             method: "GET"
         };
         const data = await Promise.all([
-            fetch(url + '/showschedule', othepram)
+            fetch(url + '/schedule', othepram)
                 .then((response) => {
                     return response.json();
                 })
@@ -198,8 +198,7 @@ class Schedule extends Component {
         this.props.dropdownTest()
     }
 
-    ShowDayColorOnSchedule = (num,name) => {
-        console.log(name)
+    ShowDayColorOnSchedule = (num, name) => {
         var dayStr = name
         var dayStr1 = num
         if (dayStr1 == this.state.currentDay) {
@@ -244,7 +243,6 @@ class Schedule extends Component {
             return;
         }
         const show = { ...this.state.TestShow }
-        var countarray = 0;
 
         const oldShow = show[`${event.User_ID},${e}`]
         if (Array.isArray(oldShow)) {
@@ -276,7 +274,7 @@ class Schedule extends Component {
     }
 
     InsertPeriodtoSchedule = () => {
-        const Url = url + '/schedule';
+        const Url = url + '/schedule/insert';
         const othepram = {
             headers: {
                 "content-type": "application/json; charset=UTF-8"
@@ -313,7 +311,7 @@ class Schedule extends Component {
         if (hasRequest.length !== 0) {
             if (!window.confirm("This period has Request!! Do you want to delete this period?")) return
             let token = localStorage.getItem('tk')
-            const Url = url + '/schedule/deleted';
+            const Url = url + '/schedule/delete/autoreject';
 
             const othepram = {
                 headers: {
@@ -356,7 +354,7 @@ class Schedule extends Component {
                 .catch(error => console.log(error))
         }
     }
-    
+
     toggle = () => {
         const { dropdownOpen } = this.state
         this.setState({ dropdownOpen: !dropdownOpen })
@@ -438,7 +436,7 @@ class Schedule extends Component {
     render() {
 
         const { loading } = this.state
-        const daysname =  this.state.daysname.map((event1, i) => { return event1 })
+        const daysname = this.state.daysname.map((event1, i) => { return event1 })
         let showperiod = []
         if (!loading) {
             showperiod = this.state.showPeriod.map((event) => {
@@ -451,8 +449,6 @@ class Schedule extends Component {
                     <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
                 </div>
             })
-            console.log(this.state.TestShow)
-
         }
 
         return (
@@ -506,11 +502,13 @@ class Schedule extends Component {
                             <tbody>
                                 <tr>
                                     <th className="name" colSpan="2" id="name-schedule">NAME</th>
-                                    {this.state.day.map((event, i) => { return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event,daysname[i]) }} className="day">
-                                                                                    <div style={{display:'flex',flexDirection:'column'}}>
-                                                                                    <span>{event}</span>
-                                                                                    <span>{daysname[i]}</span>
-                                                                                     </div></th> })}
+                                    {this.state.day.map((event, i) => {
+                                        return <th style={{ backgroundColor: this.ShowDayColorOnSchedule(event, daysname[i]) }} className="day">
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span>{event}</span>
+                                                <span>{daysname[i]}</span>
+                                            </div></th>
+                                    })}
                                 </tr>
                                 {this.state.user.map((event, x) => {
                                     return <tr className="test2">
@@ -539,7 +537,7 @@ class Schedule extends Component {
                                                     this.state.showDropdown[0] === x &&
                                                     this.state.showDropdown[1] === y &&
                                                     !this.state.dropdownshouldclose &&
-                                                    <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)} />
+                                                    <Timepicker CloseDropdown={this.CloseDropdown.bind(this)} period={this.state.showPeriod} AddPeriod={(PeriodUserClick) => this.AddPeriod(PeriodUserClick, x, y, event, e)} />
                                                     :
                                                     false}
 
