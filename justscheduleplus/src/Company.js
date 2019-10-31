@@ -298,9 +298,8 @@ class Company extends Component {
                             {editCompany == true ?
                                 <div>
                                     <div style={{ display: 'flex' }}>
-                                        <label htmlFor="manage-staff10" className="manage-staff9">Browse...</label>
+                                        <label htmlFor="manage-staff9" className="manage-staff9">Browse...</label>
                                         <input type="file" name="photo" id="manage-staff9" onChange={this.fileSelectedHandler} />
-                                        <button className="manage-staff9" onClick={this.confirmUploadImage}>Upload</button>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', padding: 5, marginTop: 10 }}>
                                         <span>Company :</span>

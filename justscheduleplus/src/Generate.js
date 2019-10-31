@@ -16,6 +16,7 @@ class Generate extends Component {
             dropdownPeriod: false,
             dropdownPerson: false,
             dropdownHoliday: false,
+            dropdownPosition: false,
             holiday: { date: "select", reason: "" },
             holidays: [],
             day: [],
@@ -23,6 +24,8 @@ class Generate extends Component {
             month: new Date().getMonth(),
             periodperDays: [],
             personperDays: [],
+            positions:[],
+            position:null,
             periodperDay: null,
             personperDay: null,
         }
@@ -38,6 +41,12 @@ class Generate extends Component {
             this.props.onClose(e);
         }
     };
+
+    selectPosition = () => {
+        this.setState({
+            dropdownPosition: !this.state.dropdownPosition,
+        })
+    }
 
 
     selectPeriodTimes = () => {
@@ -100,6 +109,12 @@ class Generate extends Component {
         })
     }
 
+    changePosition = (event) => {
+        this.setState({
+            position:event.target.innerText
+        })
+    }
+
     getDate = (month, year) => {
         var date = new Date(year, month, 1);
         let collectDay = ""
@@ -130,7 +145,7 @@ class Generate extends Component {
         if (!this.props.show) {
             return null;
         }
-        const { day, holiday, holidays, periodperDays, personperDays, periodperDay, personperDay } = this.state
+        const { day, holiday, holidays, periodperDays, personperDays, periodperDay, personperDay,position,positions } = this.state
         console.log(this.state.periodperDay, this.state.personperDay)
         return (
             <div className="generate_popup">
@@ -141,7 +156,25 @@ class Generate extends Component {
                         <hr></hr>
                     </div>
                     <div className="generate-content">
-                        <div style={{ display: "flex", marginTop: 15, marginLeft: 40 }}>
+                    <div style={{ display: "flex", marginTop: 15, marginLeft: 40 }}>
+                            <span>Select position  :</span>
+                            <Dropdown className="select_gen" isOpen={this.state.dropdownPosition} toggle={this.selectPosition} direction='down' size="sm">
+                                <DropdownToggle tag="div">
+                                    <div className="dropdown_gen">
+                                        {position}
+                                        <img className="down" src={down}></img>
+                                    </div>
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    {positions.map((po) => {
+                                        return <DropdownItem onClick={(event) => this.changePosition(event)} >
+                                            {po}
+                                        </DropdownItem>
+                                    })}
+                                </DropdownMenu>
+                            </Dropdown>
+                        </div>
+                        <div style={{ display: "flex", marginTop: 10, marginLeft: 40 }}>
                             <span>Select period times per days :</span>
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPeriod} toggle={this.selectPeriodTimes} direction='down' size="sm">
                                 <DropdownToggle tag="div">
