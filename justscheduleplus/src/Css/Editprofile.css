@@ -2,12 +2,11 @@
   background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
   background-color: #fafafb;
   height: 100vh;
+  display: flex;
 }
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 .editbox {
   position: relative;
@@ -119,6 +118,20 @@ label {
   color: white;
   margin-left: 30%;
 }
+
+.confirmbutt2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  width: 70px;
+  height: 30px;
+  background-color:rgba(0, 0, 0, 0);
+  border: 1px solid white;
+  color: white;
+  margin-top: 10px;
+  padding-left: 7px;
+  padding-top: 3px;
+}
 .confirmbutt:hover {
   font-family: 'Poppins', sans-serif;
   font-weight: bold;
@@ -152,4 +165,7 @@ label {
   color: red;
   font-size: 12px;
   margin: 0px;
+}
+.under{
+  display: flex;
 }

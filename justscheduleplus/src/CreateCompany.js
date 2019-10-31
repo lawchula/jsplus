@@ -72,6 +72,10 @@ class CreateCompany extends Component {
             companyImages: URL.createObjectURL(event.target.files[0]),
             imageName: event.target.files[0].name
         })
+        if(event !== null){
+            this.uploadImages()
+            this.confirmUploadImage()
+        } 
     }
 
     uploadImages = async (event, imgname) => {
@@ -120,7 +124,7 @@ class CreateCompany extends Component {
                             <div style={{ display: 'flex' }}>
                                 <label htmlFor="upload-photo" className="upload-picture">Browse...</label>
                                 <input type="file" name="photo" id="upload-photo" onChange={this.fileSelectedHandler} />
-                                <button className="upload-picture" onClick={this.confirmUploadImage}>Upload</button>
+                                {/* <button className="upload-picture" onClick={this.confirmUploadImage}>Upload</button> */}
                             </div>
                         </div>
                         <div className='right-content'>

@@ -3,6 +3,9 @@
     height: 100vh;
     font-family: 'Poppins', sans-serif;
 }
+.department-description::after{
+   height: auto;
+}
 .dp-ds-container{
    display: flex;
    justify-content: center;

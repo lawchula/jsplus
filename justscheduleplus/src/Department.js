@@ -435,7 +435,6 @@ class Department extends Component {
                         </tbody>
                     </Table>
                     <button className="add-staff-butt" onClick={this.insertUser}>Save</button>
-                    <button className="add-staff-butt" onClick={this.sendEmail}>sendEmail</button>
                 </div>
                 <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
             </div>

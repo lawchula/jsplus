@@ -157,6 +157,10 @@ class Company extends Component {
             companyImages: URL.createObjectURL(event.target.files[0]),
             imageName: event.target.files[0].name
         })
+        if(event !== null){
+            this.uploadImages()
+            this.confirmUploadImage()
+        } 
     }
 
 

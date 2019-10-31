@@ -5,6 +5,7 @@ import user from "./Images/user.png";
 import * as firebase from "firebase";
 import ApiKeys from "./ApiKeys";
 import url from './url';
+import cartoon from './Images/cartoon.png';
 
 class AdminHome extends Component {
   constructor(props) {
@@ -147,6 +148,10 @@ class AdminHome extends Component {
         userImages: URL.createObjectURL(event.target.files[0]),
         userImgName: event.target.files[0].name
       });
+      if(event !== null){
+        this.uploadImages()
+        this.confirmUploadImage()
+    } 
     };
 
     uploadImages = async (event, imgname) => {
@@ -189,23 +194,17 @@ class AdminHome extends Component {
           {!loading && <React.Fragment>
             <Header />
             <div className="bodypage">
-              <div className="container">
+              <div className="container col-5">
                 <div className="zindex"></div>
 
                 <div className="edit-profile">
                   {userImg == "" ?  " " : (<img className="edit-userimg" src={userImg}></img>)}
                 </div>
-
-                <label htmlFor="upload-photo">
-                  <img
-                    className="camerapic"
-                    src="https://i.ibb.co/MGrq4Mt/camera.png"
-                  ></img>
-                </label>
                 <span className="selectedfile2">
                   {userImages == null ? "no file selected" : userImgName}
                 </span>
-
+                <label htmlFor="upload-photo" className="confirmbutt2">Browse
+                </label>
                 <input
                   type="file"
                   name="photo"
@@ -213,9 +212,6 @@ class AdminHome extends Component {
                   accept="image/*"
                   onChange={this.fileSelectedHandler}
                 />
-                <button className="upload-image" onClick={this.confirmUploadImage}>
-                  Upload
-            </button>
 
                 <form name="form" onSubmit={this.handleSubmit}>
                   <div className="under">
@@ -262,17 +258,17 @@ class AdminHome extends Component {
 
                     </div>
                   </div>
-                  <br></br>
-                  <br></br>
                   <button type="submit" className="confirmbutt">
                     Confirm
               </button>
                 </form>
               </div>
+              <div className="col-11">
+                  <img src={cartoon}></img>
+              </div>
             </div>
             {console.log(userImg)}
           </React.Fragment>
-          
           }
         </div>
       );
