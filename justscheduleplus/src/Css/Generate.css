@@ -1,0 +1,117 @@
+.generate_popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .generate_popup_inner {
+    position: absolute;
+    left: 18%;
+    right: 20%;
+    top: 20%;
+    margin: auto;
+    width: 750px;
+    background-color: #fafafb;
+    border-radius:5px;
+    height: 470px;
+    /* box-shadow: 0px 0px 2px 3px #808080; */
+  }
+  .generate-header{
+    text-align: center;
+    padding-left: 17.5px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    font-size: 20px;
+    color:white;
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
+    height: 80px;
+    padding-top: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px #808080;
+}
+.generate-content{
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Poppins', sans-serif;
+    height: auto;
+    font-size: 14px;
+}
+.td11 {
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid white;
+    text-align: center;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    width: 120px;
+  }
+  .td12 {
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);  
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid white;
+    text-align: center;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    width: 270px;
+  }
+.td14{
+    width: 120px;
+}
+.td13{
+    font-size: 12px;
+    width: 270px;
+}
+.dropdown_item{
+    max-height: 80px;
+    overflow: auto;
+}
+.table-gen{
+    display: block;
+    height: 140px;
+    width: max-content;
+    overflow: auto;
+}
+.dropdown_gen{
+    border: 1px solid #C0C0C0;
+    padding: 5px;
+    padding-top:3px;
+    padding-bottom: 3px;
+    margin-left: 10px;
+    border-radius:  5px;
+    margin-top: -5px;
+    color: #4054b2;
+}
+.select_gen{
+    margin-left: 10px;
+}
+.input-holi{
+    margin-left: 5px;
+    margin-top: -5px;
+}
+.manage-gen{
+    font-size: 12.5px; 
+    width: 65px;
+    height: 30px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+    padding: 5px;
+    font-weight: 300;
+    margin-left: 5px;
+    margin-top: -5px;
+}
+.down{
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+}

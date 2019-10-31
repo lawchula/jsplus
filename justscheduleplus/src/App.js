@@ -27,6 +27,7 @@ class App extends Component {
           <Route path = "/EditProfile" component = {EditProfile} />
           <Route path = "/Company" component ={Company} />
           <Route path = "/Department" component = {Department} />
+          <Route path = "/Test" component ={TestComponent2} />
         </Router>
       {/* <Schedule/> 
       {/* <User></User> */}
@@ -38,6 +39,7 @@ class App extends Component {
          {/* <CreateDepartment></CreateDepartment>
        {/* <NewHomePage></NewHomePage> */}
        {/* <DepartmentDP></DepartmentDP> */}
+       {/* <TestComponent2></TestComponent2> */}
       </div>
     );
   }

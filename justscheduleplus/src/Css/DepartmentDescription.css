@@ -117,3 +117,20 @@
  left: 250px;
  margin-top: 15px;
 }
+.add-staff-excel{
+    width: 150px;
+    height: 40px;
+    background: white;
+    border: 1px solid #4054b2;
+    color: #4054b2;
+   text-align: center;
+   
+    padding:7px; 
+}
+.table-dp{
+    table-layout: fixed;
+}
+
+#upload-excel {
+    display: none;
+}

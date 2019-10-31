@@ -351,7 +351,7 @@ class Schedule extends Component {
                 .catch(error => console.log(error))
         }
     }
-
+    
     toggle = () => {
         const { dropdownOpen } = this.state
         this.setState({ dropdownOpen: !dropdownOpen })

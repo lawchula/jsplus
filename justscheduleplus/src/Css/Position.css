@@ -1,0 +1,129 @@
+.position-popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.position-popup_inner {
+    position: absolute;
+    left: 18%;
+    right: 20%;
+    top: 20%;
+    bottom: 25%;
+    margin: auto;
+    width: 600px;
+    height: 400px;
+    max-height: auto;
+    background-color:#fafafb; 
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 3px #808080;
+}
+.position-header{
+  text-align: center;
+  padding-left: 17.5px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: lighter;
+  font-size: 20px;
+  color:white;
+  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
+  height: 80px;
+  padding-top: 15px;
+  border-radius: 5px;
+  /* box-shadow: 0px 0px 5px 2px #808080; */
+}
+.position-content{
+  position: relative;
+  margin-left: 120px;
+  font-family: 'Poppins', sans-serif;
+  height: 240px;
+  /* max-height: 240px;
+  overflow: auto; */
+}
+.position-footer{
+  position: relative;
+}
+.add-position{
+  display: 'flex';
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+.save-position{
+    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%);
+    font-family: 'Poppins', sans-serif;
+    color: white;  
+    margin-left: 520px;
+    position: "static";
+    font-size: 15px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    border:none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+}
+.close-create{
+  width: 12.5px;
+  height: 12.5px;
+  margin-top: 0;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+.new-position{
+  width: auto;
+}
+.addp-but{
+  color:#4054b2;
+  border: 1px solid #4054b2;
+  width: 50px;
+  height: 29px;
+}
+.addp-but2{
+  color:#4054b2;
+  border: 1px solid #4054b2;
+  margin-left: 7px;
+  width: 50px;
+  height: 29px;
+}
+.addp-but3{
+  font-size: 11px;
+  color:#4054b2;
+  border: 1px solid #4054b2;
+  margin-left: 7px;
+  width: 50px;
+  height: 29px;
+  padding: 5px;
+}
+.test{
+  font-size: 15px;
+  position: relative;
+  top:70px;
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid #dee2e6;
+  width: 330px;
+  height: 250px;
+  padding: 10px;
+  padding-left: 35px;
+  margin-top: -50px;
+}
+.val{
+  font-size: 12px;
+  color: red;
+  position: fixed;
+  margin-left: 100px;
+}
+.val2{
+  font-size: 10px;
+  color: red;
+}
+
+
+ 
+
