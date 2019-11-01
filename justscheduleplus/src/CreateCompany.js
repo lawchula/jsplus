@@ -18,7 +18,7 @@ class CreateCompany extends Component {
             validate: '',
             test: '',
         };
-        
+
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.FirebaseConfig)
         }
@@ -123,7 +123,7 @@ class CreateCompany extends Component {
                             <span className="selectedfile">{companyImages == null ? 'no file selected' : imageName}</span>
                             <div style={{ display: 'flex' }}>
                                 <label htmlFor="upload-photo" className="upload-picture">Browse...</label>
-                                <input type="file" name="photo" id="upload-photo" onChange={this.fileSelectedHandler} />
+                                <input type="file" name="photo" accept="image/*" id="upload-photo" onChange={this.fileSelectedHandler} />
                                 {/* <button className="upload-picture" onClick={this.confirmUploadImage}>Upload</button> */}
                             </div>
                         </div>

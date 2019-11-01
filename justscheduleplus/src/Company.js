@@ -300,7 +300,7 @@ class Company extends Component {
                                 <div>
                                     <div style={{ display: 'flex' }}>
                                         <label htmlFor="manage-staff9" className="manage-staff9">Browse...</label>
-                                        <input type="file" name="photo" id="manage-staff9" onChange={this.fileSelectedHandler} />
+                                        <input type="file" name="photo" accept="image/*" id="manage-staff9" onChange={this.fileSelectedHandler} />
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', padding: 5, marginTop: 10 }}>
                                         <span>Company :</span>

@@ -130,7 +130,7 @@ class CreateDepartment extends Component {
                             <span className="selectedfile">{departmentImages == null ? 'no file selected' : imgName}</span>
                             <div style={{display:'flex'}}>
                                 <label htmlFor="upload-photo"  className="upload-picture">Browse...</label>
-                                <input type="file" name="photo" id="upload-photo"  onChange={this.fileSelectedHandler}/>
+                                <input type="file" name="photo" accept="image/*" id="upload-photo"  onChange={this.fileSelectedHandler}/>
                                 {/* <button className="upload-picture" onClick={this.confirmUploadImage}>Upload</button> */}
                             </div>
                         </div>

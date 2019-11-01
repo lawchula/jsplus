@@ -433,7 +433,7 @@ class Department extends Component {
                             <button className="add-staff-butt" onClick={this.showPosition}>Position</button>
                             <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>Import</button>
                             <label htmlFor="upload-excel" className="add-staff-excel">Import</label>
-                            <input type="file" id="upload-excel" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
+                            <input type="file" id="upload-excel" accept=".xlsx, .xls" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
                         </div>
                         :
                         <div className="add-staff2">
