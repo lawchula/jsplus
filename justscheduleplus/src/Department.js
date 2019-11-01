@@ -65,7 +65,7 @@ class Department extends Component {
 
         const [user] = data
         this.setState({ user, loading: false, })
-        this.getAllNotification(user)
+        // this.getAllNotification(user)
     }
 
     getPosition = (manageDepartment) => {
@@ -87,31 +87,32 @@ class Department extends Component {
             });
     };
 
-    getAllNotification = (user) => {
-        let manager = [];
-        let member = user.length
-        user.map(manage => {
-            if (manage.Position_Name === "Manager") {
-                manager.push(manage)
-            }
-        })
+    // getAllNotification = (user) => {
+    //     let manager = [];
+    //     let member = user.length
+    //     user.map(manage => {
+    //         if (manage.Position_Name === "Manager") {
+    //             manager.push(manage)
+    //         }
+    //     })
 
-        if(manager.length !== 0){
-            const othepram = {
-                headers: {
-                    manager: manager
-                },
-                method: "GET"
-            };
-            fetch(url + "/user/admin/notification", othepram)
-                .then(response => {
-                    return response.json();
-                })
-                .then(myJson => {
-                    this.setState({ notification: myJson });
-                });
-        }
-    }
+    //     if(manager.length !== 0){
+    //         const Url = url + "/user/admin/notification"
+    //         const othepram = {
+    //             headers: {
+    //                 manager: manager
+    //             },
+    //             method: "GET"
+    //         };
+    //         fetch(Url, othepram)
+    //             .then(response => {
+    //                 return response.json();
+    //             })
+    //             .then(myJson => {
+    //                 this.setState({ notification: myJson });
+    //             });
+    //     }
+    // }
 
     saveEdit = () => {
         const Url = url + "/user/position/update";

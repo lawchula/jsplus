@@ -1,12 +1,15 @@
 .bodypage {
-  background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
   background-color: #fafafb;
-  height: 100vh;
-  display: flex;
+  min-height: 100vh;
+  height: auto;
+  /* display: flex; */
 }
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
 }
 .editbox {
   position: relative;
@@ -29,13 +32,14 @@
   border-radius: 100px;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 30px;
  
 }
 .edit-userimg {
   width: 150px;
   height: 150px;
-  border: 1px solid #bdc7d8;
+  border: 1px solid #4054b2;
   border-radius: 100px;
 }
 
@@ -84,14 +88,14 @@ label {
 .input-userinfor {
   font-family: 'Poppins', sans-serif;
   outline: 0;
-  border-width: 0 0 2px;
-  border: 1px solid white;
+  border-width: 0 0 1px;
+  border-bottom: 1px solid #4054b2;
   background-color:rgba(0, 0, 0, 0);
   padding-left: 10px;
   width: 300px;
   height: 50px;
   margin-bottom: 8%;
-  color: white
+  color: #4054b2;
 }
 .input-userinfor:focus{
   background-color: white;
@@ -114,8 +118,8 @@ label {
   width: 150px;
   height: 40px;
   background-color:rgba(0, 0, 0, 0);
-  border: 1px solid white;
-  color: white;
+  border: 1px solid #4054b2;;
+  color: #4054b2;
   margin-left: 30%;
 }
 
@@ -126,25 +130,22 @@ label {
   width: 70px;
   height: 30px;
   background-color:rgba(0, 0, 0, 0);
-  border: 1px solid white;
-  color: white;
+  border: 1px solid #4054b2;;
+  color: #4054b2;
   margin-top: 10px;
   padding-left: 7px;
   padding-top: 3px;
 }
-.confirmbutt:hover {
+.confirmbutt:hover, .confirmbutt2:hover {
   font-family: 'Poppins', sans-serif;
   font-weight: bold;
   font-size: 14px;
-  width: 150px;
-  height: 40px;
-  background-color:white;
-  border: 1px solid white;
-  color: #4054b2;
-  margin-left: 30%;
+  background-color:#4054b2;
+  border: 1px solid #4054b2;
+  color: white;
 }
 .span {
-  color: white;
+  color: #4054b2;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   margin-bottom: 1%;
@@ -154,7 +155,7 @@ label {
   font-family: Helvetica;
   font-weight: bold;
   font-size: 14px;
-  color: white;
+  color: #4054b2;
 }
 .Name {
   background-image: url("http://placehold.it/150x20");

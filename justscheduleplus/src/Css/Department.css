@@ -1,7 +1,8 @@
 .department-container{
     /* background-image:linear-gradient(#07889b,#66b9bf); */
     background-color:#fafafb; 
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -9,7 +10,8 @@
 }
 .company-description{
     background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     width: 220px;
     display: flex;
     flex-direction: column;

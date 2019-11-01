@@ -57,7 +57,10 @@ class Header extends Component {
         var decoded = jwt_decode(detailtk)
         if (decoded.position === "Manager") {
           this.getManagerNoti(token, detailtk)
-        } else {
+        } else if(decoded.position === "Admin"){
+          this.getNewUser(token);
+        }
+        else {
           this.getUserNoti(token, detailtk)
         }
       } else {
@@ -601,7 +604,7 @@ class Header extends Component {
     }
 
     return (
-      <div >
+      <div className="top_header">
         {
           !loading && (<React.Fragment>
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >

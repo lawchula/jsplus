@@ -1,7 +1,8 @@
 .Schedule{
-    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);  
+background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);  
 height: 100vh;
 width: auto;
+top:50px;
 }
 .stat{
     font-family: 'Poppins', sans-serif;
