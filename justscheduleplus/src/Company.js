@@ -46,9 +46,10 @@ class Company extends Component {
 
     getCompanyandDepartmentFromDB = async () => {
         var token = localStorage.getItem('tk')
+        console.log(token)
         const othepram = {
             headers: {
-                tkAuth: token,
+                tkauth: token,
             },
             method: "GET"
         };

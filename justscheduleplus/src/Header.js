@@ -52,8 +52,8 @@ class Header extends Component {
     let token = localStorage.getItem('sc');
     let detailtk = localStorage.getItem('tk');
 
-    if (token != null && token != "undefined") {
-      if (detailtk != null && detailtk != "undefined") {
+    if (token !== null && token !== undefined) {
+      if (detailtk !== null && detailtk !== undefined) {
         var decoded = jwt_decode(detailtk)
         if (decoded.position === "Manager") {
           this.getManagerNoti(token, detailtk)
