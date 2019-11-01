@@ -157,7 +157,7 @@ class Filter extends Component {
           });
           alert("Delete Success")
           this.setState({ showPeriod: periods });
-          // this.props.getSchedule();
+          this.props.getSchedule();
         })
         .catch(error => console.log(error));
     } else {
@@ -182,7 +182,7 @@ class Filter extends Component {
           });
           alert("Delete Success")
           this.setState({ showPeriod: periods });
-          // this.props.getSchedule();
+          this.props.getSchedule();
         })
         .catch(error => console.log(error));
     }

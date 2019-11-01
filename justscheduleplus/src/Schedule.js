@@ -475,7 +475,7 @@ class Schedule extends Component {
                                 <div className="managerperiod-description">
                                     {showperiod}
                                 </div>
-                                <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} >
+                                <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} Schedule= {this.getSchedules}>
                                 </Filter>
                                 {!check && <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} position = {this.state.position} user={this.state.user} testGenerate = {this.testGenerate}></Generate>}
                             </div>
