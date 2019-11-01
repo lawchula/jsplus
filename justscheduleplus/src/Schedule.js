@@ -52,7 +52,9 @@ class Schedule extends Component {
             userRequest: [],
             loading: true,
             showGenerate: false,
-            daysname: []
+            daysname: [],
+            position: [],
+            check: true
         }
     }
 
@@ -124,11 +126,15 @@ class Schedule extends Component {
             fetch(url + '/schedule/manager/notification/', otheprams)
                 .then((response) => {
                     return response.json();
+                }),
+            fetch(url + '/position/generate', othepram)
+                .then((response) => {
+                    return response.json();
                 })
         ])
 
-        const [user, company, department, showPeriod, userRequest] = data
-        this.setState({ user, company, department, showPeriod, userRequest })
+        const [user, company, department, showPeriod, userRequest, position] = data
+        this.setState({ user, company, department, showPeriod, userRequest, position })
         this.getSchedules();
     }
 
@@ -360,7 +366,7 @@ class Schedule extends Component {
         this.setState({ dropdownOpen: !dropdownOpen })
     }
 
-    testGenerate = () => {
+    testGenerate = (holidays,periodperDay,personperDay, positions) => {
         const { month, year, user, showPeriod } = this.state
 
         var date = new Date(year, month, 1);
@@ -368,9 +374,12 @@ class Schedule extends Component {
         let collectDay = ""
         let days = 0
 
-        let personPerDay = [2]
-        let dayOff = [1]
-        let periodPerDay = [2]
+        let dayOff = []
+        holidays.map(h => {
+            dayOff.push(h.date)
+        })
+        let personPerDay = [personperDay]
+        let periodPerDay = [periodperDay]
 
         while (date.getMonth() === this.state.month) {
             collectDay = new Date(date).toDateString().substr("7", "4")
@@ -401,7 +410,7 @@ class Schedule extends Component {
         for (let i = 0; i < day.length; i++) {
             var b = suffleArray(periods)
             if (personPerDay.length !== 0) {
-                var a = suffleArray(personGroupedByPosition["Doctor"])
+                var a = suffleArray(personGroupedByPosition[positions])
                 for (let x = 0; x < personPerDay[0]; x++) {
                     if (periods.length > 1) {
                         for (let y = 0; y < periodPerDay[0]; y++) {
@@ -428,14 +437,14 @@ class Schedule extends Component {
 
     showGenerate = () => {
         this.setState({
-            showGenerate: !this.state.showGenerate
+            showGenerate: !this.state.showGenerate, check: !this.state.check
         })
     }
 
 
     render() {
 
-        const { loading } = this.state
+        const { loading,check } = this.state
         const daysname = this.state.daysname.map((event1, i) => { return event1 })
         let showperiod = []
         if (!loading) {
@@ -468,7 +477,7 @@ class Schedule extends Component {
                                 </div>
                                 <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} >
                                 </Filter>
-                                <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} user={this.state.user.length}></Generate>
+                                {!check && <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} position = {this.state.position} user={this.state.user} testGenerate = {this.testGenerate}></Generate>}
                             </div>
                             <div id="filter">
                                 {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>

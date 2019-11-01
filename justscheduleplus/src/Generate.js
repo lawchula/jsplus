@@ -5,6 +5,7 @@ import remove from './Images/close.png';
 import { DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import { Table } from "reactstrap";
 import down from "./Images/down.png";
+import url from './url'
 
 
 
@@ -24,16 +25,68 @@ class Generate extends Component {
             month: new Date().getMonth(),
             periodperDays: [],
             personperDays: [],
-            positions:[],
-            position:null,
+            positions: [],
             periodperDay: null,
             personperDay: null,
+            conditon: []
         }
     }
 
     componentDidMount() {
-        this.getDate(this.state.month, this.state.year)
-        this.genCondition()
+        this.getDate()
+        this.selectConditionFromDB()
+    }
+
+    selectConditionFromDB = async () =>{
+        let token = localStorage.getItem('tk');
+
+        const othepram = {
+            headers: {
+                tkAuth: token
+            },
+            method: "GET"
+        };
+        const data = await Promise.all([
+            fetch(url + '/position/generate/condition', othepram)
+                .then((response) => {
+                    return response.json();
+                })
+        ])
+        const [conditon] = data
+        this.setState({conditon})
+    }
+
+    getDate = () => {
+        const { year, month } = this.state
+        var date = new Date(year, month, 1);
+        let collectDay = ""
+        let days = 0
+
+        while (date.getMonth() === this.state.month) {
+            collectDay = new Date(date).toDateString().substr("7", "4")
+            days = parseInt(collectDay)
+            date.setDate(date.getDate() + 1);
+            this.state.day.push(days)
+        }
+    }
+
+    handleChange = (event) => {
+        event.preventDefault()
+        let { holiday } = this.state
+        holiday[event.target.name] = event.target.value
+        this.setState({ holiday })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        let { holiday, holidays } = this.state
+        holidays.push(holiday)
+        this.setState({
+            holiday: {
+                date: "select",
+                reason: " "
+            }
+        })
     }
 
     onClose = e => {
@@ -47,7 +100,6 @@ class Generate extends Component {
             dropdownPosition: !this.state.dropdownPosition,
         })
     }
-
 
     selectPeriodTimes = () => {
         this.setState({
@@ -67,76 +119,125 @@ class Generate extends Component {
         })
     }
 
-    handleChange = (event) => {
-        event.preventDefault()
-        let { holiday } = this.state
-        holiday[event.target.name] = event.target.value
-        this.setState({ holiday })
-    }
-
-    handleSubmit = event => {
-        event.preventDefault();
-        let { holiday, holidays } = this.state
-        holidays.push(this.state.holiday)
-        this.setState({
-            holiday: {
-                date: "select",
-                reason: " "
-            }
-        })
-    }
-
     remove = key => {
         this.state.holidays.splice(key, 1);
         this.forceUpdate()
     };
 
     selectDate = (event) => {
+        let a = parseInt(event.target.innerText)
         this.setState({
-            holiday: { date: event.target.innerText }
+            holiday: { date: a }
         })
     }
 
     selectPeriodperDay = (event) => {
+        let a = parseInt(event.target.innerText)
         this.setState({
-            periodperDay: event.target.innerText
+            periodperDay: a
         })
     }
 
     selectPersonperDay = (event) => {
+        let a = parseInt(event.target.innerText)
         this.setState({
-            personperDay: event.target.innerText
+            personperDay: a
         })
     }
 
-    changePosition = (event) => {
+    clickPosition = (event) => {
         this.setState({
-            position:event.target.innerText
+            positions: event.target.innerText
         })
+        let click = event.target.innerText
+        this.getPersonInPosition(click)
     }
 
-    getDate = (month, year) => {
-        var date = new Date(year, month, 1);
-        let collectDay = ""
-        let days = 0
+    getPersonInPosition = (click) => {
 
-        while (date.getMonth() === this.state.month) {
-            collectDay = new Date(date).toDateString().substr("7", "4")
-            days = parseInt(collectDay)
-            date.setDate(date.getDate() + 1);
-            this.state.day.push(days)
+        const { conditon } = this.state
+        const { user } = this.props
+        let arr = []
+
+        conditon.map(c => {
+            if(c.Position_Name === click){
+                arr.push(c)
+            }
+        })
+
+        if(arr.length !== 0){
+            let holiday = []
+            arr.map(d => {
+                holiday.push({date: d.Day, reason: d.PositionDayOff_Reason})
+            })
+            this.setState({periodperDay: arr[0].PeriodPerDay, personperDay: arr[0].PersonPerDay, holidays: holiday})
+        }else{
+            const groupBy = (array, key) => {
+                return array.reduce((result, currentValue) => {
+                    (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                        currentValue
+                    );
+                    return result;
+                }, {});
+            };
+    
+            const personGroupedByPosition = groupBy(user, 'Position_Name');
+            let person = personGroupedByPosition[click]
+            if (person !== undefined) {
+                this.genCondition(person)
+            }
         }
-
     }
 
-    genCondition() {
-        console.log(this.props.period, this.props.user)
+    genCondition(person) {
+        this.state.periodperDays = []
+        this.state.personperDays = []
         for (let i = 0; i < this.props.period; i++) {
             this.state.periodperDays.push(i + 1)
         }
-        for (let j = 0; j < this.props.user; j++) {
-            this.state.personperDays.push(j + 1)
+        for (let x = 0; x < person.length; x++) {
+            this.state.personperDays.push(x + 1)
         }
+        this.setState({periodperDay: [], personperDay: []})
+    }
+
+    insertToCondition = () => {
+        const {position } = this.props
+        const {holidays, personperDay, periodperDay, positions} = this.state
+        let positionID = []
+        let month = new Date().getMonth() +1 
+
+        position.map(p => {
+            if(p.Position_Name === positions){
+                positionID.push(p.Position_ID)
+            }
+        })
+        const Url = url + '/position/generate/insert';
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({
+                holiday: holidays,
+                month: month,
+                personPerDay: personperDay,
+                periodPerDay: periodperDay,
+                positionID: positionID
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram)
+            .then(data => { return data.json() })
+            .then(res => {
+                alert('Insert Success')
+                this.forceUpdate();
+            })
+            .catch(error => console.log(error))
+    }
+
+    generate = () => {
+        const {holidays,periodperDay,personperDay, positions} = this.state
+        this.props.testGenerate(holidays,periodperDay,personperDay,positions);
     }
 
 
@@ -145,8 +246,9 @@ class Generate extends Component {
         if (!this.props.show) {
             return null;
         }
-        const { day, holiday, holidays, periodperDays, personperDays, periodperDay, personperDay,position,positions } = this.state
-        console.log(this.state.periodperDay, this.state.personperDay)
+        const { day, holiday, holidays, periodperDays, personperDays, periodperDay, personperDay, positions } = this.state
+        const { position } = this.props
+        console.log(this.state.conditon)
         return (
             <div className="generate_popup">
                 <div className="generate_popup_inner">
@@ -156,19 +258,19 @@ class Generate extends Component {
                         <hr></hr>
                     </div>
                     <div className="generate-content">
-                    <div style={{ display: "flex", marginTop: 15, marginLeft: 40 }}>
+                        <div style={{ display: "flex", marginTop: 15, marginLeft: 40 }}>
                             <span>Select position  :</span>
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPosition} toggle={this.selectPosition} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
-                                        {position}
+                                        {positions}
                                         <img className="down" src={down}></img>
                                     </div>
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    {positions.map((po) => {
-                                        return <DropdownItem onClick={(event) => this.changePosition(event)} >
-                                            {po}
+                                    {position.map((po) => {
+                                        return <DropdownItem onClick={(event) => this.clickPosition(event)} >
+                                            {po.Position_Name}
                                         </DropdownItem>
                                     })}
                                 </DropdownMenu>
@@ -245,8 +347,8 @@ class Generate extends Component {
                             </tbody>
                         </Table>
                         <div style={{ display: 'flex', marginLeft: 600, marginTop: 10 }}>
-                            <button className="manage-gen">save</button>
-                            <button className="manage-gen">generate</button>
+                            <button className="manage-gen" onClick = {this.insertToCondition}>save</button>
+                            <button className="manage-gen" onClick = {this.generate}>generate</button>
                         </div>
                     </div>
                 </div>

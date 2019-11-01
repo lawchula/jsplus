@@ -36,6 +36,7 @@ class Department extends Component {
             newuserp: [],
             changeposition: {},
             positionname: null,
+            notification: []
         }
     }
 
@@ -48,7 +49,7 @@ class Department extends Component {
 
     getDepartmentDes = async (manageDepartment) => {
         let departID = manageDepartment.Department_ID
-        // var token = localStorage.getItem('tk')
+
         const othepram = {
             headers: {
                 departid: departID
@@ -64,6 +65,7 @@ class Department extends Component {
 
         const [user] = data
         this.setState({ user, loading: false, })
+        this.getAllNotification(user)
     }
 
     getPosition = (manageDepartment) => {
@@ -85,6 +87,32 @@ class Department extends Component {
             });
     };
 
+    getAllNotification = (user) => {
+        let manager = [];
+        let member = user.length
+        user.map(manage => {
+            if (manage.Position_Name === "Manager") {
+                manager.push(manage)
+            }
+        })
+
+        if(manager.length !== 0){
+            const othepram = {
+                headers: {
+                    manager: manager
+                },
+                method: "GET"
+            };
+            fetch(url + "/user/admin/notification", othepram)
+                .then(response => {
+                    return response.json();
+                })
+                .then(myJson => {
+                    this.setState({ notification: myJson });
+                });
+        }
+    }
+
     saveEdit = () => {
         const Url = url + "/user/position/update";
         const { changeposition } = this.state
@@ -101,6 +129,7 @@ class Department extends Component {
         fetch(Url, othepram)
             .then(res => {
                 this.setState({ changeposition: [], test: 0 });
+                alert('Update user success');
                 this.componentDidMount()
                 //   this.cancelEdit();
             })
@@ -121,6 +150,7 @@ class Department extends Component {
         fetch(Url, othepram)
             .then(res => {
                 this.sendEmail()
+                alert('Import From Excel Success');
                 this.setState({ newusers: [] });
                 this.componentDidMount()
             })
@@ -129,8 +159,27 @@ class Department extends Component {
 
 
     remove = (key) => {
-        this.state.user.splice(key, 1);
-        this.forceUpdate();
+        const { user } = this.state
+        let removeUser = user[key]
+
+        if (!window.confirm("Do you want to remove this staff?")) return
+        const Url = url + "/user/remove";
+        const othepram = {
+            headers: {
+                "content-type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify({
+                user: removeUser
+            }),
+            method: "POST"
+        };
+        fetch(Url, othepram)
+            .then(res => res.json())
+            .then(json => {
+                alert('remove user success');
+                this.forceUpdate();
+            })
+            .catch(error => console.log(error));
     }
 
     editTable = (key) => {
@@ -201,7 +250,7 @@ class Department extends Component {
 
     sendEmail = () => {
         for (let i = 0; i < this.state.newusers.length; i++) {
-            const Url = url + '/sendEmail';
+            const Url = url + '/email/send';
             const othepram = {
                 headers: {
                     "content-type": "application/json; charset=UTF-8"
@@ -302,6 +351,7 @@ class Department extends Component {
 
     render() {
 
+        console.log(this.state.notification);
         const { edit, addstaff, test, department, user, newusers, positions, dropdownOpen, changeposition, positionname, newuser, editDepartment, changeDepartment } = this.state
         const manage = user.map((e, key) => {
             return <tr>
@@ -341,9 +391,9 @@ class Department extends Component {
 
         let manager = '';
         let member = user.length
-        user.map(manager => {
-            if (manager.Position_Name === "Manager") {
-                manager = manager.name + ' ' + manager.surname
+        user.map(manage => {
+            if (manage.Position_Name === "Manager") {
+                manager = manage.name + ' ' + manage.surname
             }
         })
 
