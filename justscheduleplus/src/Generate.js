@@ -28,7 +28,9 @@ class Generate extends Component {
             positions: [],
             periodperDay: null,
             personperDay: null,
-            conditon: []
+            conditon: [],
+            test:null,
+            validate:""
         }
     }
 
@@ -75,18 +77,27 @@ class Generate extends Component {
         let { holiday } = this.state
         holiday[event.target.name] = event.target.value
         this.setState({ holiday })
+        this.setState({
+            validate:""
+        })
     }
 
     handleSubmit = event => {
         event.preventDefault();
         let { holiday, holidays } = this.state
-        holidays.push(holiday)
-        this.setState({
-            holiday: {
-                date: "select",
-                reason: " "
-            }
-        })
+        if(holiday.reason.trim() === ""){
+            this.setState({
+                validate:"Please specific reason"
+            })
+        }else{
+            holidays.push(holiday)
+            this.setState({
+                holiday: {
+                    date: "select",
+                    reason: " "
+                }
+            })
+        }
     }
 
     onClose = e => {
@@ -248,7 +259,7 @@ class Generate extends Component {
         }
         const { day, holiday, holidays, periodperDays, personperDays, periodperDay, personperDay, positions } = this.state
         const { position } = this.props
-        console.log(this.state.conditon)
+    
         return (
             <div className="generate_popup">
                 <div className="generate_popup_inner">
@@ -324,7 +335,10 @@ class Generate extends Component {
                                     {day.map((days) => { return <DropdownItem onClick={(event) => this.selectDate(event)}>{days}</DropdownItem> })}
                                 </DropdownMenu>
                             </Dropdown>
+                            <div>
                             <input type="text" name="reason" className="input-holi" value={this.state.holiday.reason} onChange={event => this.handleChange(event)}></input>
+                            <span className="valgenerate">{this.state.validate}</span>
+                            </div>
                             <button className="manage-gen" onClick={(event) => this.handleSubmit(event)}>Add</button>
                         </div>
                         <Table responsive className="table-gen" style={{ marginTop: 70, marginLeft: 40 }}>

@@ -19,7 +19,8 @@ class Register extends Component {
       userAlreadyHave: [],
       submitted: false,
       submitConfirm: false,
-      shake: 'register-popup_inner'
+      shake: 'register-popup_inner',
+      validatepass:''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -35,37 +36,42 @@ class Register extends Component {
         [name]: value
       }
     })
+    this.setState({submitted: false})
   }
 
   handleSubmit(event) {
     this.setState({ shake: 'register-popup_inner', submitted: true, submitConfirm: false, userAlreadyHave: [] });
     event.preventDefault();
+    const validatenewpass = /^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
 
     const { user } = this.state
     if (user.username && user.password) {
       if (user.password === user.confirmPass) {
-        //(/user/register)
-        const Url = url + '/user/register';
-        const othepram = {
-          headers: {
-            "content-type": "application/json; charset=UTF-8"
-          },
-          body: JSON.stringify({
-            register: this.state.user
-          }),
-          method: "POST"
-        };
-        fetch(Url, othepram)
-          .then(res => res.json())
-          .then(json => {
-            if (json == "Username is already exists!!!") {
-              this.setState({ userAlreadyHave: json, user: { username: '', password: '', confirmPass: '' }, shake: 'register-popup_inner-shake', submitted: false })
-            } else {
-              this.setState({ user: { username: '', password: '', confirmPass: '' }, submitted: false, userAlreadyHave: [] });
-              alert("Register Success")
-              this.popUpLogin();
-            }
-          })
+        if(!validatenewpass.test(user.password)){
+            this.setState({validatepass:"Password must be at least 8 characters and contain at least 1 Uppercase"})
+        }else{
+          const Url = url + '/user/register';
+          const othepram = {
+            headers: {
+              "content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({
+              register: this.state.user
+            }),
+            method: "POST"
+          };
+          fetch(Url, othepram)
+            .then(res => res.json())
+            .then(json => {
+              if (json == "Username is already exists!!!") {
+                this.setState({ userAlreadyHave: json, user: { username: '', password: '', confirmPass: '' }, shake: 'register-popup_inner-shake', submitted: false })
+              } else {
+                this.setState({ user: { username: '', password: '', confirmPass: '' }, submitted: false, userAlreadyHave: [] });
+                alert("Register Success")
+                this.popUpLogin();
+              }
+            })
+        }
       } else {
         this.setState({ shake: 'register-popup_inner-shake', user: { username: '', password: '', confirmPass: '' }, submitted: false, submitConfirm: true })
       }
@@ -78,6 +84,7 @@ class Register extends Component {
     if (this.props.onClose !== undefined) {
       this.props.onClose(e)
     }
+    this.setState({submitted: false,shake: 'register-popup_inner'})
   }
 
   popUpLogin = (e) => {
@@ -103,7 +110,7 @@ class Register extends Component {
           </div>
           <form name="form" onSubmit={this.handleSubmit}>
             <div className="register-container">
-              <input placeholder="Email or Username" type="text" className="username" name="username" value={user.username} onChange={this.handleChange} />
+              <input placeholder="Username" type="text" className="username" name="username" value={user.username} onChange={this.handleChange} />
               {submitted && !user.username &&
                 <div className="help-block">Username is required</div>
               }
@@ -111,11 +118,12 @@ class Register extends Component {
               {submitted && !user.password &&
                 <div className="help-block">Password is required</div>
               }
-              <input placeholder="ConfirmPassword" type="password" className="password" name="confirmPass" value={user.confirmPass} onChange={this.handleChange} />
+              <input placeholder="Confirm Password" type="password" className="password" name="confirmPass" value={user.confirmPass} onChange={this.handleChange} />
               {submitConfirm && !user.confirmPass && !user.password &&
                 <div className="help-block">Password is not the same</div>
               }
               {userAlreadyHave.length > 0 && !user.username && <div className="help-block">This username is already exists</div>}
+              <span  className="help-block">{this.state.validatepass}</span>
               <button type="submit" className="signup">Sign Up</button>
             </div>
           </form>

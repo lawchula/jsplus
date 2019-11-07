@@ -17,6 +17,8 @@ class CreateCompany extends Component {
             imageName: '',
             validate: '',
             test: '',
+            validateEmail: '',
+            validateTelno: ''
         };
 
         if (!firebase.apps.length) {
@@ -35,35 +37,47 @@ class CreateCompany extends Component {
         let { company } = this.state
         company[event.target.name] = event.target.value
         this.setState({ company })
+        this.setState({validate:'',validateEmail:'',validateTelno:''})
     }
 
     handleSubmit = async (event) => {
         event.preventDefault()
         let { company } = this.state
+        const validEmailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        const phoneno = /^0[0-9]{8,9}$/i;
 
-        if (company.companyName == "" || company.companyEmail == "" || company.companyTel == "") {
+        if (company.companyName.trim() === "" || company.companyEmail.trim() === "" || company.companyTel.trim() === "") {
             this.setState({ validate: 'This field is requried' })
+
+        }else if (!validEmailRegex.test(this.state.company.companyEmail)) {
+             this.setState({
+                 validateEmail: "Invalid email"
+             })   
+         }else if (!phoneno.test(this.state.company.companyTel)) {
+            this.setState({
+                validateTelno: "Invalid telephone numeber"
+            })
         } else {
-            const Url = url + '/company/insert';
-            var token = localStorage.getItem('sc');
-            const othepram = {
-                headers: {
-                    "content-type": "application/json; charset=UTF-8",
-                    tkauth: token
-                },
-                body: JSON.stringify({
-                    createcompany: this.state.company,
-                    companypicture: this.state.companyImage,
-                }),
-                method: "POST"
-            };
-            fetch(Url, othepram)
-                .then(res => res.json())
-                .then(json => {
-                    localStorage.setItem('tk', json.tk)
-                    alert("Create Company Success")
-                    window.location.href = "/Company";
-                })
+                const Url = url + '/company/insert';
+                var token = localStorage.getItem('sc');
+                const othepram = {
+                    headers: {
+                        "content-type": "application/json; charset=UTF-8",
+                        tkauth: token
+                    },
+                    body: JSON.stringify({
+                        createcompany: this.state.company,
+                        companypicture: this.state.companyImage,
+                    }),
+                    method: "POST"
+                };
+                fetch(Url, othepram)
+                    .then(res => res.json())
+                    .then(json => {
+                        localStorage.setItem('tk', json.tk)
+                        alert("Create Company Success")
+                        window.location.href = "/Company";
+                    })
         }
     }
 
@@ -72,10 +86,10 @@ class CreateCompany extends Component {
             companyImages: URL.createObjectURL(event.target.files[0]),
             imageName: event.target.files[0].name
         })
-        if(event !== null){
+        if (event !== null) {
             this.uploadImages()
             this.confirmUploadImage()
-        } 
+        }
     }
 
     uploadImages = async (event, imgname) => {
@@ -134,11 +148,13 @@ class CreateCompany extends Component {
                             <br></br>
                             <span id='email'>Email</span>
                             <input type='email' className='createcom' name="companyEmail" value={company.companyEmail || ''} onChange={(event => this.handleChange(event))} />
-                            <span className="comp-validate">{company.companyEmail == "" ? validate : " "}</span>
+                            <span className="comp-validate2">{company.companyEmail == "" ? validate : " "}</span>
+                            <span className="comp-validate2">{this.state.validateEmail}</span>
                             <br></br>
                             <span id='tel'>Telephone</span>
                             <input type='text' className='createcom' name="companyTel" value={company.companyTel || ''} onChange={(event => this.handleChange(event))} />
-                            <span className="comp-validate">{company.companyTel == "" ? validate : " "}</span>
+                            <span className="comp-validate3">{company.companyTel == "" ? validate : " "}</span>
+                            <span className="comp-validate3">{this.state.validateTelno}</span>
                         </div>
                     </div>
                     <div className="createcompany-footer">

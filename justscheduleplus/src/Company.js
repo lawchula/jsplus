@@ -161,7 +161,9 @@ class Company extends Component {
         if(event !== null){
             this.uploadImages()
             this.confirmUploadImage()
-        } 
+        } else{
+            return null
+        }
     }
 
 
@@ -294,6 +296,7 @@ class Company extends Component {
             <div className="department-container">
                 {!loading &&
                     <React.Fragment>
+                        <Header></Header>
                         <div className="company-description">
                             {this.state.companyImage == null ? companypicture : companypictures}
                             {editCompany == true ?

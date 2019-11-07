@@ -138,24 +138,30 @@ class Department extends Component {
     }
 
     insertUser = () => {
-        const Url = url + "/user/insert";
-        const othepram = {
-            headers: {
-                "content-type": "application/json; charset=UTF-8",
-            },
-            body: JSON.stringify({
-                user: this.state.newusers,
-            }),
-            method: "POST"
-        };
-        fetch(Url, othepram)
-            .then(res => {
-                this.sendEmail()
-                alert('Import From Excel Success');
-                this.setState({ newusers: [] });
-                this.componentDidMount()
-            })
-            .catch(error => console.log(error));
+        for (let i = 0; i < this.state.newusers.length; i++) {
+            if (this.state.newusers[i].position === "Please select position") {
+                alert("Position of "+this.state.newusers[i].name+" "+this.state.newusers[i].surname+" is invalid")
+            } else {
+                const Url = url + "/user/insert";
+                const othepram = {
+                    headers: {
+                        "content-type": "application/json; charset=UTF-8",
+                    },
+                    body: JSON.stringify({
+                        user: this.state.newusers,
+                    }),
+                    method: "POST"
+                };
+                fetch(Url, othepram)
+                    .then(res => {
+                        this.sendEmail()
+                        alert('Import From Excel Success');
+                        this.setState({ newusers: [] });
+                        this.componentDidMount()
+                    })
+                    .catch(error => console.log(error));
+            }
+        }
     }
 
 
@@ -352,7 +358,7 @@ class Department extends Component {
 
     render() {
 
-        console.log(this.state.notification);
+        console.log(this.state.newusers);
         const { edit, addstaff, test, department, user, newusers, positions, dropdownOpen, changeposition, positionname, newuser, editDepartment, changeDepartment } = this.state
         const manage = user.map((e, key) => {
             return <tr>

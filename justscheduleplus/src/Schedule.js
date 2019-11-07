@@ -470,8 +470,8 @@ class Schedule extends Component {
                         <div className="before-schedule">
                             <p className="stat"><b>STATISTIC</b></p>
                             <div className="stat-schedule">
-                                <button className="b-filter" onClick={this.showPopup}>FILTER PERIOD</button>
-                                <button className="b-filter" onClick={this.showGenerate}>Generate</button>
+                                <button className="b-filter" onClick={this.showPopup}>CREATE PERIOD</button>
+                                <button className="b-filter" style={{marginLeft:10}} onClick={this.showGenerate}>GENERATE</button>
                                 <div className="managerperiod-description">
                                     {showperiod}
                                 </div>

@@ -113,3 +113,10 @@
     height: 12px;
     margin-left: 5px;
 }
+.valgenerate{
+    font-size: 10px;
+    color: red;
+    position:fixed;
+    margin-left: -125px;
+    margin-top: 30px;
+  }

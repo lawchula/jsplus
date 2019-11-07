@@ -136,7 +136,18 @@ label {
   padding-left: 7px;
   padding-top: 3px;
 }
-.confirmbutt:hover, .confirmbutt2:hover {
+.confirmbutt3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  width: 150px;
+  height: 40px;
+  background-color:rgba(0, 0, 0, 0);
+  border: 1px solid #4054b2;;
+  color: #4054b2;
+  margin-top: 10px;
+}
+.confirmbutt:hover, .confirmbutt2:hover, .confirmbutt3:hover {
   font-family: 'Poppins', sans-serif;
   font-weight: bold;
   font-size: 14px;

@@ -138,6 +138,24 @@ label {
     font-family: 'Poppins', sans-serif;
     font-weight: lighter;
     color: red;
-    font-size: 12px;
+    font-size: 10px;
+    position: fixed;
+    margin-top:62px;
+ }
+ .comp-validate2{
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    color: red;
+    font-size: 10px;
+    position: fixed;
+    margin-top:144px;
+ }
+ .comp-validate3{
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    color: red;
+    font-size: 10px;
+    position: fixed;
+    margin-top:224px;
  }
  

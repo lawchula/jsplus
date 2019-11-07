@@ -133,7 +133,7 @@ class Login extends React.Component {
           </div>
           <form name="form" onSubmit={this.handleSubmit}>
             <div className="login">
-              <input type="text" className="username" name="username" placeholder="Username or Email" value={username} onChange={this.handleChange}></input>
+              <input type="text" className="username" name="username" placeholder="Username" value={username} onChange={this.handleChange}></input>
               {submitted && !username &&
                 <div className="help-block">Username is required</div>
               }

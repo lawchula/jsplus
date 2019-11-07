@@ -27,7 +27,8 @@ class Filter extends Component {
       },
       setcolor: " ",
       edit: false,
-      DeletPeriod: []
+      DeletPeriod: [],
+      val:{val1:""}
     };
   }
 
@@ -77,15 +78,21 @@ class Filter extends Component {
     event.preventDefault();
     const periods = this.state.periods;
     const period = this.state.period;
-    periods.push(period);
-    this.setState({
-      period: {
-        periodName: "",
-        periodOne: "00:00",
-        periodTwo: "00:00",
-        color: period.color
-      }
-    });
+    if(period.periodName.trim() === ""){
+      this.setState({
+        val:{val1:"Please insert period name"}
+      })
+    }else{
+      periods.push(period);
+      this.setState({
+        period: {
+          periodName: "",
+          periodOne: "00:00",
+          periodTwo: "00:00",
+          color: period.color
+        }
+      });
+    }
   };
 
   handleChange = event => {
@@ -93,6 +100,7 @@ class Filter extends Component {
     let { period } = this.state;
     period[event.target.name] = event.target.value;
     this.setState({ period });
+    this.setState({ val:{val1:""}})
   };
 
   changeColor = async color => {
@@ -215,7 +223,7 @@ class Filter extends Component {
                 <p
                   className="filter-head-text"
                 >
-                  FILTER
+                  Create Period
                   <hr className="headline" />
                 </p>
                 <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
@@ -317,6 +325,9 @@ class Filter extends Component {
                     </div>
                   </Row>
                 </form>
+                <Row>
+                   <span className="valfilter">{this.state.val.val1}</span>
+                </Row>
 
                 <Table
                   responsive

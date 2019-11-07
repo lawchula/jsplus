@@ -121,3 +121,19 @@ label {
     color: white;
     margin-top: -20px;
 }
+.valcreatedepartment{
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    color: red;
+    font-size: 10px;
+    position: fixed;
+    margin-top:62px;
+  }
+  .valcreatedepartment2{
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
+    color: red;
+    font-size: 10px;
+    position: fixed;
+    margin-top:144px;
+  }

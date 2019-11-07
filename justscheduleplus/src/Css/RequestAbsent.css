@@ -14,8 +14,7 @@
     position: absolute;
     left: 18%;
     right: 20%;
-    top: 0%;
-    bottom: 35%;
+    top: 20%;
     margin: auto;
     width: 600px;
     height: 350px;
@@ -41,8 +40,9 @@
     font-weight: bold;
     color: white;
     background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 100%); 
-    width: 103px;
-    padding-left: 7.5px;  
+    width: 75px;
+    padding-left: 8px;
+    border-radius: 10px;
 }
 .givereason{
     font-family: 'Poppins', sans-serif;
@@ -97,3 +97,11 @@
     font-family: 'Poppins', sans-serif;
     border: 1px solid #EDEDED;
 }
+.valrequest{
+    font-size: 10px;
+    color: red;
+    position:fixed;
+    margin-top: 210px;
+    margin-left: 10px;
+  }
+  

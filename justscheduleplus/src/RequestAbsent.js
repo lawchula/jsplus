@@ -16,7 +16,8 @@ class RequestAbsent extends Component {
             loading: true,
             checkValue: true,
             requestValue: [],
-            checkboxValue: ''
+            checkboxValue: '',
+            validate:""
         }
         this.handleChanges = this.handleChanges.bind(this);
     }
@@ -57,7 +58,7 @@ class RequestAbsent extends Component {
     }
 
     insertRequest = () => {
-        if (this.state.checkboxValue !== '' && this.state.absentDescription !== '') {
+        if (this.state.checkboxValue !== '' && this.state.absentDescription.trim() !== '') {
             let arr = [];
             let a = '';
             let value = this.state.checkboxValue.substring(0, 5)
@@ -126,7 +127,10 @@ class RequestAbsent extends Component {
                     })
             }
         } else {
-            alert("Please select Period to Absent!!!")
+            // alert("Please select Period to Absent!!!")
+            this.setState({
+                validate:"Please specific reason"
+            })
         }
     }
 
@@ -202,6 +206,7 @@ class RequestAbsent extends Component {
                                     value={absentDescription}
                                     onChange={this.handleChanges}
                                 />
+                                 <span className="valrequest">{this.state.validate}</span>
                                 <button className="select-request2-absent" onClick={this.insertRequest}>Request</button>
                             </div>
                         </div>

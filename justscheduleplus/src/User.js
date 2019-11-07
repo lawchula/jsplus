@@ -351,7 +351,7 @@ class User extends Component {
                             <div className="before-schedule">
                                 <p className="stat"><b>STATISTIC</b></p>
                                 <div className="request-schedule">
-                                    <button className="b-request" onClick={this.request}>Request</button>
+                                    <button className="b-request" onClick={this.request}>REQUEST</button>
                                     <button className="b-request" onClick={this.clickRequestAbsent} style={{ marginLeft: 10 }}>ABSENCE</button>
                                     <div className="period-description">
                                     {showperiod}

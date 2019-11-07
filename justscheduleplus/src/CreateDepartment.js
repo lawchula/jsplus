@@ -15,7 +15,8 @@ class CreateDepartment extends Component {
             departmentImages: null,
             departmentImage: '',
             imgName: '',
-            validate: ''
+            validate: '',
+            validateTelno:''
         }
 
         if (!firebase.apps.length) {
@@ -75,6 +76,7 @@ class CreateDepartment extends Component {
         let { department } = this.state
         department[event.target.name] = event.target.value
         this.setState({ department })
+        this.setState({validate:'',validateTelno:''})
     }
 
 
@@ -82,29 +84,34 @@ class CreateDepartment extends Component {
         event.preventDefault()
         
         let { department } = this.state
-        if (department.departmentName == "" || department.departmentTel == "") {
+        const phoneno = /^0[0-9]{8,9}$/i;
+        if (department.departmentName.trim() === "" || department.departmentTel.trim() === "") {
             this.setState({ validate: 'This field is requried' })
+        }else if (!phoneno.test(department.departmentTel)) {
+            this.setState({
+                validateTelno: "Invalid telephone numeber"
+            })
         } else {
-            var token = localStorage.getItem('tk');
-            const Url = url + '/department/insert';
-            const othepram = {
-                headers: {
-                    "content-type": "application/json; charset=UTF-8",
-                    tkauth: token
-                },
-                body: JSON.stringify({
-                    createdepartment: this.state.department,
-                    departmentpicture: this.state.departmentImage
-                }),
-                method: "POST"
-            };
-            fetch(Url, othepram)
-                .then(data => { return data.json() })
-                .then(res => {
-                    alert("Create Department Success")
-                    window.location.href = "/Company";
-                })
-                .catch(error => console.log(error))
+            // var token = localStorage.getItem('tk');
+            // const Url = url + '/department/insert';
+            // const othepram = {
+            //     headers: {
+            //         "content-type": "application/json; charset=UTF-8",
+            //         tkauth: token
+            //     },
+            //     body: JSON.stringify({
+            //         createdepartment: this.state.department,
+            //         departmentpicture: this.state.departmentImage
+            //     }),
+            //     method: "POST"
+            // };
+            // fetch(Url, othepram)
+            //     .then(data => { return data.json() })
+            //     .then(res => {
+            //         alert("Create Department Success")
+            //         window.location.href = "/Company";
+            //     })
+            //     .catch(error => console.log(error))
         }
     }
 
@@ -137,11 +144,12 @@ class CreateDepartment extends Component {
                         <div className="right-content">
                             <span id='comname'>Department Name</span>
                             <input type='text' className='createcom' name="departmentName" onChange={(event => this.handleChange(event))} />
-                            <span className="comp-validate">{department.departmentName == "" ? validate : " "}</span>
+                            <span className="valcreatedepartment">{department.departmentName == "" ? validate : " "}</span>
                             <br></br>
                             <span id='tel'>Telephone</span>
                             <input type='text' className='createcom' name="departmentTel" onChange={(event => this.handleChange(event))} />
-                            <span className="comp-validate">{department.departmentTel == "" ? validate : " "}</span>
+                            <span className="valcreatedepartment2">{department.departmentTel == "" ? validate : " "}</span>
+                            <span className="valcreatedepartment2">{this.state.validateTelno}</span>
                         </div>
                     </div>
                     <div className="createdepartment-footer">

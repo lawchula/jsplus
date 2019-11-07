@@ -1,7 +1,12 @@
 .User{
-    background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);  
-height: 100vh;
+top:20px;
+background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);  
+
+min-height: 100vh;
+height: auto;
 width: auto;
+max-width: 100%;
+top:70px;
 }
 
 .user-schedule{

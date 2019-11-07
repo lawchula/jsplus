@@ -7,6 +7,7 @@
     flex-direction: row;
     width: 100%;
     max-width: 100%;
+    padding-top: 50px;
 }
 .company-description{
     background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 
@@ -45,6 +46,8 @@
     flex-wrap: wrap;
     align-content: flex-start;
     width: 100%;
+    padding-left:10px; 
+    padding-bottom: 20px;
 }
 .create-department{
     border:2px solid #bdc7d8;
@@ -52,6 +55,7 @@
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
+    align-items: center;
     padding-top:65px;
     width: 60px;
     height: 60px;
