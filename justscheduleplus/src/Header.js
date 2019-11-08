@@ -196,7 +196,6 @@ class Header extends Component {
 
     if (autoReject.length !== 0 || autoAbsentReject !== 0) {
       if (!window.confirm("This period is has another request!,Do you want to approve this request?")) return
-      //(/user/manager/exchangenotification/approve)
       const Url = url + '/user/manager/exchangenotification/approve';
 
       const othepram = {
@@ -213,7 +212,6 @@ class Header extends Component {
       this.autoRejectRequest(managerNoti, autoReject, autoAbsentReject);
     } else {
       if (!window.confirm("Do you want to approve this request?")) return
-      //(/user/manager/exchangenotification/approve)
       const Url = url + '/user/manager/exchangenotification/approve';
 
       const othepram = {
@@ -238,7 +236,6 @@ class Header extends Component {
 
   clickRejectExchangeNotification = (notification) => {
     if (!window.confirm("Do you want to reject this request?")) return
-    //(/user/manager/exchangenotification/reject)
     const Url = url + '/user/manager/exchangenotification/reject';
 
     const othepram = {
@@ -274,7 +271,6 @@ class Header extends Component {
 
     if (autoReject.length !== 0) {
       if (!window.confirm("This period is has another request!, Do you want to approve this absent request?")) return
-      //(/user/manager/absentnotification/approve)
       const Url = url + '/user/manager/absentnotification/approve';
       const othepram = {
         headers: {
@@ -293,7 +289,6 @@ class Header extends Component {
         })
     } else {
       if (!window.confirm("Do you want to approve this absent request?")) return
-      //(/user/manager/absentnotification/approve)
       const Url = url + '/user/manager/absentnotification/approve';
 
       const othepram = {
@@ -318,7 +313,6 @@ class Header extends Component {
 
   clickRejectAbsentNotification = (notification) => {
     if (!window.confirm("Do you want to reject this absent request?")) return
-    //(/user/manager/absentnotification/reject)
     const Url = url + '/user/manager/absentnotification/reject';
 
     const othepram = {

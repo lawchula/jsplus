@@ -24,6 +24,39 @@ function suffleArray(array) {
     return array;
 }
 
+function calulateStatisticByToey(array) {
+    let limit = 24;
+
+    if (array[1] === 0) {
+        array[1] = 24
+        const a = array[1] - array[0]
+        array = a
+        return array;
+    }else if (array[1] < 1 && array[1] > 0){
+        let result = limit + array[1]
+        const a = result - array[0]
+        array = a
+        return array;
+    } else if (array[0] > array[1]) {
+        const a = (limit - array[0]) + array[1]
+        array = a
+        return array;
+    } else {
+        const a = array[1] - array[0]
+        array = a
+        return array
+    }
+}
+
+function calulateWorkHour(array) {
+    let sum = 0
+    for (let i = 0; i < array.length; i++) {
+        sum += array[i]
+    }
+    array = sum
+    return array;
+}
+
 class Schedule extends Component {
     constructor(props) {
         super(props)
@@ -54,7 +87,10 @@ class Schedule extends Component {
             showGenerate: false,
             daysname: [],
             position: [],
-            check: true
+            check: true,
+            workHour: 0,
+            doneHour: 0,
+            remainHour: 0
         }
     }
 
@@ -84,7 +120,7 @@ class Schedule extends Component {
             "July", "August", "September", "October", "November", "December"
         ];
         return monthNames[month]
-        // this.getSchedules();
+        this.getSchedules();
 
     }
 
@@ -156,7 +192,48 @@ class Schedule extends Component {
         ])
 
         const [selectSchedule] = data;
+        this.getStatistic(selectSchedule);
         this.setState({ selectSchedule, loading: false })
+    }
+    getStatistic = (selectSchedule) => {
+        const { user,currentDay } = this.state
+        let allWorkHour = []
+        let doneWorkHour = []
+
+        selectSchedule.map(s => {
+            if (s.User_ID === user[0].User_ID) {
+                let statistic = []
+                let a = s.Period_Time_One.replace(":", ".");
+                let b = s.Period_Time_Two.replace(":", ".");
+
+                let resultA = parseFloat(a)
+                let resultB = parseFloat(b)
+
+                statistic.push(resultA, resultB)
+                const workhour = calulateStatisticByToey(statistic);
+                allWorkHour.push(workhour)
+            }
+        })
+
+        selectSchedule.map(s => {
+            if (s.User_ID === user[0].User_ID && s.Date < currentDay) {
+                let statistic = []
+                let a = s.Period_Time_One.replace(":", ".");
+                let b = s.Period_Time_Two.replace(":", ".");
+
+                let resultA = parseFloat(a)
+                let resultB = parseFloat(b)
+
+                statistic.push(resultA, resultB)
+                const workhour = calulateStatisticByToey(statistic);
+                doneWorkHour.push(workhour)
+            }
+        })
+
+        const userWorkHour = calulateWorkHour(allWorkHour)
+        const userDoneWorkHour = calulateWorkHour(doneWorkHour)
+        const userRemain = userWorkHour - userDoneWorkHour
+        this.setState({ workHour: userWorkHour, doneHour:userDoneWorkHour, remainHour: userRemain})
     }
 
     getDaysInMonth() {
@@ -366,7 +443,7 @@ class Schedule extends Component {
         this.setState({ dropdownOpen: !dropdownOpen })
     }
 
-    testGenerate = (holidays,periodperDay,personperDay, positions) => {
+    testGenerate = (holidays, periodperDay, personperDay, positions) => {
         const { month, year, user, showPeriod } = this.state
 
         var date = new Date(year, month, 1);
@@ -444,7 +521,7 @@ class Schedule extends Component {
 
     render() {
 
-        const { loading,check } = this.state
+        const { loading, check, workHour, remainHour, doneHour } = this.state
         const daysname = this.state.daysname.map((event1, i) => { return event1 })
         let showperiod = []
         if (!loading) {
@@ -471,21 +548,21 @@ class Schedule extends Component {
                             <p className="stat"><b>STATISTIC</b></p>
                             <div className="stat-schedule">
                                 <button className="b-filter" onClick={this.showPopup}>CREATE PERIOD</button>
-                                <button className="b-filter" style={{marginLeft:10}} onClick={this.showGenerate}>GENERATE</button>
+                                <button className="b-filter" style={{ marginLeft: 10 }} onClick={this.showGenerate}>GENERATE</button>
                                 <div className="managerperiod-description">
                                     {showperiod}
                                 </div>
-                                <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} Schedule= {this.getSchedules}>
+                                <Filter show={this.state.show} onClose={this.showPopup} userRequest={this.state.userRequest} Schedule={this.getSchedules}>
                                 </Filter>
-                                {!check && <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} position = {this.state.position} user={this.state.user} testGenerate = {this.testGenerate}></Generate>}
+                                {!check && <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} position={this.state.position} user={this.state.user} testGenerate={this.testGenerate}></Generate>}
                             </div>
                             <div id="filter">
                                 {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
                             <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
                             <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button> */}
-                                <div className="b-static">WORK HOUR:</div>
-                                <div className="b-static">DONE:</div>
-                                <div className="b-static">REMAIN:</div>
+                                <div className="b-static">WORK HOUR: {workHour}</div>
+                                <div className="b-static">DONE: {doneHour}</div>
+                                <div className="b-static">REMAIN: {remainHour}</div>
                             </div>
                         </div>
                         <Table bordered responsive className="tests" id="table-to-xls">

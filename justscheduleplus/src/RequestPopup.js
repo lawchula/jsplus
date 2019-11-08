@@ -91,7 +91,6 @@ class RequestPopup extends Component {
         let validate = true;
         this.setState({ checkValidate: true, checkRequest: [] })
 
-
         this.props.checkReq.map(e => {
             periodUser = e.Period_Time_One + "-" + e.Period_Time_Two
             firstArr.push(periodUser)
@@ -273,9 +272,9 @@ class RequestPopup extends Component {
 
         const showNewPeriod = newPeriod.map((event) => {
             let valid = true;
-            // if (event !== secondCheckboxValue && secondCheckboxValue !== '') {
-            //     valid = false;
-            // }
+            if (event !== secondCheckboxValue && secondCheckboxValue !== '') {
+                valid = false;
+            }
             return <div style={{ marginLeft: 20 }} >
                 {checkValidate &&
                     <React.Fragment>

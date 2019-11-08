@@ -18,19 +18,19 @@ class Generate extends Component {
             dropdownPerson: false,
             dropdownHoliday: false,
             dropdownPosition: false,
-            holiday: { date: "select", reason: "" },
-            holidays: [],
+            holiday: { date: "select", reason: null },
+            showHoliday: [],
+            showPeriodPerDay: [],
+            showPersonPerDay: [],
+            showPosition: [],
+            periodPerDay: null,
+            personPerDay: null,
             day: [],
             year: new Date().getFullYear(),
             month: new Date().getMonth(),
-            periodperDays: [],
-            personperDays: [],
-            positions: [],
-            periodperDay: null,
-            personperDay: null,
             conditon: [],
-            test:null,
-            validate:""
+            validate: "",
+            holidayForSaveToDB: []
         }
     }
 
@@ -39,7 +39,7 @@ class Generate extends Component {
         this.selectConditionFromDB()
     }
 
-    selectConditionFromDB = async () =>{
+    selectConditionFromDB = async () => {
         let token = localStorage.getItem('tk');
 
         const othepram = {
@@ -55,7 +55,7 @@ class Generate extends Component {
                 })
         ])
         const [conditon] = data
-        this.setState({conditon})
+        this.setState({ conditon })
     }
 
     getDate = () => {
@@ -78,19 +78,24 @@ class Generate extends Component {
         holiday[event.target.name] = event.target.value
         this.setState({ holiday })
         this.setState({
-            validate:""
+            validate: ""
         })
     }
 
     handleSubmit = event => {
         event.preventDefault();
-        let { holiday, holidays } = this.state
-        if(holiday.reason.trim() === ""){
+        let { holiday, showHoliday, holidayForSaveToDB } = this.state
+        if (holiday.reason == null) {
             this.setState({
-                validate:"Please specific reason"
+                validate: "Please specific reason"
             })
-        }else{
-            holidays.push(holiday)
+        } else if (holiday.date === "select") {
+            this.setState({
+                validate: "Please specific date"
+            })
+        } else {
+            showHoliday.push(holiday)
+            holidayForSaveToDB.push(holiday)
             this.setState({
                 holiday: {
                     date: "select",
@@ -130,9 +135,42 @@ class Generate extends Component {
         })
     }
 
-    remove = key => {
-        this.state.holidays.splice(key, 1);
-        this.forceUpdate()
+    remove = (h, key) => {
+        const { showPosition, conditon } = this.state
+
+        let arr = []
+        conditon.map(e => {
+            if (e.Position_Name == showPosition && e.Day === h.date) {
+                arr.push(e)
+            }
+        })
+
+        if (arr.length !== 0) {
+            if (!window.confirm("Do you want to remove this dayoff?")) return
+
+            const Url = url + '/position/generate/delete';
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify({
+                    condition: arr
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(data => { return data.json() })
+                .then(res => {
+                    alert('Delete Success')
+                    this.selectConditionFromDB();
+                    this.forceUpdate();
+                })
+                .catch(error => console.log(error))
+
+        } else {
+            this.state.showHoliday.splice(key, 1);
+            this.forceUpdate()
+        }
     };
 
     selectDate = (event) => {
@@ -145,44 +183,43 @@ class Generate extends Component {
     selectPeriodperDay = (event) => {
         let a = parseInt(event.target.innerText)
         this.setState({
-            periodperDay: a
+            periodPerDay: a
         })
     }
 
     selectPersonperDay = (event) => {
         let a = parseInt(event.target.innerText)
         this.setState({
-            personperDay: a
+            personPerDay: a
         })
     }
 
     clickPosition = (event) => {
         this.setState({
-            positions: event.target.innerText
+            showPosition: event.target.innerText
         })
         let click = event.target.innerText
         this.getPersonInPosition(click)
     }
 
     getPersonInPosition = (click) => {
-
-        const { conditon } = this.state
-        const { user } = this.props
+        const { conditon,day } = this.state
+        const { user, period } = this.props
         let arr = []
 
         conditon.map(c => {
-            if(c.Position_Name === click){
+            if (c.Position_Name === click) {
                 arr.push(c)
             }
         })
 
-        if(arr.length !== 0){
+        if (arr.length !== 0) {
             let holiday = []
             arr.map(d => {
-                holiday.push({date: d.Day, reason: d.PositionDayOff_Reason})
+                holiday.push({ date: d.Day, reason: d.PositionDayOff_Reason })
             })
-            this.setState({periodperDay: arr[0].PeriodPerDay, personperDay: arr[0].PersonPerDay, holidays: holiday})
-        }else{
+            this.setState({ showHoliday: holiday })
+
             const groupBy = (array, key) => {
                 return array.reduce((result, currentValue) => {
                     (result[currentValue[key]] = result[currentValue[key]] || []).push(
@@ -191,48 +228,95 @@ class Generate extends Component {
                     return result;
                 }, {});
             };
-    
+
             const personGroupedByPosition = groupBy(user, 'Position_Name');
             let person = personGroupedByPosition[click]
-            if (person !== undefined) {
+
+            if (period.length !== 0 && person !== undefined) {
                 this.genCondition(person)
+            } else if (period.length !== 0) {
+                this.genPeriod();
+            } else if (person !== undefined) {
+                this.genPerson(person);
+            } else {
+                this.setState({ showHoliday: [] })
+            }
+        } else {
+            this.setState({ showHoliday: [] })
+            const groupBy = (array, key) => {
+                return array.reduce((result, currentValue) => {
+                    (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                        currentValue
+                    );
+                    return result;
+                }, {});
+            };
+
+            const personGroupedByPosition = groupBy(user, 'Position_Name');
+            let person = personGroupedByPosition[click]
+
+            if (period.length !== 0 && person !== undefined) {
+                this.genCondition(person)
+            } else if (period.length !== 0) {
+                this.genPeriod();
+            } else if (person !== undefined) {
+                this.genPerson(person);
+            } else {
+                this.setState({ showPeriodPerDay: [], showPersonPerDay: [] })
             }
         }
+    }
+
+    genPeriod() {
+        this.state.showPeriodPerDay = []
+        for (let i = 0; i < this.props.period; i++) {
+            this.state.showPeriodPerDay.push(i + 1)
+        }
+        this.setState({ periodPerDay: [], showPersonPerDay: [] })
+    }
+
+    genPerson(person) {
+        this.state.showPersonPerDay = []
+        for (let x = 0; x < person.length; x++) {
+            this.state.showPersonPerDay.push(x + 1)
+        }
+        this.setState({ personPerDay: [], showPeriodPerDay: [] })
     }
 
     genCondition(person) {
-        this.state.periodperDays = []
-        this.state.personperDays = []
+        this.state.showPeriodPerDay = []
+        this.state.showPersonPerDay = []
         for (let i = 0; i < this.props.period; i++) {
-            this.state.periodperDays.push(i + 1)
+            this.state.showPeriodPerDay.push(i + 1)
         }
         for (let x = 0; x < person.length; x++) {
-            this.state.personperDays.push(x + 1)
+            this.state.showPersonPerDay.push(x + 1)
         }
-        this.setState({periodperDay: [], personperDay: []})
+        this.setState({ periodPerDay: [], personPerDay: [] })
     }
 
     insertToCondition = () => {
-        const {position } = this.props
-        const {holidays, personperDay, periodperDay, positions} = this.state
+        const { position } = this.props
+        const { holidayForSaveToDB, personPerDay, periodPerDay, showPosition } = this.state
+
         let positionID = []
-        let month = new Date().getMonth() +1 
+        let month = new Date().getMonth() + 1
 
         position.map(p => {
-            if(p.Position_Name === positions){
+            if (p.Position_Name === showPosition) {
                 positionID.push(p.Position_ID)
             }
         })
+
+        if (!window.confirm("Do you want to save dayoff?")) return
         const Url = url + '/position/generate/insert';
         const othepram = {
             headers: {
                 "content-type": "application/json; charset=UTF-8"
             },
             body: JSON.stringify({
-                holiday: holidays,
+                holiday: holidayForSaveToDB,
                 month: month,
-                personPerDay: personperDay,
-                periodPerDay: periodperDay,
                 positionID: positionID
             }),
             method: "POST"
@@ -241,14 +325,14 @@ class Generate extends Component {
             .then(data => { return data.json() })
             .then(res => {
                 alert('Insert Success')
-                this.forceUpdate();
+                this.selectConditionFromDB();
             })
             .catch(error => console.log(error))
     }
 
     generate = () => {
-        const {holidays,periodperDay,personperDay, positions} = this.state
-        this.props.testGenerate(holidays,periodperDay,personperDay,positions);
+        const { showHoliday, periodPerDay, personPerDay, showPosition } = this.state
+        this.props.testGenerate(showHoliday, periodPerDay, personPerDay, showPosition);
     }
 
 
@@ -257,9 +341,9 @@ class Generate extends Component {
         if (!this.props.show) {
             return null;
         }
-        const { day, holiday, holidays, periodperDays, personperDays, periodperDay, personperDay, positions } = this.state
+        const { day, holiday, showHoliday, showPeriodPerDay, showPersonPerDay, periodPerDay, personPerDay, showPosition } = this.state
         const { position } = this.props
-    
+
         return (
             <div className="generate_popup">
                 <div className="generate_popup_inner">
@@ -274,7 +358,7 @@ class Generate extends Component {
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPosition} toggle={this.selectPosition} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
-                                        {positions}
+                                        {showPosition}
                                         <img className="down" src={down}></img>
                                     </div>
                                 </DropdownToggle>
@@ -292,12 +376,12 @@ class Generate extends Component {
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPeriod} toggle={this.selectPeriodTimes} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
-                                        {periodperDay}
+                                        {periodPerDay}
                                         <img className="down" src={down}></img>
                                     </div>
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    {periodperDays.map((pd) => {
+                                    {showPeriodPerDay.map((pd) => {
                                         return <DropdownItem onClick={(event) => this.selectPeriodperDay(event)} >
                                             {pd}
                                         </DropdownItem>
@@ -310,12 +394,12 @@ class Generate extends Component {
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPerson} toggle={this.selectPersons} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
-                                        {personperDay}
+                                        {personPerDay}
                                         <img className="down" src={down}></img>
                                     </div>
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    {personperDays.map((psd) => {
+                                    {showPersonPerDay.map((psd) => {
                                         return <DropdownItem onClick={(event) => this.selectPersonperDay(event)}>
                                             {psd}
                                         </DropdownItem>
@@ -336,8 +420,8 @@ class Generate extends Component {
                                 </DropdownMenu>
                             </Dropdown>
                             <div>
-                            <input type="text" name="reason" className="input-holi" value={this.state.holiday.reason} onChange={event => this.handleChange(event)}></input>
-                            <span className="valgenerate">{this.state.validate}</span>
+                                <input type="text" name="reason" className="input-holi" value={this.state.holiday.reason} onChange={event => this.handleChange(event)}></input>
+                                <span className="valgenerate">{this.state.validate}</span>
                             </div>
                             <button className="manage-gen" onClick={(event) => this.handleSubmit(event)}>Add</button>
                         </div>
@@ -349,20 +433,20 @@ class Generate extends Component {
                                     <td className="td12">Reason</td>
                                     <td className="td11">Manage</td>
                                 </tr>
-                                {holidays.map((h, key) => {
+                                {showHoliday.map((h, key) => {
                                     return <tr>
                                         <td className="td14">{key + 1}</td>
                                         <td className="td14">{h.date}</td>
                                         <td className="td13">{h.reason}</td>
-                                        <td className="td14"><img src={remove} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 55 }} onClick={() => this.remove(key)} />
+                                        <td className="td14"><img src={remove} style={{ width: 15, height: 15, marginTop: 0, marginLeft: 55 }} onClick={() => this.remove(h, key)} />
                                         </td>
                                     </tr>
                                 })}
                             </tbody>
                         </Table>
                         <div style={{ display: 'flex', marginLeft: 600, marginTop: 10 }}>
-                            <button className="manage-gen" onClick = {this.insertToCondition}>save</button>
-                            <button className="manage-gen" onClick = {this.generate}>generate</button>
+                            <button className="manage-gen" onClick={this.insertToCondition}>save</button>
+                            <button className="manage-gen" onClick={this.generate}>generate</button>
                         </div>
                     </div>
                 </div>
