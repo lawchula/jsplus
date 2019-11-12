@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './Css/User.css';
-import { Button, Table } from 'reactstrap';
+import { Table } from 'reactstrap';
 import { Container } from 'react-grid-system';
 import Header from './Header';
 import * as jwt_decode from 'jwt-decode';
 import RequestPopup from './RequestPopup';
 import RequestAbsent from './RequestAbsent';
 import url from './url'
+import { css } from '@emotion/core';
+import FadeLoader from 'react-spinners/FadeLoader';
 
 function calulateStatisticByToey(array) {
     let limit = 24;
@@ -305,23 +307,30 @@ class User extends Component {
     checkRequest(name, date, y) {
         const checkCount = this.state.count
         const request = this.state.request
-        // if (y < this.state.currentDay) {
-        //     alert('Error')
-        //     this.setState({
-        //         request: !this.state.request
-        //     })
-        // } else {
-            if (request != true) {
-                if (checkCount == 0) {
-                    this.setFirstRequest(name, date);
+    
+        if(this.state.request == true && this.state.requestAbsent == true){
+                return null
+        }else{
+            if (y < this.state.currentDay) {
+                alert('This period is already passed')
+                this.setState({
+                    request: true,
+                    requestAbsent: true
+                })
+            } else {
+                if (request != true) {
+                    if (checkCount == 0) {
+                        this.setFirstRequest(name, date);
+                    }
+                    else {
+                        this.setSecondRequest(name, date);
+                    }
+                } else if (this.state.requestAbsent != true) {
+                    this.userRequestAbsent(name, date)
                 }
-                else {
-                    this.setSecondRequest(name, date);
-                }
-            } else if (this.state.requestAbsent != true) {
-                this.userRequestAbsent(name, date)
             }
-        // }
+        }
+       
     }
 
     setFirstRequest(name, date) {
@@ -391,7 +400,7 @@ class User extends Component {
         const { loading, count, alreadyReq, workHour, doneHour, remainHour } = this.state
         const users = this.state.user.map((name, user) => {
             return <tr className="test2">
-                <td colSpan="2" className={"block" && this.ShowUserColorOnSchedule(user)} style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} >{name.Name}</td>
+                <td colSpan="2" className={"block" && this.ShowUserColorOnSchedule(user)} style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0),wordWrap:'break-word',paddingTop:10,paddingLeft:4,paddingRight:0 }} >{name.Name}</td>
                 {this.state.block.map((date, y) => {
                     return <td style={{ backgroundColor: 'white' }} className="block" style={{ zIndex: count === 0 && user < 1 ? this.state.zIndex : (count === 1 && user > 0 ? this.state.zIndex2 : 0) }} onClick={() => this.checkRequest(name, date, y)}>
                         {this.state.schedule.map(periodInSchedule => {
@@ -414,21 +423,36 @@ class User extends Component {
                 <div style={{ backgroundColor: event.Period_Color, marginLeft: 5 }} className="period-color">
 
                 </div>
-                <span style={{ marginLeft: 5 }}>{event.Period_Name}</span>
-                <span style={{ marginLeft: 5 }}>{event.Period_Time_One} - </span>
-                <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
+                <span style={{ marginLeft: 5,marginTop:3  }}>{event.Period_Name}</span>
+                <span style={{ marginLeft: 5,marginTop:3  }}>{event.Period_Time_One} - </span>
+                <span style={{ marginLeft: 5,marginTop:3  }}>{event.Period_Time_Two}</span>
             </div>
         })
 
+        const override = css`
+        display: block;
+        left: 50%;
+        top: 45%;
+        margin-left: -4em;
+        position: fixed;
+    `;
+
         return (
             <div className="User">
-                {
-                    !loading && (<React.Fragment>
+                
+                <FadeLoader
+                        css={override}
+                        sizeUnit={"px"}
+                        size={150}
+                        color={'#ffffff'}
+                        loading={true}
+                        />
+    
+                {   !loading && (<React.Fragment>
                         <Header Schedule={this.getSchedules}></Header>
                         <Container className="User" fluid>
                             <span className="show-position">STAFF</span>
                             <div className="before-schedule">
-                                <p className="stat"><b>STATISTIC</b></p>
                                 <div className="request-schedule">
                                     <button className="b-request" onClick={this.request}>REQUEST</button>
                                     <button className="b-request" onClick={this.clickRequestAbsent} style={{ marginLeft: 10 }}>ABSENCE</button>
@@ -437,15 +461,18 @@ class User extends Component {
                                     </div>
                                 </div>
                                 <div id="filter">
-                                    <div className="b-static">WORK HOUR: {workHour}</div>
-                                    <div className="b-static">DONE: {doneHour}</div>
-                                    <div className="b-static">REMAIN: {remainHour}</div>
+                                <p className="stat-user"><b>STATISTIC</b></p>
+                                <div style={{display:'flex'}}>
+                                    <div className="b-static">WORK HOUR: {workHour} hr.</div>
+                                    <div className="b-static">DONE: {doneHour} hr.</div>
+                                    <div className="b-static">REMAIN: {remainHour} hr.</div>
+                                </div>
                                 </div>
                             </div>
                             <div className="request" hidden={this.state.request} onClick={this.cancleRequest}>
 
                             </div>
-                            <div className="request" hidden={this.state.requestAbsent} onClick={this.cancleRequest}>
+                            <div className="request" hidden={this.state.requestAbsent} onClick={this.cancleAbsentRequest}>
 
                             </div>
                             <Table bordered responsive className="user-schedule">
@@ -489,6 +516,7 @@ class User extends Component {
                     )
                 }
             </div>
+            
         );
     }
 

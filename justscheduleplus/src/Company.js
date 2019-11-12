@@ -154,13 +154,19 @@ class Company extends Component {
 
     // เอา url ของรูปจากเครื่องมา
     fileSelectedHandler = (event) => {
-        this.setState({
-            companyImages: URL.createObjectURL(event.target.files[0]),
-            imageName: event.target.files[0].name
-        })
         if(event !== null){
-            this.uploadImages()
-            this.confirmUploadImage()
+            try{
+                let imgfile = URL.createObjectURL(event.target.files[0])
+                let imgname = event.target.files[0].name
+                this.confirmUploadImage(imgfile,imgname)
+            }
+            catch(error){
+                return null
+            }
+            // this.setState({
+            //     companyImages: URL.createObjectURL(event.target.files[0]),
+            //     imageName: event.target.files[0].name
+            // })
         } else{
             return null
         }
@@ -180,13 +186,13 @@ class Company extends Component {
 
 
     //เรียกใช้ uploadImages เอา companyImages ใส่ใน parameter
-    confirmUploadImage = () => {
-        this.uploadImages(this.state.companyImages, this.state.imageName)
+    confirmUploadImage = (file,name) => {
+        this.uploadImages(file, name)
             .then(() => {
                 console.log('Upload Success !!')
-                console.log('name' + this.state.imageName)
+                console.log('name' + name)
                 //get url ของรูปมาถ้า Upload สำเร็จ (ต้องเอา url ของรูปมาเก็บใน state แล้วนำมา show **ตอนนี้ยังไม่ได้ทำ)
-                firebase.storage().ref().child('images/' + this.state.imageName).getDownloadURL()
+                firebase.storage().ref().child('images/' + name).getDownloadURL()
                     .then((imageURL) => {
                         this.setState({
                             companyImage: imageURL
@@ -343,7 +349,7 @@ class Company extends Component {
                             {departments}
 
                         </div>
-                        <CreateDepartment show={this.state.showdepartment} onClose={this.showCreateDepartment}></CreateDepartment>
+                        <CreateDepartment show={this.state.showdepartment} onClose={this.showCreateDepartment} company={this.state.department}></CreateDepartment>
                     </React.Fragment>
                 }
             </div>

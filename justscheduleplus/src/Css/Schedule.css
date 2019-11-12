@@ -1,15 +1,18 @@
 .Schedule{
 background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);  
-height: 100vh;
+min-height: 100vh;
+height: auto;
 width: auto;
+min-width:100%;
 top:70px;
-overflow-x: hidden;
-
+/* overflow: hidden; */
+overflow: auto;
+min-width: 1440px;
 }
 .stat{
     font-family: 'Poppins', sans-serif;
     color: white;
-    margin-top: 50px;
+    margin-top: 40px;
     font-size: 18px;
 }
 .p1{
@@ -28,9 +31,9 @@ overflow-x: hidden;
 }
 .tests{
     background-color: white;
-    margin-top: 30px;
-    overflow: hidden;
+    margin-top: 50px;
     table-layout: fixed;
+    min-width: 1410px !important;
 }
 .fix{
     width: 200px;
@@ -65,6 +68,7 @@ overflow-x: hidden;
 #filter{
     display: flex;
     margin-right:10;
+    flex-direction: column;
 }
 #tr1{
     font-family: 'Poppins', sans-serif;
@@ -168,6 +172,7 @@ overflow-x: hidden;
     padding-top: 7px;
     padding-left: 5px;
     font-weight: bold; 
+    font-size: 15px;
 }
 .show-position{
     font-family: 'Poppins', sans-serif;
@@ -183,10 +188,15 @@ overflow-x: hidden;
     color: #6754e2;
     background-color: white;
     margin-top: 30px;
+    margin-right: 10px;
 }
 .userloggedcolor{
     color: black;
-    background-color: #15da88
+    background-color: #15da88;
+    word-wrap:break-word;
+    padding: 0px !important;
+    padding-top: 10px !important;
+    padding-left: 5px !important;
 }
 .managerperiod-description{
     display: flex;
@@ -195,7 +205,7 @@ overflow-x: hidden;
     color: white;
     padding: 5px;
     height: 35px;
-    font-size: 12px;
+    font-size: 10px;
     margin-left: 20px;
     margin-top: 66px;
 }
@@ -208,4 +218,11 @@ overflow-x: hidden;
 .table-td{
     background-color: white;
 }
+.responsive{
+    min-width: 1410px;
+}
+.show_period{
+    display: flex;
+}
+ 
 

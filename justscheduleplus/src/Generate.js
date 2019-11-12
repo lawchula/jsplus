@@ -18,7 +18,7 @@ class Generate extends Component {
             dropdownPerson: false,
             dropdownHoliday: false,
             dropdownPosition: false,
-            holiday: { date: "select", reason: null },
+            holiday: { date: "select", reason: "" },
             showHoliday: [],
             showPeriodPerDay: [],
             showPersonPerDay: [],
@@ -36,7 +36,7 @@ class Generate extends Component {
 
     componentDidMount() {
         this.getDate()
-        this.selectConditionFromDB()
+        // this.selectConditionFromDB()
     }
 
     selectConditionFromDB = async () => {
@@ -75,33 +75,35 @@ class Generate extends Component {
     handleChange = (event) => {
         event.preventDefault()
         let { holiday } = this.state
-        holiday[event.target.name] = event.target.value
-        this.setState({ holiday })
+        holiday.reason = event.target.value
+        // this.setState({ holiday })
         this.setState({
             validate: ""
         })
+        console.log(holiday.reason)
     }
 
     handleSubmit = event => {
         event.preventDefault();
-        let { holiday, showHoliday, holidayForSaveToDB } = this.state
-        if (holiday.reason == null) {
+        let { holiday, holidays,showHoliday, holidayForSaveToDB } = this.state
+       if(holiday.date === "select"){
             this.setState({
-                validate: "Please specific reason"
+                validate:"Please specific date",
             })
-        } else if (holiday.date === "select") {
-            this.setState({
-                validate: "Please specific date"
-            })
-        } else {
+        } else if(holiday.reason.trim() == "" ){
+                this.setState({
+                    validate:"Please specific reason",
+                })
+        }else {
             showHoliday.push(holiday)
             holidayForSaveToDB.push(holiday)
             this.setState({
                 holiday: {
                     date: "select",
-                    reason: " "
+                    reason: ""
                 }
             })
+            this.forceUpdate()
         }
     }
 
@@ -175,9 +177,14 @@ class Generate extends Component {
 
     selectDate = (event) => {
         let a = parseInt(event.target.innerText)
-        this.setState({
-            holiday: { date: a }
-        })
+        if(this.state.showPosition.length == 0){
+            alert('Please select position')
+        }else{
+            this.setState({
+                holiday: { date: a,reason:this.state.holiday.reason }
+            })
+            this.forceUpdate()
+        }
     }
 
     selectPeriodperDay = (event) => {
@@ -333,6 +340,11 @@ class Generate extends Component {
     generate = () => {
         const { showHoliday, periodPerDay, personPerDay, showPosition } = this.state
         this.props.testGenerate(showHoliday, periodPerDay, personPerDay, showPosition);
+        this.setState({
+            periodPerDay:null,
+            personPerDay:null,
+            showPosition:[],
+        })
     }
 
 
@@ -343,7 +355,7 @@ class Generate extends Component {
         }
         const { day, holiday, showHoliday, showPeriodPerDay, showPersonPerDay, periodPerDay, personPerDay, showPosition } = this.state
         const { position } = this.props
-
+        console.log(this.state.holidayForSaveToDB.length)
         return (
             <div className="generate_popup">
                 <div className="generate_popup_inner">
@@ -423,7 +435,7 @@ class Generate extends Component {
                                 <input type="text" name="reason" className="input-holi" value={this.state.holiday.reason} onChange={event => this.handleChange(event)}></input>
                                 <span className="valgenerate">{this.state.validate}</span>
                             </div>
-                            <button className="manage-gen" onClick={(event) => this.handleSubmit(event)}>Add</button>
+                            <button className="manage-gen" onClick={event => this.handleSubmit(event)}>Add</button>
                         </div>
                         <Table responsive className="table-gen" style={{ marginTop: 70, marginLeft: 40 }}>
                             <tbody>
@@ -445,8 +457,8 @@ class Generate extends Component {
                             </tbody>
                         </Table>
                         <div style={{ display: 'flex', marginLeft: 600, marginTop: 10 }}>
-                            <button className="manage-gen" onClick={this.insertToCondition}>save</button>
-                            <button className="manage-gen" onClick={this.generate}>generate</button>
+                            {showPosition.length !== 0 && periodPerDay.length !== null && personPerDay.length !== null && this.state.holidayForSaveToDB.length > 0 ?  <button className="manage-gen" onClick={this.insertToCondition}>save</button>: null}
+                            {showPosition.length !== 0 && periodPerDay.length !== null && personPerDay.length !== null && this.state.holidayForSaveToDB.length == 0? <button className="manage-gen" onClick={this.generate}>generate</button> : null}
                         </div>
                     </div>
                 </div>

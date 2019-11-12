@@ -36,7 +36,7 @@ class Register extends Component {
         [name]: value
       }
     })
-    this.setState({submitted: false})
+    this.setState({submitted: false,validatepass:''})
   }
 
   handleSubmit(event) {

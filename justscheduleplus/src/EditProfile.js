@@ -150,34 +150,44 @@ class AdminHome extends Component {
   }
 
   fileSelectedHandler = event => {
-    this.setState({
-      userImages: URL.createObjectURL(event.target.files[0]),
-      userImgName: event.target.files[0].name
-    });
     if (event !== null) {
-      // this.uploadImages()
-      this.confirmUploadImage()
-    }
+      try {
+      let imgfile = URL.createObjectURL(event.target.files[0])
+      let imgname = event.target.files[0].name
+      this.confirmUploadImage(imgfile,imgname)
+      } catch (error) {
+        return null
+      }
+    }else{
+      return null
+  }
+
   };
 
   uploadImages = async (event, imgname) => {
+    console.log(event,imgname)
     const response = await fetch(event);
     const blob = await response.blob();
+
+    var metadata = {
+      contentType: 'image/jpeg'
+    };
 
     var ref = firebase
       .storage()
       .ref()
       .child("userImages/" + imgname);
-    return ref.put(blob);
+    return ref.put(blob, metadata);
   };
 
-  confirmUploadImage = async () => {
-    await this.uploadImages(this.state.userImages, this.state.userImgName)
+  confirmUploadImage = (file,name) => {
+    this.uploadImages(file,name)
+
       .then(() => {
         firebase
           .storage()
           .ref()
-          .child("userImages/" + this.state.userImgName)
+          .child("userImages/" + name)
           .getDownloadURL()
           .then(imageURL => {
             this.setState({
@@ -188,7 +198,7 @@ class AdminHome extends Component {
       .catch(error => {
         console.log("Fail to upload" + error);
       });
-      console.log(this.state.userImg)
+
   };
 
   changepassword = () => {

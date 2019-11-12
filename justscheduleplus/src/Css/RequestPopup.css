@@ -37,7 +37,7 @@
     border-bottom-left-radius:  5px;
 }
 .change{
-    position: absolute;
+    position: fixed;
     left: 46%;
     right: 46%;
     top:38.5%;

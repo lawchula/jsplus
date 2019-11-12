@@ -30,7 +30,7 @@ class Header extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false,
+      navOpen: false,
       name: [],
       dropdownOpen: false,
       loading: true,
@@ -428,7 +428,7 @@ class Header extends Component {
 
   navbarOpen = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      navOpen: !this.state.navOpen
     })
   }
 
@@ -612,18 +612,18 @@ class Header extends Component {
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
               <div className="JS" onClick={this.homePage}><img src={logo} style={{ height: 100, width: 100 }}></img></div>
               <NavbarToggler onClick={this.navbarOpen} />
-              <Collapse isOpen={this.state.isOpen} navbar>
+              <Collapse isOpen={this.state.navOpen} navbar>
                 <Nav className="ml-auto" navbar >
                   <div id="first-header">
                     <NavItem>
                       <NavLink href=""  ><b className="firstheader-item">HOW TO USE</b></NavLink>
                     </NavItem>
                     <NavItem>
-                      <NavLink href="" ><b className="firstheader-item">ABOUT</b></NavLink>
+                      <NavLink href="" ><b className="firstheader-item">ABOUT US</b></NavLink>
                     </NavItem>
-                    <NavItem>
+                    {/* <NavItem>
                       <NavLink href="" ><b className="firstheader-item">CONTRACT US</b></NavLink>
-                    </NavItem>
+                    </NavItem> */}
                   </div>
                   {name.length > 0 ?
                     <div className="third-header">

@@ -239,12 +239,13 @@ class Department extends Component {
                 var a = {}
                 const random = Math.floor(Math.random() * 9999999) + 1
                 const password = event[i][0].substring(0, 1) + event[i][1].substring(0, 1) + random
+                const surnamesub = event[i][1].substring(0,3)
                 a.name = event[i][0]
                 a.surname = event[i][1]
                 a.email = event[i][2]
                 a.telno = event[i][3]
                 a.position = "Please select position"
-                a.username = event[i][2]
+                a.username = event[i][0]+"."+ surnamesub
                 a.id = this.state.newusers.length
                 a.positionid = null
                 a.password = password
@@ -298,6 +299,8 @@ class Department extends Component {
     }
 
     handleSubmit = (event) => {
+        const validEmailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        const phoneno = /^0[0-9]{8,9}$/i;
         event.preventDefault();
         const { newuser } = this.state
         if (newuser.name.trim() == "" || newuser.surname.trim() == "" || newuser.email.trim() == "" || newuser.telno.trim() == "") {
@@ -306,10 +309,15 @@ class Department extends Component {
             newuser.surname = ""
             newuser.email = ""
             newuser.telno = ""
+        }else if(!validEmailRegex.test(newuser.email)){
+            this.setState({ val: "Please fill the right format for email" })
+        }else if(!phoneno.test(newuser.telno)){
+            this.setState({ val: "Please fill the right format for telephone number" })
         } else {
             const random = Math.floor(Math.random() * 9999999) + 1
             const password = this.state.newuser.name.substring(0, 1) + this.state.newuser.surname.substring(0, 1) + random
-            newuser.username = this.state.newuser.email
+            const surnamesub = newuser.surname.substring(0,3)
+            newuser.username = this.state.newuser.name + "." + surnamesub
             newuser.password = password
             this.state.newusers.push(this.state.newuser)
             this.setState({ addstaff: false, val: null })
@@ -435,9 +443,9 @@ class Department extends Component {
                 <div className="tb-container">
                     {addstaff == false ?
                         <div className="add-staff">
-                            <button className="add-staff-butt" onClick={this.addStaff}>Add Staff+</button>
-                            <button className="add-staff-butt" onClick={this.showPosition}>Position</button>
-                            <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>Import</button>
+                              <button className="add-staff-butt" onClick={this.showPosition}>CREATE POSITION</button>
+                            <button className="add-staff-butt" onClick={this.addStaff}>ADD STAFF</button>
+                            <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>IMPORT STAFF</button>
                             <label htmlFor="upload-excel" className="add-staff-excel">Import</label>
                             <input type="file" id="upload-excel" accept=".xlsx, .xls" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
                         </div>
@@ -452,7 +460,7 @@ class Department extends Component {
                                 <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.handleSubmit}>Add</button>
 
                             </div>
-                            <span className="val2">{this.state.val}</span>
+                            <span className="val5">{this.state.val}</span>
                         </div>
                     }
                     <br></br>
@@ -491,7 +499,7 @@ class Department extends Component {
                             })}
                         </tbody>
                     </Table>
-                    <button className="add-staff-butt" onClick={this.insertUser}>Save</button>
+                   {this.state.newusers.length == 0 ? null: <button className="add-staff-butt3" onClick={this.insertUser}>Save</button> } 
                 </div>
                 <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
             </div>

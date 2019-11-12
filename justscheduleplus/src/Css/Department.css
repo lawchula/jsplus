@@ -8,6 +8,7 @@
     width: 100%;
     max-width: 100%;
     padding-top: 50px;
+    min-width: 1440px;
 }
 .company-description{
     background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%); 

@@ -12,6 +12,9 @@ import url from './url';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import Generate from './Generate';
+import { css } from '@emotion/core';
+import FadeLoader from 'react-spinners/FadeLoader';
+
 
 function suffleArray(array) {
     let i = array.length - 1;
@@ -121,7 +124,6 @@ class Schedule extends Component {
         ];
         return monthNames[month]
         this.getSchedules();
-
     }
 
     SelectDataFromDB = async () => {
@@ -519,34 +521,60 @@ class Schedule extends Component {
         })
     }
 
+    getMonth = (event,i) =>{
+        this.setState({
+            month:i
+        })
+        this.componentDidMount()
+    }
+
+    clearSchedule = () => {
+        this.setState({
+            TestShow:[]
+        })
+    }
+
 
     render() {
 
         const { loading, check, workHour, remainHour, doneHour } = this.state
+        const override = css`
+                display: block;
+                left: 50%;
+                top: 40%;
+                margin-left: -4em;
+                position:fixed;
+            `;
+
         const daysname = this.state.daysname.map((event1, i) => { return event1 })
         let showperiod = []
         if (!loading) {
             showperiod = this.state.showPeriod.map((event) => {
-                return <div style={{ display: 'flex' }}>
+                return <div className="show_period"> 
                     <div style={{ backgroundColor: event.Period_Color, marginLeft: 5 }} className="period-color">
 
                     </div>
-                    <span style={{ marginLeft: 5 }}>{event.Period_Name}</span>
-                    <span style={{ marginLeft: 5 }}>{event.Period_Time_One} - </span>
-                    <span style={{ marginLeft: 5 }}>{event.Period_Time_Two}</span>
+                    <span style={{ marginLeft: 5,marginTop:3 }}>{event.Period_Name}</span>
+                    <span style={{ marginLeft: 5,marginTop:3 }}>{event.Period_Time_One} - </span>
+                    <span style={{ marginLeft: 5,marginTop:3 }}>{event.Period_Time_Two}</span>
                 </div>
             })
         }
 
-
         return (
             <div className="Schedule">
+                 <FadeLoader
+          css={override}
+          sizeUnit={"px"}
+          size={150}
+          color={'#ffffff'}
+          loading={this.state.loading}
+        />
                 <Header Schedule={this.getSchedules} />
                 {!loading &&
                     <Container className="Schedule" fluid>
                         <span className="show-position">MANAGER</span>
                         <div className="before-schedule">
-                            <p className="stat"><b>STATISTIC</b></p>
                             <div className="stat-schedule">
                                 <button className="b-filter" onClick={this.showPopup}>CREATE PERIOD</button>
                                 <button className="b-filter" style={{ marginLeft: 10 }} onClick={this.showGenerate}>GENERATE</button>
@@ -558,20 +586,26 @@ class Schedule extends Component {
                                 {!check && <Generate show={this.state.showGenerate} onClose={this.showGenerate} period={this.state.showPeriod.length} position={this.state.position} user={this.state.user} testGenerate={this.testGenerate}></Generate>}
                             </div>
                             <div id="filter">
-                                {/* <Button color="btn btn-light" className="p1" style={{ color: '#E37222' }} ><b>WORK HOUR:</b></Button>
-                            <Button color="btn btn-light" className="p2" style={{ color: '#E37222' }} ><b>DONE:</b></Button>
-                            <Button color="btn btn-light" className="p3" style={{ color: '#E37222' }}><b>REMAIN:</b></Button> */}
-                                <div className="b-static">WORK HOUR: {workHour}</div>
-                                <div className="b-static">DONE: {doneHour}</div>
-                                <div className="b-static">REMAIN: {remainHour}</div>
+                                
+                                 <p className="stat"><b>STATISTIC</b></p>
+                                 <div style={{display:'flex'}}>
+                                <div className="b-static">WORK HOUR: {workHour} hr.</div>
+                                <div className="b-static">DONE: {doneHour} hr.</div>
+                                <div className="b-static">REMAIN: {remainHour} hr.</div>
+                                </div>
                             </div>
                         </div>
+                        <div className="responsive">
                         <Table bordered responsive className="tests" id="table-to-xls">
                             <thead>
                                 <tr id="tr1">
                                     <th colSpan={(this.state.block.length / 2)} >Company : {this.state.company.map(event => { return <span>{event.Company_Name}</span> })}</th>
-                                    <th colSpan={(this.state.block.length / 2)}>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
-                                    <td colSpan={this.state.block.length == 31 ? 3 : 2} style={{ marginLeft: 10 }}><button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button></td>
+                                    <th colSpan={(this.state.block.length / 2 )}>Department : {this.state.department.map(event => { return <span>{event.Department_Name}</span> })} </th>
+                                    <td colSpan={this.state.block.length == 31 ? 3 : 2} style={{ marginLeft: 10,paddingLeft:5 }}>
+                                        {this.state.edit == false ? <button id="edit-schedule" onClick={this.showButtonAfterEdit} disabled={this.state.disable}>Edit</button> : 
+                                        <button id="edit-schedule" onClick={this.clearSchedule} >Clear</button>
+                                      }
+                                    </td>
                                 </tr>
                                 <tr id="tr2">
                                     {/* <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th> */}
@@ -601,7 +635,7 @@ class Schedule extends Component {
                                 {this.state.user.map((event, x) => {
                                     return <tr className="test2">
                                         {/* เอาค่า username มาแสดง*/}
-                                        <td colSpan="2" className={this.ShowUserColorOnSchedule(x)} >{event.Name}</td>
+                                        <td colSpan="2" style={{wordWrap:'break-word',paddingTop:10,paddingLeft:4,paddingRight:0}} className={this.ShowUserColorOnSchedule(x)} >{event.Name}</td>
                                         {/* เอาค่าวันที่มา set เป็นช่อง */}
                                         {this.state.block.map((e, y) => {
                                             return <td className="table-td" onClick={() => this.SendMultidimension(x, y)}>
@@ -648,10 +682,12 @@ class Schedule extends Component {
                                 })}
                             </tbody>
                         </Table>
+                        </div>
                         <div style={{ display: "flex", float: 'right' }}>
                             {this.state.edit && <button className="b-save" onClick={this.finishEdit}>FINISH EDIT</button>}
-                            {this.state.edit == false ? <div> <button className="b-save" style={{ marginRight: 10 }} onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button>
-                                <ReactHTMLTableToExcel table="table-to-xls" filename="Schedule" sheet="sheet 2" buttonText="Export" className="b-save" /> </div> : ""}
+                            {this.state.edit == false && Object.keys(this.state.TestShow).length > 0 ? <div> <button className="b-save"  onClick={() => this.InsertPeriodtoSchedule(this.state.TestShow)}>SAVE</button>
+                                </div> : ""}
+                                <ReactHTMLTableToExcel table="table-to-xls" filename="Schedule" sheet="sheet 2" buttonText="EXPORT" className="b-save" />
                         </div>
                     </Container>
                 }

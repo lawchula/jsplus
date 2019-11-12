@@ -18,13 +18,18 @@ class CreateCompany extends Component {
             validate: '',
             test: '',
             validateEmail: '',
-            validateTelno: ''
+            validateTelno: '',
+            valcompanyname:''
         };
 
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.FirebaseConfig)
         }
     }
+
+    componentDidMount(){
+    }
+
 
     onClose = (e) => {
         if (this.props.onClose !== undefined) {
@@ -37,7 +42,7 @@ class CreateCompany extends Component {
         let { company } = this.state
         company[event.target.name] = event.target.value
         this.setState({ company })
-        this.setState({validate:'',validateEmail:'',validateTelno:''})
+        this.setState({validate:'',validateEmail:'',validateTelno:'',valcompanyname:''})
     }
 
     handleSubmit = async (event) => {
@@ -74,21 +79,38 @@ class CreateCompany extends Component {
                 fetch(Url, othepram)
                     .then(res => res.json())
                     .then(json => {
-                        localStorage.setItem('tk', json.tk)
-                        alert("Create Company Success")
-                        window.location.href = "/Company";
+                        console.log(json)
+                        if(json === "This company is already exists"){
+                            this.setState({
+                                valcompanyname:json
+                            })
+                        }else{
+                            localStorage.setItem('tk', json.tk)
+                            alert("Create Company Success")
+                            window.location.href = "/Company";
+                        }
+                        
                     })
         }
     }
 
     fileSelectedHandler = (event) => {
-        this.setState({
-            companyImages: URL.createObjectURL(event.target.files[0]),
-            imageName: event.target.files[0].name
-        })
         if (event !== null) {
-            this.uploadImages()
-            this.confirmUploadImage()
+            try{
+                let imgfile = URL.createObjectURL(event.target.files[0])
+                let imgname = event.target.files[0].name
+                this.confirmUploadImage(imgfile,imgname)
+
+            }catch(error){
+                return null
+            }   
+            // this.confirmUploadImage()
+            // this.setState({
+            //     companyImages: URL.createObjectURL(event.target.files[0]),
+            //     imageName: event.target.files[0].name
+            // })
+        }else{
+            return null
         }
     }
 
@@ -100,10 +122,10 @@ class CreateCompany extends Component {
         return ref.put(blob)
     }
 
-    confirmUploadImage = () => {
-        this.uploadImages(this.state.companyImages, this.state.imageName)
+    confirmUploadImage = (file,name) => {
+        this.uploadImages(file, name)
             .then(() => {
-                firebase.storage().ref().child('images/' + this.state.imageName).getDownloadURL()
+                firebase.storage().ref().child('images/' + name).getDownloadURL()
                     .then((imageURL) => {
                         this.setState({
                             companyImage: imageURL
@@ -113,6 +135,9 @@ class CreateCompany extends Component {
             .catch((error) => {
                 console.log("Fail to upload" + error);
             })
+        this.setState({
+            imageName: name
+        })
     }
 
     render() {
@@ -134,7 +159,7 @@ class CreateCompany extends Component {
                             <div className="company-picture">
                                 {companyImage == "" ? '' : <img className="company-picture" src={companyImage}></img>}
                             </div>
-                            <span className="selectedfile">{companyImages == null ? 'no file selected' : imageName}</span>
+                            <span className="selectedfile">{imageName == null ? 'no file selected' : imageName}</span>
                             <div style={{ display: 'flex' }}>
                                 <label htmlFor="upload-photo" className="upload-picture">Browse...</label>
                                 <input type="file" name="photo" accept="image/*" id="upload-photo" onChange={this.fileSelectedHandler} />
@@ -145,6 +170,7 @@ class CreateCompany extends Component {
                             <span id='comname'>Company Name</span>
                             <input type='text' className='createcom' name="companyName" value={company.companyName || ''} onChange={(event => this.handleChange(event))} />
                             <span className="comp-validate">{company.companyName == "" ? validate : " "}</span>
+                            <span className="comp-validate">{this.state.valcompanyname}</span>
                             <br></br>
                             <span id='email'>Email</span>
                             <input type='email' className='createcom' name="companyEmail" value={company.companyEmail || ''} onChange={(event => this.handleChange(event))} />
@@ -158,7 +184,7 @@ class CreateCompany extends Component {
                         </div>
                     </div>
                     <div className="createcompany-footer">
-                        <button type="submit" className="confirm-create" onClick={(e) => this.handleSubmit(e)}>Create New Company</button>
+                      <button type="submit" className="confirm-create" onClick={(e) => this.handleSubmit(e)}>Create New Company</button>
                     </div>
                 </div>
             </div>
