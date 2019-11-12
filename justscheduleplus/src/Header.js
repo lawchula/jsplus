@@ -30,7 +30,7 @@ class Header extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false,
+      navOpen: false,
       name: [],
       dropdownOpen: false,
       loading: true,
@@ -57,7 +57,7 @@ class Header extends Component {
         var decoded = jwt_decode(detailtk)
         if (decoded.position === "Manager") {
           this.getManagerNoti(token, detailtk)
-        } else if(decoded.position === "Admin"){
+        } else if (decoded.position === "Admin") {
           this.getNewUser(token);
         }
         else {
@@ -227,6 +227,7 @@ class Header extends Component {
         .then(data => { return data.json() })
         .then(res => {
           this.setState({ loading: true, haveNotification: true })
+          alert("Approve Success")
           this.checkToken();
           this.props.Schedule();
         })
@@ -251,6 +252,7 @@ class Header extends Component {
       .then(data => { return data.json() })
       .then(res => {
         this.setState({ loading: true, haveNotification: true })
+        alert("Reject Success")
         this.checkToken();
       })
       .catch(error => console.log(error))
@@ -259,7 +261,7 @@ class Header extends Component {
   clickApproveAbsentNotification = async (notification) => {
     let autoReject = []
     let autoAbsentReject = []
-    const { managerNoti } = this.state
+    const { managerNoti, managerNotificationAbsent } = this.state
 
     managerNoti.map(e => {
       e.map(t => {
@@ -269,7 +271,13 @@ class Header extends Component {
       })
     })
 
-    if (autoReject.length !== 0) {
+    managerNotificationAbsent.map(noti => {
+      if (noti.Request_ID !== notification.Request_ID && noti.Schedule_ID === notification.Schedule_ID) {
+        autoAbsentReject.push(noti)
+      }
+    })
+
+    if (autoReject.length !== 0 || autoAbsentReject.length !== 0) {
       if (!window.confirm("This period is has another request!, Do you want to approve this absent request?")) return
       const Url = url + '/user/manager/absentnotification/approve';
       const othepram = {
@@ -304,6 +312,7 @@ class Header extends Component {
         .then(data => { return data.json() })
         .then(res => {
           this.setState({ loading: true, haveNotification: true })
+          alert("Approve Success")
           this.checkToken();
           this.props.Schedule();
         })
@@ -345,8 +354,7 @@ class Header extends Component {
           }
         })
       })
-
-      const Url = url + '/user/manager/exchangenotification/reject';
+      const Url = url + '/user/manager/exchangenotification/autoreject';
       const othepram = {
         headers: {
           "content-type": "application/json; charset=UTF-8"
@@ -376,7 +384,7 @@ class Header extends Component {
   }
 
   autoRejectAbsentRequest(autoAbsentReject) {
-    const Url = url + '/user/manager/absentnotification/reject';
+    const Url = url + '/user/manager/absentnotification/autoreject';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
@@ -420,7 +428,7 @@ class Header extends Component {
 
   navbarOpen = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      navOpen: !this.state.navOpen
     })
   }
 
@@ -604,18 +612,18 @@ class Header extends Component {
             <Navbar color="light" light expand="sm" style={{ height: 'auto' }} className="top-header" >
               <div className="JS" onClick={this.homePage}><img src={logo} style={{ height: 100, width: 100 }}></img></div>
               <NavbarToggler onClick={this.navbarOpen} />
-              <Collapse isOpen={this.state.isOpen} navbar>
+              <Collapse isOpen={this.state.navOpen} navbar>
                 <Nav className="ml-auto" navbar >
                   <div id="first-header">
                     <NavItem>
                       <NavLink href=""  ><b className="firstheader-item">HOW TO USE</b></NavLink>
                     </NavItem>
                     <NavItem>
-                      <NavLink href="" ><b className="firstheader-item">ABOUT</b></NavLink>
+                      <NavLink href="" ><b className="firstheader-item">ABOUT US</b></NavLink>
                     </NavItem>
-                    <NavItem>
+                    {/* <NavItem>
                       <NavLink href="" ><b className="firstheader-item">CONTRACT US</b></NavLink>
-                    </NavItem>
+                    </NavItem> */}
                   </div>
                   {name.length > 0 ?
                     <div className="third-header">

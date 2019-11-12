@@ -77,7 +77,7 @@ class Home extends Component {
                 <span className="h-t3">GET START NOW</span>
                     <div style={{display:'flex'}}>
                     <button className="b-h1" onClick={this.showCreateCompany} disabled={this.state.disable}>CREATE COMPANY</button>
-                    <button className="b-h1" style={{marginLeft:10}}>JOIN COMPANY</button>
+                    <button className="b-h1" style={{marginLeft:10}}>SIGN UP</button>
                 </div> 
             </div>
           </div>
@@ -85,7 +85,7 @@ class Home extends Component {
           <span className="c-t1">What are we offer</span>
           <span className="c-t2">we offering online schedule management</span>
           <div className="contents">
-            <div className="cover-func col-4">
+            <div className="cover-func col-4 ">
               <div className="c-func" data-aos="flip-right">
                 <img src={manager} className="func-pic"></img>
                 <span className="role-func">Manager</span>
@@ -103,7 +103,7 @@ class Home extends Component {
                 </span>
               </div>
             </div>
-            <div className="cover-func col-4">
+            <div className="cover-func col-4 ">
               <div className="c-func" data-aos="flip-right">
                 <img src={staff} className="func-pic"></img>
                 <span className="role-func">Staff</span>
@@ -114,7 +114,7 @@ class Home extends Component {
                 <span className="role-func2">View work statistic</span>
               </div>
             </div>
-            <div className="cover-func col-4">
+            <div className="cover-func col-4 ">
               <div className="c-func" data-aos="flip-right">
                 <img src={admin} className="func-pic"></img>
                 <span className="role-func">Administrator</span>

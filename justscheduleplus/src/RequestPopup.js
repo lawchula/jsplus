@@ -313,7 +313,6 @@ class RequestPopup extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <img src={change} className="change"></img>
                             <div className='request-popup_inner2'>
                                 <div className='request-header2'>select only one period
                                 </div>

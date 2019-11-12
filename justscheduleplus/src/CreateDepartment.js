@@ -16,7 +16,8 @@ class CreateDepartment extends Component {
             departmentImage: '',
             imgName: '',
             validate: '',
-            validateTelno:''
+            validateTelno: '',
+            validateDepartmentName: ''
         }
 
         if (!firebase.apps.length) {
@@ -31,15 +32,18 @@ class CreateDepartment extends Component {
     }
 
     fileSelectedHandler = (event) => {
-        this.setState({
-            departmentImages: URL.createObjectURL(event.target.files[0]),
-            imgName: event.target.files[0].name
-        })
-        if(event !== null){
-            this.uploadImages()
-            this.confirmUploadImage()
-        } 
-     }
+        if (event !== null) {
+            try {
+                let imgfile = URL.createObjectURL(event.target.files[0])
+                let imgname = event.target.files[0].name
+                this.confirmUploadImage(imgfile, imgname)
+            } catch (error) {
+                return null
+            }
+        } else {
+            return null
+        }
+    }
 
 
     uploadImages = async (event, imgname) => {
@@ -48,15 +52,13 @@ class CreateDepartment extends Component {
 
         var ref = firebase.storage().ref().child('Department Images/' + imgname);
         return ref.put(blob)
-        console.log('success')
     }
 
 
-    confirmUploadImage = () => {
-        this.uploadImages(this.state.departmentImages, this.state.imgName)
+    confirmUploadImage = (file, name) => {
+        this.uploadImages(file, name)
             .then(() => {
-                //get url ของรูปมาถ้า Upload สำเร็จ (ต้องเอา url ของรูปมาเก็บใน state แล้วนำมา show **ตอนนี้ยังไม่ได้ทำ)
-                firebase.storage().ref().child('Department Images/' + this.state.imgName).getDownloadURL()
+                firebase.storage().ref().child('Department Images/' + name).getDownloadURL()
                     .then((imageURL) => {
                         this.setState({
                             departmentImage: imageURL
@@ -68,6 +70,9 @@ class CreateDepartment extends Component {
             .catch((error) => {
                 console.log("Fail to upload" + error);
             })
+        this.setState({
+            imgName: name
+        })
     }
 
 
@@ -76,42 +81,47 @@ class CreateDepartment extends Component {
         let { department } = this.state
         department[event.target.name] = event.target.value
         this.setState({ department })
-        this.setState({validate:'',validateTelno:''})
+        this.setState({ validate: '', validateTelno: '' })
     }
 
 
     handleSubmit = (event) => {
         event.preventDefault()
-        
+
         let { department } = this.state
         const phoneno = /^0[0-9]{8,9}$/i;
+        for (let i = 0; i < this.props.company.length; i++) {
+            if (department.departmentName.trim() !== "" && department.departmentName === this.props.company[i].Department_Name) {
+                this.setState({ validateDepartmentName: 'This department name is already used' })
+            }
+        }
         if (department.departmentName.trim() === "" || department.departmentTel.trim() === "") {
             this.setState({ validate: 'This field is requried' })
-        }else if (!phoneno.test(department.departmentTel)) {
+        } else if (!phoneno.test(department.departmentTel)) {
             this.setState({
                 validateTelno: "Invalid telephone numeber"
             })
         } else {
-            // var token = localStorage.getItem('tk');
-            // const Url = url + '/department/insert';
-            // const othepram = {
-            //     headers: {
-            //         "content-type": "application/json; charset=UTF-8",
-            //         tkauth: token
-            //     },
-            //     body: JSON.stringify({
-            //         createdepartment: this.state.department,
-            //         departmentpicture: this.state.departmentImage
-            //     }),
-            //     method: "POST"
-            // };
-            // fetch(Url, othepram)
-            //     .then(data => { return data.json() })
-            //     .then(res => {
-            //         alert("Create Department Success")
-            //         window.location.href = "/Company";
-            //     })
-            //     .catch(error => console.log(error))
+            var token = localStorage.getItem('tk');
+            const Url = url + '/department/insert';
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8",
+                    tkauth: token
+                },
+                body: JSON.stringify({
+                    createdepartment: this.state.department,
+                    departmentpicture: this.state.departmentImage
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(data => { return data.json() })
+                .then(res => {
+                    alert("Create Department Success")
+                    window.location.href = "/Company";
+                })
+                .catch(error => console.log(error))
         }
     }
 
@@ -120,6 +130,7 @@ class CreateDepartment extends Component {
             return null;
         }
         const { departmentImages, imgName, departmentImage, department, validate } = this.state
+        console.log(this.props.company)
 
         return (
             <div className="createdepartment-popup">
@@ -134,10 +145,10 @@ class CreateDepartment extends Component {
                             <div className="department-picture">
                                 {departmentImage == "" ? '' : <img className="company-picture" src={departmentImage}></img>}
                             </div>
-                            <span className="selectedfile">{departmentImages == null ? 'no file selected' : imgName}</span>
-                            <div style={{display:'flex'}}>
-                                <label htmlFor="upload-photo"  className="upload-picture">Browse...</label>
-                                <input type="file" name="photo" accept="image/*" id="upload-photo"  onChange={this.fileSelectedHandler}/>
+                            <span className="selectedfile">{imgName == null ? 'no file selected' : imgName}</span>
+                            <div style={{ display: 'flex' }}>
+                                <label htmlFor="upload-photo" className="upload-picture">Browse...</label>
+                                <input type="file" name="photo" accept="image/*" id="upload-photo" onChange={this.fileSelectedHandler} />
                                 {/* <button className="upload-picture" onClick={this.confirmUploadImage}>Upload</button> */}
                             </div>
                         </div>
@@ -145,6 +156,7 @@ class CreateDepartment extends Component {
                             <span id='comname'>Department Name</span>
                             <input type='text' className='createcom' name="departmentName" onChange={(event => this.handleChange(event))} />
                             <span className="valcreatedepartment">{department.departmentName == "" ? validate : " "}</span>
+                            <span className="valcreatedepartment">{this.state.validateDepartmentName}</span>
                             <br></br>
                             <span id='tel'>Telephone</span>
                             <input type='text' className='createcom' name="departmentTel" onChange={(event => this.handleChange(event))} />

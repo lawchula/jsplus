@@ -23,6 +23,7 @@
     "react-input-color": "^2.0.16",
     "react-router-dom": "^5.0.1",
     "react-scripts": "2.1.8",
+    "react-spinners": "^0.6.1",
     "react-z-index": "^3.0.0",
     "reactstrap": "^7.1.0"
   },

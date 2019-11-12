@@ -9,6 +9,8 @@ import Request from './RequestPopup';
 import RequestAbsent from './RequestAbsent';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,Dropdown } from 'reactstrap';
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
+import Position from './Position';
+import Generate from './Generate';
 
 
 
@@ -24,14 +26,15 @@ class TestComponent2 extends Component {
       showdepartment: false,
       showrequest: false,
       showrequestabsent: false,
+      showposition: false,
       months:["Januray","February","March","April","May","June","July","August","September","October","November","December"],  
       dropdownOpen: false,
       month: 0,
       nameofmonth: "test",
       cols:[],
       rows:[],
-      user:{name:"",surname:"",email:"",position:""},
-      users:[]
+      users:[],
+      showg:false
     }
   }
 
@@ -60,7 +63,7 @@ class TestComponent2 extends Component {
 
   showRegister = () => {
     this.setState({
-      showregis: !this.state.showregis
+     showposition: !this.state.showposition
     })
   }
 
@@ -75,6 +78,12 @@ class TestComponent2 extends Component {
       showdepartment: !this.state.showdepartment
     })
   }
+
+  showGenerate = () =>[
+    this.setState({
+      showg: !this.state.showg
+    })
+  ]
 
   toggle = () => {
     const { dropdownOpen } = this.state
@@ -125,17 +134,19 @@ class TestComponent2 extends Component {
     return (
       <div>
         <button onClick={this.test(this.state.rows)}>Test</button>
-        <button onClick={this.showRegister}>Test</button>
+        <button onClick={this.showGenerate}>Generate</button>
         <button onClick={this.showCreateCompany}>Company</button>
         <button onClick={this.showCreateDepartment}>Department</button>
         <button onClick={this.showRequest}>Request</button>
         <button onClick={this.showRequestAbsent}>Request Absent</button>
-        <RequestAbsent show={this.state.showrequestabsent} onClose={this.showRequestAbsent}></RequestAbsent>
-        <Request show={this.state.showrequest} onClose={this.showRequest}></Request>
+        {/* <RequestAbsent show={this.state.showrequestabsent} onClose={this.showRequestAbsent}></RequestAbsent>
+        <Request show={this.state.showrequest} onClose={this.showRequest}></Request> */}
         <CreateCompany show={this.state.showcompany} onClose={this.showCreateCompany}></CreateCompany>
-        <Login show={this.state.showLogin} onClose={this.showLogin}></Login>
-        <Register show={this.state.showregis} onClose={this.showRegister}></Register>
-        <CreateDepartment show={this.state.showdepartment} onClose={this.showCreateDepartment}></CreateDepartment>
+        {/* <Login show={this.state.showLogin} onClose={this.showLogin}></Login> */}
+        {/* <Register show={this.state.showregis} onClose={this.showRegister}></Register> */}
+        {/* <CreateDepartment show={this.state.showdepartment} onClose={this.showCreateDepartment}></CreateDepartment>
+        <Position show={this.state.showposition} onClose={this.showRegister}></Position>
+        <Generate show={this.state.showg} onClose={this.showGenerate}></Generate> */}
         {/* <div data-aos='fade-right' style={{height:300,width:300,backgroundColor:'red',marginTop:1000}}> 
 
         </div> */}

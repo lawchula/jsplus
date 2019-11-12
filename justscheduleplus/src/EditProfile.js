@@ -6,6 +6,7 @@ import * as firebase from "firebase";
 import ApiKeys from "./ApiKeys";
 import url from './url';
 import cartoon from './Images/cartoon.png';
+import { throws } from "assert";
 
 class AdminHome extends Component {
   constructor(props) {
@@ -18,17 +19,17 @@ class AdminHome extends Component {
       surname: "",
       email: "",
       telno: "",
-      password:"",
+      password: "",
       userDetail: null,
       loading: true,
       validate: "",
       format: "",
       submiited: false,
       changepassword: false,
-      oldpass:"",
-      newpass:"",
-      conpass:"",
-      val:{val1:"",val2:"",val3:""}
+      oldpass: "",
+      newpass: "",
+      conpass: "",
+      val: { val1: "", val2: "", val3: "" }
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -70,18 +71,16 @@ class AdminHome extends Component {
     const [userDetail] = data
     this.setState({ userDetail })
     this.setProfileDetail();
-    console.log(userDetail)
-
   }
   setProfileDetail = () => {
     let detail = this.state.userDetail
-    this.setState({ name: detail[0].name, surname: detail[0].surname, email: detail[0].Email, telno: detail[0].PhoneNumber, userImg: detail[0].UserPicture, password: detail[0].Password,loading: false })
+    this.setState({ name: detail[0].name, surname: detail[0].surname, email: detail[0].Email, telno: detail[0].PhoneNumber, userImg: detail[0].UserPicture, password: detail[0].Password, loading: false })
   }
 
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
-    this.setState({val:{val1:"",val2:"",val3:""}})
+    this.setState({ val: { val1: "", val2: "", val3: "" } })
   }
 
   handleSubmit(e) {
@@ -152,13 +151,16 @@ class AdminHome extends Component {
   }
 
   fileSelectedHandler = event => {
-    this.setState({
-      userImages: URL.createObjectURL(event.target.files[0]),
-      userImgName: event.target.files[0].name
-    });
     if (event !== null) {
-      this.uploadImages()
-      this.confirmUploadImage()
+      try {
+        let imgfile = URL.createObjectURL(event.target.files[0])
+        let imgname = event.target.files[0].name
+        this.confirmUploadImage(imgfile, imgname)
+      } catch (error) {
+        return null
+      }
+    } else {
+      return null
     }
   };
 
@@ -166,20 +168,25 @@ class AdminHome extends Component {
     const response = await fetch(event);
     const blob = await response.blob();
 
+    var metadata = {
+      contentType: 'image/jpeg'
+    };
+
     var ref = firebase
       .storage()
       .ref()
       .child("userImages/" + imgname);
-    return ref.put(blob);
+    return ref.put(blob, metadata);
   };
 
-  confirmUploadImage = () => {
-    this.uploadImages(this.state.userImages, this.state.userImgName)
+  confirmUploadImage = (file, name) => {
+    this.uploadImages(file, name)
+
       .then(() => {
         firebase
           .storage()
           .ref()
-          .child("userImages/" + this.state.userImgName)
+          .child("userImages/" + name)
           .getDownloadURL()
           .then(imageURL => {
             this.setState({
@@ -190,63 +197,59 @@ class AdminHome extends Component {
       .catch(error => {
         console.log("Fail to upload" + error);
       });
+
   };
 
   changepassword = () => {
     this.setState({
-      changepassword:true
+      changepassword: true
     })
   }
 
   updatePassword = () => {
     const validatenewpass = /^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-
-    if(this.state.oldpass.trim() !== "" && this.state.newpass.trim() !=="" && this.state.conpass.trim() !== "") {
-         if(this.state.oldpass !== this.state.password){
-          this.setState({val:{val1:"Old password is incorrect"}})
-        }else if(this.state.newpass === this.state.password){
-          this.setState({val:{val2:"Invalid password"}})
-        }else if(!validatenewpass.test(this.state.newpass)){
-          this.setState({val:{val2:"Password must be at least 8 characters and contain at least 1 Uppercase"}})
-        } else if(this.state.newpass !==  this.state.conpass){
-            this.setState({val:{val3:"This confirm password does not match"}})
-        }else{
-          const Url = url + '/user/password/update';
-          const { newpass } = this.state
-          const othepram = {
-              headers: {
-                  "content-type": "application/json; charset=UTF-8",
-              },
-              body: JSON.stringify({
-                  userid: this.state.userDetail[0].User_ID,
-                  newpassword: newpass
-              }),
-              method: "POST"
-          };
-          fetch(Url, othepram)
-              .then(res => {
-                window.location.href = "/"
-              })
-              // .then(json => {
-              //   if (json === "Edit Password Success") {
-                 
-              //   }
-              // })
-              .catch(error => console.log(error));
-        }
-    }else{
-          this.setState({val:{val4:"This field is requried"}})
-     }
-
-  
-
-
+    // if (this.state.oldpass !== this.state.password) {
+    //   this.setState({ val: { val1: "Old password is incorrect" } })
+    // } else 
+    if (this.state.oldpass.trim() !== "" && this.state.newpass.trim() !== "" && this.state.conpass.trim() !== "") {
+      if (this.state.newpass === this.state.password) {
+        this.setState({ val: { val2: "Invalid password" } })
+      } else if (!validatenewpass.test(this.state.newpass)) {
+        this.setState({ val: { val2: "Password must be at least 8 characters and contain at least 1 Uppercase" } })
+      } else if (this.state.newpass !== this.state.conpass) {
+        this.setState({ val: { val3: "This confirm password does not match" } })
+      } else {
+        const Url = url + '/user/password/update';
+        const { newpass } = this.state
+        const othepram = {
+          headers: {
+            "content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({
+            userid: this.state.userDetail[0].User_ID,
+            password: this.state.password,
+            oldpassword: this.state.oldpass,
+            newpassword: newpass
+          }),
+          method: "POST"
+        };
+        fetch(Url, othepram)
+          .then(res => res.json())
+          .then(json => {
+            if (json == "Old password is incorrect") {
+              this.setState({ val: { val1: "Old password is incorrect" } })
+            } else {
+              window.location.href = "/"
+            }
+          }).catch(error => console.log(error));
+      }
+    } else {
+      this.setState({ val: { val4: "This field is requried" } })
+    }
   }
 
   render() {
     const { userImg, userImgName, userImages, name, surname, email, telno, userDetail, loading, validate, submiited, format, changepassword } = this.state;
-    // const validEmailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    // const phoneno = /^0[0-9]{8,9}$/i;
 
     return (
       <div className="EditProfile">
@@ -272,34 +275,34 @@ class AdminHome extends Component {
                 onChange={this.fileSelectedHandler}
               />
 
-                <div className="under">
-                  <div className="user-information">
-                    <div style={{ display: "flex" }}>
-                      <span className="span">Profile</span>
-                      <span className="span" style={{ marginLeft: 130 }} onClick={this.changepassword}>Change Password</span>
+              <div className="under">
+                <div className="user-information">
+                  <div style={{ display: "flex" }}>
+                    <span className="span">Profile</span>
+                    <span className="span" style={{ marginLeft: 130 }} onClick={this.changepassword}>Change Password</span>
+                  </div>
+                  {this.state.changepassword == true ?
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span className="span" >Old password</span>
+                      <input value={this.state.oldpass} type="password" name="oldpass" className="input-userinfor" onChange={this.handleChange}></input>
+                      <span className="Editprofile-validate">
+                        {this.state.oldpass == "" ? this.state.val.val4 : this.state.val.val1}
+                      </span>
+
+                      <span className="span" >New password</span>
+                      <input value={this.state.newpass} type="password" name="newpass" className="input-userinfor" onChange={this.handleChange} ></input>
+                      <span className="Editprofile-validate">
+                        {this.state.newpass == "" ? this.state.val.val4 : this.state.val.val2}
+                      </span>
+
+                      <span className="span">Confirm password</span>
+                      <input value={this.state.conpass} type="password" name="conpass" className="input-userinfor" onChange={this.handleChange}></input>
+                      <span className="Editprofile-validate">
+                        {this.state.conpass == "" ? this.state.val.val4 : this.state.val.val3}
+                      </span>
                     </div>
-                    {this.state.changepassword == true  ?
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                           <span className="span" >Old password</span>
-                           <input value={this.state.oldpass} type="password" name="oldpass" className="input-userinfor" onChange={this.handleChange}></input>
-                           <span className="Editprofile-validate">
-                            {this.state.oldpass == "" ? this.state.val.val4 : this.state.val.val1}
-                            </span>
-
-                           <span className="span" >New password</span>
-                           <input value={this.state.newpass} type="password" name="newpass" className="input-userinfor" onChange={this.handleChange} ></input>
-                           <span className="Editprofile-validate">
-                           {this.state.newpass == "" ? this.state.val.val4 : this.state.val.val2}
-                           </span>
-
-                           <span className="span">Confirm password</span>
-                           <input value={this.state.conpass} type="password" name="conpass" className="input-userinfor" onChange={this.handleChange}></input>
-                           <span className="Editprofile-validate">
-                           {this.state.conpass == "" ? this.state.val.val4 : this.state.val.val3}
-                           </span>
-                      </div>
-                      :
-                      <form name="form" onSubmit={this.handleSubmit}>
+                    :
+                    <form name="form" onSubmit={this.handleSubmit}>
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <input type="text" className="input-userinfor" name="name" placeholder="Name" value={name} onChange={this.handleChange} />
 
@@ -344,28 +347,27 @@ class AdminHome extends Component {
                       <button type="submit" className="confirmbutt">
                         Update Profile
                     </button>
-                      </form>
-                    }
+                    </form>
+                  }
 
-                  </div>
                 </div>
+              </div>
               {changepassword == true ? <div><button className="confirmbutt3" onClick={this.updatePassword}>
-                  Update Password
+                Update Password
               </button>
-              <br></br>
-              <button className="confirmbutt3" onClick={() => this.setState({changepassword:false})}>
+                <br></br>
+                <button className="confirmbutt3" onClick={() => this.setState({ changepassword: false })}>
                   Cancle
           </button>
-          </div> : null}  
+              </div> : null}
             </div>
             {/* <div className="col-10">
                   <img src={cartoon}></img>
               </div> */}
           </div>
-          {console.log(userImg)}
         </React.Fragment>
         }
-      </div> 
+      </div>
     );
 
   }
