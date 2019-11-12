@@ -432,6 +432,7 @@ class Schedule extends Component {
             fetch(Url, othepram)
                 .then(data => { return data.json() })
                 .then(res => {
+                    alert("Delete Success!!")
                     this.getSchedules();
                 })
                 .catch(error => console.log(error))

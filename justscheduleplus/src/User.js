@@ -305,12 +305,12 @@ class User extends Component {
     checkRequest(name, date, y) {
         const checkCount = this.state.count
         const request = this.state.request
-        if (y < this.state.currentDay) {
-            alert('Error')
-            this.setState({
-                request: !this.state.request
-            })
-        } else {
+        // if (y < this.state.currentDay) {
+        //     alert('Error')
+        //     this.setState({
+        //         request: !this.state.request
+        //     })
+        // } else {
             if (request != true) {
                 if (checkCount == 0) {
                     this.setFirstRequest(name, date);
@@ -321,7 +321,7 @@ class User extends Component {
             } else if (this.state.requestAbsent != true) {
                 this.userRequestAbsent(name, date)
             }
-        }
+        // }
     }
 
     setFirstRequest(name, date) {

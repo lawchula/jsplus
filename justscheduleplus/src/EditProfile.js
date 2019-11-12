@@ -70,8 +70,6 @@ class AdminHome extends Component {
     const [userDetail] = data
     this.setState({ userDetail })
     this.setProfileDetail();
-    console.log(userDetail)
-
   }
   setProfileDetail = () => {
     let detail = this.state.userDetail
@@ -157,7 +155,7 @@ class AdminHome extends Component {
       userImgName: event.target.files[0].name
     });
     if (event !== null) {
-      this.uploadImages()
+      // this.uploadImages()
       this.confirmUploadImage()
     }
   };
@@ -173,8 +171,8 @@ class AdminHome extends Component {
     return ref.put(blob);
   };
 
-  confirmUploadImage = () => {
-    this.uploadImages(this.state.userImages, this.state.userImgName)
+  confirmUploadImage = async () => {
+    await this.uploadImages(this.state.userImages, this.state.userImgName)
       .then(() => {
         firebase
           .storage()
@@ -190,6 +188,7 @@ class AdminHome extends Component {
       .catch(error => {
         console.log("Fail to upload" + error);
       });
+      console.log(this.state.userImg)
   };
 
   changepassword = () => {
@@ -227,11 +226,6 @@ class AdminHome extends Component {
               .then(res => {
                 window.location.href = "/"
               })
-              // .then(json => {
-              //   if (json === "Edit Password Success") {
-                 
-              //   }
-              // })
               .catch(error => console.log(error));
         }
     }else{
@@ -245,8 +239,6 @@ class AdminHome extends Component {
 
   render() {
     const { userImg, userImgName, userImages, name, surname, email, telno, userDetail, loading, validate, submiited, format, changepassword } = this.state;
-    // const validEmailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    // const phoneno = /^0[0-9]{8,9}$/i;
 
     return (
       <div className="EditProfile">
@@ -362,7 +354,6 @@ class AdminHome extends Component {
                   <img src={cartoon}></img>
               </div> */}
           </div>
-          {console.log(userImg)}
         </React.Fragment>
         }
       </div> 
