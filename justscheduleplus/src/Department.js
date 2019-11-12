@@ -164,7 +164,9 @@ class Department extends Component {
     insertUser = () => {
         for (let i = 0; i < this.state.newusers.length; i++) {
             if (this.state.newusers[i].position === "Please select position") {
-                alert("Position of " + this.state.newusers[i].name + " " + this.state.newusers[i].surname + " is invalid")
+                alert("Position of "+this.state.newusers[i].name+" "+this.state.newusers[i].surname+" is invalid")
+            }else if(this.state.newuser[i].name === "" || this.state.newuser[i].surname === "" || this.state.newuser[i].email === "" || this.state.newuser[i].telno === ""){
+                alert("Invalid user informations")
             } else {
                 const Url = url + "/user/insert";
                 const othepram = {
