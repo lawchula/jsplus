@@ -19,17 +19,13 @@ class CreateCompany extends Component {
             test: '',
             validateEmail: '',
             validateTelno: '',
-            valcompanyname:''
+            valcompanyname: ''
         };
 
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.FirebaseConfig)
         }
     }
-
-    componentDidMount(){
-    }
-
 
     onClose = (e) => {
         if (this.props.onClose !== undefined) {
@@ -42,7 +38,7 @@ class CreateCompany extends Component {
         let { company } = this.state
         company[event.target.name] = event.target.value
         this.setState({ company })
-        this.setState({validate:'',validateEmail:'',validateTelno:'',valcompanyname:''})
+        this.setState({ validate: '', validateEmail: '', validateTelno: '', valcompanyname: '' })
     }
 
     handleSubmit = async (event) => {
@@ -54,62 +50,56 @@ class CreateCompany extends Component {
         if (company.companyName.trim() === "" || company.companyEmail.trim() === "" || company.companyTel.trim() === "") {
             this.setState({ validate: 'This field is requried' })
 
-        }else if (!validEmailRegex.test(this.state.company.companyEmail)) {
-             this.setState({
-                 validateEmail: "Invalid email"
-             })   
-         }else if (!phoneno.test(this.state.company.companyTel)) {
+        } else if (!validEmailRegex.test(this.state.company.companyEmail)) {
+            this.setState({
+                validateEmail: "Invalid email"
+            })
+        } else if (!phoneno.test(this.state.company.companyTel)) {
             this.setState({
                 validateTelno: "Invalid telephone numeber"
             })
         } else {
-                const Url = url + '/company/insert';
-                var token = localStorage.getItem('sc');
-                const othepram = {
-                    headers: {
-                        "content-type": "application/json; charset=UTF-8",
-                        tkauth: token
-                    },
-                    body: JSON.stringify({
-                        createcompany: this.state.company,
-                        companypicture: this.state.companyImage,
-                    }),
-                    method: "POST"
-                };
-                fetch(Url, othepram)
-                    .then(res => res.json())
-                    .then(json => {
-                        console.log(json)
-                        if(json === "This company is already exists"){
-                            this.setState({
-                                valcompanyname:json
-                            })
-                        }else{
-                            localStorage.setItem('tk', json.tk)
-                            alert("Create Company Success")
-                            window.location.href = "/Company";
-                        }
-                        
-                    })
+            const Url = url + '/company/insert';
+            var token = localStorage.getItem('sc');
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8",
+                    tkauth: token
+                },
+                body: JSON.stringify({
+                    createcompany: this.state.company,
+                    companypicture: this.state.companyImage,
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(res => res.json())
+                .then(json => {
+                    console.log(json)
+                    if (json === "This company is already exists") {
+                        this.setState({
+                            valcompanyname: json
+                        })
+                    } else {
+                        localStorage.setItem('tk', json.tk)
+                        alert("Create Company Success")
+                        window.location.href = "/Company";
+                    }
+
+                })
         }
     }
 
     fileSelectedHandler = (event) => {
         if (event !== null) {
-            try{
+            try {
                 let imgfile = URL.createObjectURL(event.target.files[0])
                 let imgname = event.target.files[0].name
-                this.confirmUploadImage(imgfile,imgname)
-
-            }catch(error){
+                this.confirmUploadImage(imgfile, imgname)
+            } catch (error) {
                 return null
-            }   
-            // this.confirmUploadImage()
-            // this.setState({
-            //     companyImages: URL.createObjectURL(event.target.files[0]),
-            //     imageName: event.target.files[0].name
-            // })
-        }else{
+            }
+        } else {
             return null
         }
     }
@@ -122,7 +112,7 @@ class CreateCompany extends Component {
         return ref.put(blob)
     }
 
-    confirmUploadImage = (file,name) => {
+    confirmUploadImage = (file, name) => {
         this.uploadImages(file, name)
             .then(() => {
                 firebase.storage().ref().child('images/' + name).getDownloadURL()
@@ -184,7 +174,7 @@ class CreateCompany extends Component {
                         </div>
                     </div>
                     <div className="createcompany-footer">
-                      <button type="submit" className="confirm-create" onClick={(e) => this.handleSubmit(e)}>Create New Company</button>
+                        <button type="submit" className="confirm-create" onClick={(e) => this.handleSubmit(e)}>Create New Company</button>
                     </div>
                 </div>
             </div>
