@@ -6,6 +6,7 @@ import CreateDepartment from './CreateDepartment';
 import Header from './Header';
 import url from './url';
 import ApiKeys from './ApiKeys';
+import * as jwt_decode from 'jwt-decode';
 
 import {
     BrowserRouter as Router,
@@ -41,12 +42,30 @@ class Company extends Component {
     }
 
     componentDidMount() {
-        this.getCompanyandDepartmentFromDB()
+        this.checkToken();
+    }
+
+    checkToken = () => {
+        var token = localStorage.getItem('tk');
+        if (token === null || token === undefined) {
+            alert("Please Login")
+            window.location.href = '/'
+        } else if (token !== null && token !== undefined) {
+            var decoded = jwt_decode(token);
+            if (decoded.position === "Manager") {
+                alert("Not have Permission")
+                window.location.href = "/Schedule";
+            } else if (decoded.position !== "Admin") {
+                alert("Not have Permission")
+                window.location.href = "/User";
+            } else {
+                this.getCompanyandDepartmentFromDB()
+            }
+        }
     }
 
     getCompanyandDepartmentFromDB = async () => {
         var token = localStorage.getItem('tk')
-        console.log(token)
         const othepram = {
             headers: {
                 tkauth: token,
@@ -150,30 +169,21 @@ class Company extends Component {
         }
     }
 
-
-
-    // เอา url ของรูปจากเครื่องมา
     fileSelectedHandler = (event) => {
-        if(event !== null){
-            try{
+        if (event !== null) {
+            try {
                 let imgfile = URL.createObjectURL(event.target.files[0])
                 let imgname = event.target.files[0].name
-                this.confirmUploadImage(imgfile,imgname)
+                this.confirmUploadImage(imgfile, imgname)
             }
-            catch(error){
+            catch (error) {
                 return null
             }
-            // this.setState({
-            //     companyImages: URL.createObjectURL(event.target.files[0]),
-            //     imageName: event.target.files[0].name
-            // })
-        } else{
+        } else {
             return null
         }
     }
 
-
-    //upload image โดยใช้ firebase
     uploadImages = async (event, imgname) => {
         const response = await fetch(event);
         const blob = await response.blob();
@@ -183,22 +193,14 @@ class Company extends Component {
         console.log('success')
     }
 
-
-
-    //เรียกใช้ uploadImages เอา companyImages ใส่ใน parameter
-    confirmUploadImage = (file,name) => {
+    confirmUploadImage = (file, name) => {
         this.uploadImages(file, name)
             .then(() => {
-                console.log('Upload Success !!')
-                console.log('name' + name)
-                //get url ของรูปมาถ้า Upload สำเร็จ (ต้องเอา url ของรูปมาเก็บใน state แล้วนำมา show **ตอนนี้ยังไม่ได้ทำ)
                 firebase.storage().ref().child('images/' + name).getDownloadURL()
                     .then((imageURL) => {
                         this.setState({
                             companyImage: imageURL
                         })
-                        console.log(imageURL)
-                        console.log("from state = " + this.state.companyImage)
                     })
             })
             .catch((error) => {
@@ -297,7 +299,7 @@ class Company extends Component {
                 }
             </div>
         })
-        
+
         return (
             <div className="department-container">
                 {!loading &&

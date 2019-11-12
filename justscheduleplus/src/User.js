@@ -88,15 +88,19 @@ class User extends Component {
         this.setBlock(this.state.month, this.state.year)
     }
 
-    async checkToken() {
+    async checkToken(){
         var token = localStorage.getItem('tk');
-        if (token == null || token == "undefined") {
+        if (token === null || token === undefined) {
             window.location.href = "/";
-        } else if (token != null && token != "undefined") {
+        } else if (token !== null && token !== undefined) {
             var decoded = jwt_decode(token);
-            if (decoded.position == "Manager" || decoded.position == "Admin") {
+            if (decoded.position === "Manager") {
+                alert("Not have Permission")
                 window.location.href = "/Schedule";
-            } else {
+            } else if (decoded.position === "Admin"){
+                alert("Not have Permission")
+                window.location.href = "/Company";
+            }else{
                 await this.SelectDataFromDB();
             }
         }

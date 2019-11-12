@@ -5,6 +5,7 @@ import Header from './Header';
 import setmanager from './Images/setmanager.png';
 import setstaff from './Images/setstaff.png';
 import remove from './Images/delete.png';
+import * as jwt_decode from 'jwt-decode';
 import edit from './Images/configuration.png';
 import url from './url';
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
@@ -36,15 +37,38 @@ class Department extends Component {
             newuserp: [],
             changeposition: {},
             positionname: null,
-            notification: []
+            notification: [],
+            loading: true
         }
     }
 
     componentDidMount() {
-        const { manageDepartment } = this.props.location.state
-        this.setState({ department: manageDepartment })
-        this.getDepartmentDes(manageDepartment)
-        this.getPosition(manageDepartment)
+        this.checkToken();
+    }
+
+    checkToken = () => {
+        var token = localStorage.getItem('tk');
+        if (token === null || token === undefined) {
+            alert("Please Login")
+            window.location.href = '/'
+        } else if (token !== null && token !== undefined) {
+            var decoded = jwt_decode(token);
+            if (decoded.position === "Manager") {
+                alert("Not have Permission")
+                window.location.href = "/Schedule";
+            } else if (decoded.position !== "Admin") {
+                alert("Not have Permission")
+                window.location.href = "/User";
+            } else if (this.props.location.state === undefined) {
+                alert("Please Select Department")
+                window.location.href = "/Company";
+            } else {
+                const { manageDepartment } = this.props.location.state
+                this.setState({ department: manageDepartment })
+                this.getDepartmentDes(manageDepartment)
+                this.getPosition(manageDepartment)
+            }
+        }
     }
 
     getDepartmentDes = async (manageDepartment) => {
@@ -140,7 +164,7 @@ class Department extends Component {
     insertUser = () => {
         for (let i = 0; i < this.state.newusers.length; i++) {
             if (this.state.newusers[i].position === "Please select position") {
-                alert("Position of "+this.state.newusers[i].name+" "+this.state.newusers[i].surname+" is invalid")
+                alert("Position of " + this.state.newusers[i].name + " " + this.state.newusers[i].surname + " is invalid")
             } else {
                 const Url = url + "/user/insert";
                 const othepram = {
@@ -239,13 +263,13 @@ class Department extends Component {
                 var a = {}
                 const random = Math.floor(Math.random() * 9999999) + 1
                 const password = event[i][0].substring(0, 1) + event[i][1].substring(0, 1) + random
-                const surnamesub = event[i][1].substring(0,3)
+                const surnamesub = event[i][1].substring(0, 3)
                 a.name = event[i][0]
                 a.surname = event[i][1]
                 a.email = event[i][2]
                 a.telno = event[i][3]
                 a.position = "Please select position"
-                a.username = event[i][0]+"."+ surnamesub
+                a.username = event[i][0] + "." + surnamesub
                 a.id = this.state.newusers.length
                 a.positionid = null
                 a.password = password
@@ -309,14 +333,14 @@ class Department extends Component {
             newuser.surname = ""
             newuser.email = ""
             newuser.telno = ""
-        }else if(!validEmailRegex.test(newuser.email)){
+        } else if (!validEmailRegex.test(newuser.email)) {
             this.setState({ val: "Please fill the right format for email" })
-        }else if(!phoneno.test(newuser.telno)){
+        } else if (!phoneno.test(newuser.telno)) {
             this.setState({ val: "Please fill the right format for telephone number" })
         } else {
             const random = Math.floor(Math.random() * 9999999) + 1
             const password = this.state.newuser.name.substring(0, 1) + this.state.newuser.surname.substring(0, 1) + random
-            const surnamesub = newuser.surname.substring(0,3)
+            const surnamesub = newuser.surname.substring(0, 3)
             newuser.username = this.state.newuser.name + "." + surnamesub
             newuser.password = password
             this.state.newusers.push(this.state.newuser)
@@ -365,9 +389,7 @@ class Department extends Component {
     }
 
     render() {
-
-        console.log(this.state.newusers);
-        const { edit, addstaff, test, department, user, newusers, positions, dropdownOpen, changeposition, positionname, newuser, editDepartment, changeDepartment } = this.state
+        const { edit, addstaff, test, department, user, newusers, positions, dropdownOpen, changeposition, positionname, newuser, editDepartment, changeDepartment, loading } = this.state
         const manage = user.map((e, key) => {
             return <tr>
                 <td>{e.name + " " + e.surname}</td>
@@ -415,95 +437,97 @@ class Department extends Component {
         return (
             <div className="department-description">
                 <Header></Header>
-                <div className="dp-ds-container">
-                    <div className="dp-header">
-                        <div className="col-5">
-                            <div className="dp-img">
-                                {/* <img className="department-pictures" src={department.Department_Picture}></img> */}
+                {!loading && <React.Fragment>
+                    <div className="dp-ds-container">
+                        <div className="dp-header">
+                            <div className="col-5">
+                                <div className="dp-img">
+                                    {/* <img className="department-pictures" src={department.Department_Picture}></img> */}
+                                </div>
                             </div>
-                        </div>
-                        <div className="dp-description col-9">
-                            <span>Depaertment :</span>
-                            <span>{department.Department_Name}</span>
-                            <br></br>
-                            <br></br>
-                            <span>Telno :</span>
-                            <span>{department.Department_TelNo}</span>
-                            <br></br>
-                            <br></br>
-                            <span>Manager :</span>
-                            {manager}
-                            <br></br>
-                            <br></br>
-                            <span>Member :</span>
-                            {member}
+                            <div className="dp-description col-9">
+                                <span>Depaertment :</span>
+                                <span>{department.Department_Name}</span>
+                                <br></br>
+                                <br></br>
+                                <span>Telno :</span>
+                                <span>{department.Department_TelNo}</span>
+                                <br></br>
+                                <br></br>
+                                <span>Manager :</span>
+                                {manager}
+                                <br></br>
+                                <br></br>
+                                <span>Member :</span>
+                                {member}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="tb-container">
-                    {addstaff == false ?
-                        <div className="add-staff">
-                              <button className="add-staff-butt" onClick={this.showPosition}>CREATE POSITION</button>
-                            <button className="add-staff-butt" onClick={this.addStaff}>ADD STAFF</button>
-                            <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>IMPORT STAFF</button>
-                            <label htmlFor="upload-excel" className="add-staff-excel">Import</label>
-                            <input type="file" id="upload-excel" accept=".xlsx, .xls" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
-                        </div>
-                        :
-                        <div className="add-staff2">
-                            <div>
-                                <input placeholder="Name" name="name" value={newuser.name} onChange={event => this.handleChange(event)}></input>
-                                <input placeholder="Surname" name="surname" value={newuser.surname} style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
-                                <input type="email" placeholder="Email" value={newuser.email} name="email" style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
-                                <input placeholder="Telno" name="telno" value={newuser.telno} style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
-                                <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.addStaff}>Cancel</button>
-                                <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.handleSubmit}>Add</button>
-
+                    <div className="tb-container">
+                        {addstaff == false ?
+                            <div className="add-staff">
+                                <button className="add-staff-butt" onClick={this.showPosition}>CREATE POSITION</button>
+                                <button className="add-staff-butt" onClick={this.addStaff}>ADD STAFF</button>
+                                <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>IMPORT STAFF</button>
+                                <label htmlFor="upload-excel" className="add-staff-excel">Import</label>
+                                <input type="file" id="upload-excel" accept=".xlsx, .xls" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
                             </div>
-                            <span className="val5">{this.state.val}</span>
-                        </div>
-                    }
-                    <br></br>
-                    <Table bordered responsive className="table-dp">
-                        <tbody>
-                            <tr id="table-header">
-                                <th>NAME</th>
-                                <th>EMAIL</th>
-                                <th>TELNO</th>
-                                <th>POSITION</th>
-                                <th>MANAGE</th>
-                            </tr>
-                            {manage}
-                            {newusers.map((e, key) => {
-                                return <tr>
-                                    <td>{e.name + " " + e.surname}</td>
-                                    <td>{e.email}</td>
-                                    <td>{e.telno}</td>
-                                    <td><Dropdown isOpen={this.state.dropdownOpen && key == this.state.addposition} toggle={() => this.toggle(e.id, key)} direction='down' size="sm">
-                                        <DropdownToggle tag="span" >
-                                            <span>{e.position}</span>
-                                        </DropdownToggle>
-                                        {key == this.state.addposition ? <DropdownMenu>
-                                            {this.state.newuserp.map((p, index) => {
-                                                return <DropdownItem onClick={(event) => this.selectPosition(event, key, e.id, p.Position_ID)}>
-                                                    <div style={{ display: "flex", flexDirection: "column" }}>
-                                                        <span>{p.Position_Name}</span>
-                                                    </div>
-                                                </DropdownItem>
-                                            })}
-                                        </DropdownMenu> : null}
-                                    </Dropdown>
-                                    </td>
-                                    <td><span style={{ color: "#4054b2" }}>Please save data</span></td>
-                                </tr>
-                            })}
-                        </tbody>
-                    </Table>
-                   {this.state.newusers.length == 0 ? null: <button className="add-staff-butt3" onClick={this.insertUser}>Save</button> } 
-                </div>
-                <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
-            </div>
+                            :
+                            <div className="add-staff2">
+                                <div>
+                                    <input placeholder="Name" name="name" value={newuser.name} onChange={event => this.handleChange(event)}></input>
+                                    <input placeholder="Surname" name="surname" value={newuser.surname} style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
+                                    <input type="email" placeholder="Email" value={newuser.email} name="email" style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
+                                    <input placeholder="Telno" name="telno" value={newuser.telno} style={{ marginLeft: 10 }} onChange={event => this.handleChange(event)}></input>
+                                    <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.addStaff}>Cancel</button>
+                                    <button className="add-staff-butt" style={{ marginLeft: 10 }} onClick={this.handleSubmit}>Add</button>
 
+                                </div>
+                                <span className="val5">{this.state.val}</span>
+                            </div>
+                        }
+                        <br></br>
+                        <Table bordered responsive className="table-dp">
+                            <tbody>
+                                <tr id="table-header">
+                                    <th>NAME</th>
+                                    <th>EMAIL</th>
+                                    <th>TELNO</th>
+                                    <th>POSITION</th>
+                                    <th>MANAGE</th>
+                                </tr>
+                                {manage}
+                                {newusers.map((e, key) => {
+                                    return <tr>
+                                        <td>{e.name + " " + e.surname}</td>
+                                        <td>{e.email}</td>
+                                        <td>{e.telno}</td>
+                                        <td><Dropdown isOpen={this.state.dropdownOpen && key == this.state.addposition} toggle={() => this.toggle(e.id, key)} direction='down' size="sm">
+                                            <DropdownToggle tag="span" >
+                                                <span>{e.position}</span>
+                                            </DropdownToggle>
+                                            {key == this.state.addposition ? <DropdownMenu>
+                                                {this.state.newuserp.map((p, index) => {
+                                                    return <DropdownItem onClick={(event) => this.selectPosition(event, key, e.id, p.Position_ID)}>
+                                                        <div style={{ display: "flex", flexDirection: "column" }}>
+                                                            <span>{p.Position_Name}</span>
+                                                        </div>
+                                                    </DropdownItem>
+                                                })}
+                                            </DropdownMenu> : null}
+                                        </Dropdown>
+                                        </td>
+                                        <td><span style={{ color: "#4054b2" }}>Please save data</span></td>
+                                    </tr>
+                                })}
+                            </tbody>
+                        </Table>
+                        {this.state.newusers.length == 0 ? null : <button className="add-staff-butt3" onClick={this.insertUser}>Save</button>}
+                    </div>
+                    <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
+                </React.Fragment>
+                }
+            </div>
         );
     }
 }
