@@ -46,9 +46,10 @@ class AdminHome extends Component {
     var token = localStorage.getItem('sc')
     var detailtk = localStorage.getItem('tk');
 
-    if (token != null && token != "undefined") {
+    if (token !== null && token !== undefined) {
       this.getUserDetail(token);
     } else {
+      alert("Please Login")
       window.location.href = '/'
     }
   }
@@ -208,9 +209,6 @@ class AdminHome extends Component {
 
   updatePassword = () => {
     const validatenewpass = /^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-    // if (this.state.oldpass !== this.state.password) {
-    //   this.setState({ val: { val1: "Old password is incorrect" } })
-    // } else 
     if (this.state.oldpass.trim() !== "" && this.state.newpass.trim() !== "" && this.state.conpass.trim() !== "") {
       if (this.state.newpass === this.state.password) {
         this.setState({ val: { val2: "Invalid password" } })
@@ -239,6 +237,7 @@ class AdminHome extends Component {
             if (json == "Old password is incorrect") {
               this.setState({ val: { val1: "Old password is incorrect" } })
             } else {
+              alert("Update Password Success")
               window.location.href = "/"
             }
           }).catch(error => console.log(error));

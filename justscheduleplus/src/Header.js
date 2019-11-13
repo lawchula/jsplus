@@ -40,7 +40,8 @@ class Header extends Component {
       userhaveNoti: true,
       managerNoti: [],
       managerNotificationAbsent: [],
-      userNotification: []
+      userNotification: [],
+      scheduleButton: []
     };
   }
 
@@ -58,7 +59,7 @@ class Header extends Component {
         if (decoded.position === "Manager") {
           this.getManagerNoti(token, detailtk)
         } else if (decoded.position === "Admin") {
-          this.getNewUser(token);
+          this.getAdmin(token);
         }
         else {
           this.getUserNoti(token, detailtk)
@@ -69,6 +70,25 @@ class Header extends Component {
     } else {
       this.setState({ loading: false })
     }
+  }
+
+  getAdmin = async (token) => {
+    const othepram = {
+      headers: {
+        tkAuth: token
+      },
+      method: "GET"
+    };
+
+    const data = await Promise.all([
+      fetch(url + '/user/name', othepram)
+        .then((response) => {
+          return response.json();
+        })
+    ])
+
+    const [name] = data;
+    this.setState({ name, loading: false, scheduleButton: "Company" })
   }
 
   getNewUser = async (token) => {
@@ -87,7 +107,7 @@ class Header extends Component {
     ])
 
     const [name] = data;
-    this.setState({ name, loading: false })
+    this.setState({ name, loading: false, scheduleButton: "Schedule" })
   }
 
   getManagerNoti = async (token, detailtk) => {
@@ -120,7 +140,7 @@ class Header extends Component {
     ])
 
     const [name, managerNoti] = data;
-    this.setState({ name, managerNoti })
+    this.setState({ name, managerNoti, scheduleButton: "Schedule" })
 
     this.state.managerNoti.map(notification => {
       userRequest.push(notification)
@@ -168,7 +188,7 @@ class Header extends Component {
         })
     ])
     const [name, userNotification] = data;
-    this.setState({ name, userNotification, loading: false, userhaveNoti: false, managerNoti: "T" })
+    this.setState({ name, userNotification, loading: false, userhaveNoti: false, managerNoti: "T", scheduleButton: "Schedule" })
   }
 
   clickApproveExchangeNotification = async (notification) => {
@@ -193,8 +213,7 @@ class Header extends Component {
         autoAbsentReject.push(noti)
       }
     })
-
-    if (autoReject.length !== 0 || autoAbsentReject !== 0) {
+    if (autoReject.length !== 0 || autoAbsentReject.length !== 0) {
       if (!window.confirm("This period is has another request!,Do you want to approve this request?")) return
       const Url = url + '/user/manager/exchangenotification/approve';
 
@@ -315,8 +334,7 @@ class Header extends Component {
           alert("Approve Success")
           this.checkToken();
           this.props.Schedule();
-        })
-        .catch(error => console.log(error))
+        }).catch(error => console.log(error))
     }
   }
 
@@ -384,13 +402,14 @@ class Header extends Component {
   }
 
   autoRejectAbsentRequest(autoAbsentReject) {
+    console.log(autoAbsentReject)
     const Url = url + '/user/manager/absentnotification/autoreject';
     const othepram = {
       headers: {
         "content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
-        reject: autoAbsentReject[0]
+        reject: autoAbsentReject
       }),
       method: "POST"
     };
@@ -451,7 +470,7 @@ class Header extends Component {
 
   openSchedule = () => {
     var token = localStorage.getItem('tk');
-    if (token != null && token != "undefined") {
+    if (token != null && token !== undefined) {
       var decoded = jwt_decode(token);
       if (decoded.position === "Manager") {
         window.location.href = "/Schedule";
@@ -459,7 +478,7 @@ class Header extends Component {
         window.location.href = "/Company";
       }
       else {
-        window.location.href = "/Schedule";
+        window.location.href = "/User";
       }
     }
   }
@@ -470,7 +489,7 @@ class Header extends Component {
 
   render() {
 
-    const { name, managerNoti, loading, userNotification, haveNotification, userhaveNoti, managerNotificationAbsent, haveAbsentNoti } = this.state
+    const { name, managerNoti, loading, userNotification, haveNotification, userhaveNoti, managerNotificationAbsent, haveAbsentNoti, scheduleButton } = this.state
     let showname;
     let notification;
     if (!loading) {
@@ -506,8 +525,8 @@ class Header extends Component {
             <DropdownMenu id="user-dropdown-select">
               <div onClick={this.openSchedule} className="user-item">
                 <img src={schedule1} className="select2"></img>
-                Schedule
-            </div>
+                {scheduleButton}
+              </div>
               <hr className="hr"></hr>
               <div onClick={this.editProifile} className="user-item">
                 <img src={edit} className="select2"></img>

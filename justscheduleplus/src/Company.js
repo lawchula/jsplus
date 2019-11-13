@@ -6,6 +6,7 @@ import CreateDepartment from './CreateDepartment';
 import Header from './Header';
 import url from './url';
 import ApiKeys from './ApiKeys';
+import * as jwt_decode from 'jwt-decode';
 
 import {
     BrowserRouter as Router,
@@ -30,10 +31,12 @@ class Company extends Component {
             vald: { n: null, t: null },
             valc: { n: null, e: null, t: null },
             //ส่งค่าไป firebase
-            companyImages: null,
+            companyImages: "",
             //รับค่าจาก firebase
             companyImage: null,
-            imgName: ''
+            imgName: '',
+            departmentImages: null,
+            departmentImage: ''
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.FirebaseConfig)
@@ -41,12 +44,30 @@ class Company extends Component {
     }
 
     componentDidMount() {
-        this.getCompanyandDepartmentFromDB()
+        this.checkToken();
+    }
+
+    checkToken = () => {
+        var token = localStorage.getItem('tk');
+        if (token === null || token === undefined) {
+            alert("Please Login")
+            window.location.href = '/'
+        } else if (token !== null && token !== undefined) {
+            var decoded = jwt_decode(token);
+            if (decoded.position === "Manager") {
+                alert("Not have Permission")
+                window.location.href = "/Schedule";
+            } else if (decoded.position !== "Admin") {
+                alert("Not have Permission")
+                window.location.href = "/User";
+            } else {
+                this.getCompanyandDepartmentFromDB()
+            }
+        }
     }
 
     getCompanyandDepartmentFromDB = async () => {
         var token = localStorage.getItem('tk')
-        console.log(token)
         const othepram = {
             headers: {
                 tkauth: token,
@@ -83,7 +104,8 @@ class Company extends Component {
                 body: JSON.stringify({
                     departid: this.state.changeDepartment.id,
                     departname: this.state.changeDepartment.name,
-                    departtelno: this.state.changeDepartment.telno
+                    departtelno: this.state.changeDepartment.telno,
+                    departimg: this.state.departmentImage
                 }),
                 method: "POST"
             };
@@ -150,30 +172,21 @@ class Company extends Component {
         }
     }
 
-
-
-    // เอา url ของรูปจากเครื่องมา
     fileSelectedHandler = (event) => {
-        if(event !== null){
-            try{
+        if (event !== null) {
+            try {
                 let imgfile = URL.createObjectURL(event.target.files[0])
                 let imgname = event.target.files[0].name
-                this.confirmUploadImage(imgfile,imgname)
+                this.confirmUploadImage(imgfile, imgname)
             }
-            catch(error){
+            catch (error) {
                 return null
             }
-            // this.setState({
-            //     companyImages: URL.createObjectURL(event.target.files[0]),
-            //     imageName: event.target.files[0].name
-            // })
-        } else{
+        } else {
             return null
         }
     }
 
-
-    //upload image โดยใช้ firebase
     uploadImages = async (event, imgname) => {
         const response = await fetch(event);
         const blob = await response.blob();
@@ -183,22 +196,62 @@ class Company extends Component {
         console.log('success')
     }
 
-
-
-    //เรียกใช้ uploadImages เอา companyImages ใส่ใน parameter
-    confirmUploadImage = (file,name) => {
+    confirmUploadImage = (file, name) => {
         this.uploadImages(file, name)
             .then(() => {
-                console.log('Upload Success !!')
-                console.log('name' + name)
-                //get url ของรูปมาถ้า Upload สำเร็จ (ต้องเอา url ของรูปมาเก็บใน state แล้วนำมา show **ตอนนี้ยังไม่ได้ทำ)
                 firebase.storage().ref().child('images/' + name).getDownloadURL()
                     .then((imageURL) => {
                         this.setState({
                             companyImage: imageURL
                         })
+                    })
+            })
+            .catch((error) => {
+                console.log("Fail to upload" + error);
+            })
+    }
+
+    fileSelectedHandler2 = (event) => {
+        if(event !== null){
+            try{
+                let imgfile = URL.createObjectURL(event.target.files[0])
+                let imgname = event.target.files[0].name
+                this.confirmUploadImage2(imgfile,imgname)
+            }catch(error){
+                return null
+            }
+            // this.confirmUploadImage()
+            // this.setState({
+            //     departmentImages: URL.createObjectURL(event.target.files[0]),
+            //     imgName: event.target.files[0].name
+            // })
+        } else{
+            return null
+        }
+     }
+
+
+    uploadImages2 = async (event, imgname) => {
+        const response = await fetch(event);
+        const blob = await response.blob();
+
+        var ref = firebase.storage().ref().child('Department Images/' + imgname);
+        return ref.put(blob)
+        console.log('success')
+    }
+
+
+    confirmUploadImage2 = (file,name) => {
+        this.uploadImages2(file, name)
+            .then(() => {
+                //get url ของรูปมาถ้า Upload สำเร็จ (ต้องเอา url ของรูปมาเก็บใน state แล้วนำมา show **ตอนนี้ยังไม่ได้ทำ)
+                firebase.storage().ref().child('Department Images/' + name).getDownloadURL()
+                    .then((imageURL) => {
+                        this.setState({
+                            departmentImage: imageURL
+                        })
                         console.log(imageURL)
-                        console.log("from state = " + this.state.companyImage)
+                        console.log("from state = " + this.state.departmentImage)
                     })
             })
             .catch((error) => {
@@ -260,27 +313,37 @@ class Company extends Component {
         const companypictures = <img src={this.state.companyImage} className="company-pictures"></img>
         const departments = department.map((department) => {
             return <div className="departments">
-                <div className="dp-img1">
-                    <img className="department-pictures" src={department.Department_Picture}></img>
-                </div>
                 {editDepartment == true && department.Department_ID == checkeditdepart ?
+                <div>
+                 <div className="dp-img1">
+                    {this.state.departmentImage == '' ? null :<img className="department-pictures" src={this.state.departmentImage}></img> }    
+                    </div>
                     <div className="dp-sh">
                         <div style={{ display: 'flex' }}>
                             <span>Department :</span>
                             <input defaultValue={changeDepartment.name} className="edit-depart" name="name" onChange={event => this.changeDepartment(event)}></input>
                             <span className="val2" >{this.state.vald.n}</span>
+                            <div style={{display:'flex',marginLeft:40}}>
+                            <label htmlFor="manage-staff10" className="manage-staff10">Browse...</label>
+                            <input type="file" name="photo" accept="image/*" id="manage-staff10" onChange={this.fileSelectedHandler2} />
+                            </div>
                         </div>
                         <div style={{ display: 'flex', marginTop: 10 }}>
                             <span>Telno :</span>
                             <input defaultValue={changeDepartment.telno} className="edit-depart2" name="telno" onChange={event => this.changeDepartment(event)}></input>
                             <span className="val2">{this.state.vald.t}</span>
                         </div>
-                        <div style={{ display: 'flex', marginTop: 20, marginLeft: 200 }}>
+                        <div style={{ display: 'flex', marginTop: 5, marginLeft: 200 }}>
                             <button className="manage-staff6" onClick={() => this.setState({ editDepartment: false, vald: { n: null, d: null } })}>Cancel</button>
                             <button className="manage-staff5" onClick={this.updateDepartment}>Save</button>
                         </div>
                     </div>
+                    </div>
                     :
+                    <div>
+                    <div className="dp-img1">
+                   {department.Department_Picture == "" ? null : <img className="department-pictures" src={department.Department_Picture}></img> } 
+                    </div>
                     <div className="dp-sh">
                         <span>Department : {department.Department_Name}</span>
                         <span style={{ marginTop: 10 }}>Telno : {department.Department_TelNo} </span>
@@ -294,10 +357,11 @@ class Company extends Component {
                             <button className="manage-staff4" onClick={() => this.editDepartment(department.Department_ID, department.Department_Name, department.Department_TelNo)}>Edit</button>
                         </div>
                     </div>
+                </div>
                 }
             </div>
         })
-        
+
         return (
             <div className="department-container">
                 {!loading &&
@@ -322,7 +386,7 @@ class Company extends Component {
                                         <input defaultValue={changeCompany.ctelno} className="edit-depart" name="ctelno" onChange={event => this.changeCompany(event)} className="input-c"></input>
                                         <span className="val2" >{this.state.vald.t}</span>
                                         <div style={{ display: 'flex' }}>
-                                            <button className="manage-staff7" onClick={() => this.setState({ editCompany: false, valc: { n: null, e: null, t: null } })}>Cancel</button>
+                                            <button className="manage-staff7" onClick={() => this.setState({ editCompany: false, valc: { n: null, e: null, t: null },departmentImage:'' })}>Cancel</button>
                                             <button className="manage-staff8" onClick={this.updateCompany} >Save</button>
                                         </div>
                                     </div>

@@ -84,7 +84,7 @@ class Register extends Component {
     if (this.props.onClose !== undefined) {
       this.props.onClose(e)
     }
-    this.setState({submitted: false,shake: 'register-popup_inner'})
+    this.setState({submitted: false,shake: 'register-popup_inner', validatepass:''})
   }
 
   popUpLogin = (e) => {
