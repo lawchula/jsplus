@@ -8,10 +8,9 @@ import TestComponent2 from './TestComponent2';
 import Home from './Home';
 import Company from './Company';
 import Department from './Department';
-
-
-
-
+import ManagerHowToUse from "./ManagerHowToUse";
+import StaffHowToUse from "./StaffHowToUse";
+import AdminHowToUse from "./AdminHowToUse";
 
 class App extends Component {
   render() {
