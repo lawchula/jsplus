@@ -170,5 +170,9 @@ justify-content: center;
     color: red;
     font-weight: bold;
   }
+.position-box{
+    max-height: 120px ;
+    overflow-y: scroll;
+}
 
   

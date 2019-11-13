@@ -219,10 +219,11 @@
         flex-direction: column;
     }
     #second-header{
-        color:#07889B;
+        color:#4054b2;
         font-size:12.5px;
         margin-top:2%;
-        border: none !important;            
+        border: none !important;
+        margin-left: 5px;          
     }
     .third-header{
         display: flex;
@@ -247,5 +248,11 @@
         border-radius: 5px;
         max-width: 120px;
         width: auto;
+    }
+    #second-header2{
+      border:none;
+      max-width: 60px;
+      padding: 5px;
+      width: auto;
     }
 }

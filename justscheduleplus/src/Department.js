@@ -13,6 +13,7 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } 
 import Position from './Position';
 import infor from './Images/infor.png';
 import ExampleImport from './ExampleImport';
+import down from './Images/down.png';
 
 
 
@@ -417,10 +418,13 @@ class Department extends Component {
                 <td>{e.Email}</td>
                 <td>{e.PhoneNumber}</td>
                 <td>{e.User_ID == test ? <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' size="sm">
-                    <DropdownToggle tag="span">
+                    <DropdownToggle tag="div" style={{cursor:'pointer'}}>       
+                        <div style={{border:'1px solid black',width:'auto',padding:5,maxWidth:110}}>   
                         {positionname == null ? <span>{e.Position_Name}</span> : <span>{positionname}</span>}
+                        <img src={down} style={{marginLeft:8,width:15,height:15}}></img>
+                        </div>
                     </DropdownToggle>
-                    <DropdownMenu>
+                    <DropdownMenu  className="position-box">
                         {positions.map((p) => {
                             return <DropdownItem onClick={(event) => this.changePosition(event, key, p.Position_ID)}>
                                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -525,12 +529,12 @@ class Department extends Component {
                                         <td>{e.email}</td>
                                         <td>{e.telno}</td>
                                         <td><Dropdown isOpen={this.state.dropdownOpen && key == this.state.addposition} toggle={() => this.toggle(e.id, key)} direction='down' size="sm">
-                                            <DropdownToggle tag="span" >
+                                            <DropdownToggle tag="span" style={{cursor:'pointer'}}>
                                                 <span>{e.position}</span>
                                             </DropdownToggle>
-                                            {key == this.state.addposition ? <DropdownMenu>
+                                            {key == this.state.addposition ? <DropdownMenu  className="position-box">
                                                 {this.state.newuserp.map((p, index) => {
-                                                    return <DropdownItem onClick={(event) => this.selectPosition(event, key, e.id, p.Position_ID)}>
+                                                    return <DropdownItem onClick={(event) => this.selectPosition(event, key, e.id, p.Position_ID)} >
                                                         <div style={{ display: "flex", flexDirection: "column" }}>
                                                             <span>{p.Position_Name}</span>
                                                         </div>

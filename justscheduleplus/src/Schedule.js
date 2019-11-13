@@ -614,12 +614,13 @@ class Schedule extends Component {
                                     <tr id="tr2">
                                         {/* <th colSpan={this.state.block.length + 2}>{this.getNameofMonth(this.state.month) + "  " + this.state.year} </th> */}
                                         <th colSpan={this.state.block.length + 2}>
-                                            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='right' size="sm">
-                                                <DropdownToggle tag="span">
+                                            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} direction='down' size="sm">
+                                                <DropdownToggle tag="span" style={{cursor:'pointer'}}  >
                                                     <span>{this.getNameofMonth(this.state.month) + " " + this.state.year}</span>
                                                 </DropdownToggle>
-                                                <DropdownMenu>
-                                                    {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event, i)}>{this.state.dropdownOpen == false ? null : event} </DropdownItem> })}
+                                                <DropdownMenu className="dd-mm" >
+                                                    {this.state.months.map((event, i) => { return <DropdownItem onClick={() => this.getMonth(event, i)}><div >
+                                                    <span>{this.state.dropdownOpen == false ? null : event}</span></div></DropdownItem> })}
                                                 </DropdownMenu>
                                             </Dropdown>
                                         </th>

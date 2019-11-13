@@ -79,6 +79,14 @@
   margin-top: 10px;
   margin-bottom: 60px;
 }
+.c-t3{
+  font-family: "Poppins", sans-serif;
+  font-weight: lighter;
+  font-size: 15px;
+  color: #808080;
+  margin-top: 80px;
+  margin-bottom: 60px;
+}
 .h-content {
   display: flex;
   flex-direction: column;
