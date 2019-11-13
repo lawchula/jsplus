@@ -546,7 +546,7 @@ class Department extends Component {
                         </Table>
                         {this.state.newusers.length == 0 ? null : <button className="add-staff-butt3" onClick={() => this.insertUser()}>Save</button>}
                     </div>
-                    <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
+                    <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment} getPosition = {this.checkToken}></Position>
                     <ExampleImport show={this.state.showImport} onClose={this.showExample}></ExampleImport>
                 </React.Fragment>
                 }

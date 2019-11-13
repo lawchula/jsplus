@@ -124,7 +124,9 @@ class Filter extends Component {
     fetch(Url, othepram)
       .then(res => {
         this.setState({ periods: [] });
+        alert("Insert Period Success")
         this.getPeriods();
+        this.props.SelectDataFromDB();
       })
       .catch(error => console.log(error));
   };

@@ -62,23 +62,30 @@ class Position extends Component {
 
 
   insertPosition = () => {
-    const Url = url + "/position/insert";
-    const othepram = {
-      headers: {
-        "content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify({
-        departid: this.props.test.Department_ID,
-        position: this.state.newpositions
-      }),
-      method: "POST"
-    };
-    fetch(Url, othepram)
-      .then(res => {
-        this.setState({ newpositions: [] });
-        this.getPosition();
-      })
-      .catch(error => console.log(error));
+
+    if(this.state.newpositions.length < 1){
+      alert("Please add position first")
+    }else{
+      const Url = url + "/position/insert";
+      const othepram = {
+        headers: {
+          "content-type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          departid: this.props.test.Department_ID,
+          position: this.state.newpositions
+        }),
+        method: "POST"
+      };
+      fetch(Url, othepram)
+        .then(res => {
+          this.setState({ newpositions: [] });
+          alert("Insert Position Success")
+          this.getPosition();
+          this.props.getPosition();
+        })
+        .catch(error => console.log(error));
+    }
   }
 
   editPosition = (id, Position_Name) => {
