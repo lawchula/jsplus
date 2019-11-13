@@ -1,18 +1,21 @@
 .howtouse {
   background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);
   background-color: #fafafb;
-  height: 800vh;
+  height: 100%;
+  padding-bottom: 50px;
 }
 .howtouse2 {
   background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);
   background-color: #fafafb;
-  height: 760vh;
+  height: 100%;
+  padding-bottom: 50px;
 }
 
 .howtouse3 {
   background-image: -webkit-linear-gradient(40deg, #6754e2 0%, #19cce6 150%);
   background-color: #fafafb;
-  height: 960vh;
+  height: 100%;
+  padding-bottom: 50px;
 }
 .topnav {
   display: flex;
@@ -330,6 +333,26 @@
 .set2boxes {
   display: flex;
   justify-content: center;
+}
+.howtouse-header{
+  display: flex;
+  width:100%;
+  font-family: "Poppins";
+  height: 50px;
+  font-size: 20px;
+  padding-top: 10px;
+  background-color: #f8f9fa;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.click-howto{
+  color:#4054b2;
+  font-weight: bold;
+  margin-left: 10px;
+}
+.text-header{
+  margin-left: 10px;
 }
 @media only screen and (max-width: 1360px) {
   .howtopic {

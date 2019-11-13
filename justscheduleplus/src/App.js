@@ -11,6 +11,7 @@ import Department from './Department';
 import ManagerHowToUse from "./ManagerHowToUse";
 import StaffHowToUse from "./StaffHowToUse";
 import AdminHowToUse from "./AdminHowToUse";
+import Howtouse from './HowToUse';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route path="/EditProfile" component={EditProfile} />
             <Route path="/Company" component={Company} />
             <Route path="/Department" component={Department} />
+            <Route path="/Howtouse" component={Howtouse} />
             <Redirect to="/" />
           </Switch>
         </Router>
