@@ -66,10 +66,11 @@
 } */
 .add-staff{
     /* position: absolute; */
-    margin-left: 860px;
+    margin-left: 800px;
     right:0;
     margin-right: 30px;
     font-family: 'Poppins', sans-serif;
+    margin-top: 10px;
 }
 .add-staff-butt:hover{
     width: 150px;

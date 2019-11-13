@@ -24,6 +24,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    console.log('HOME')
     AOS.init({
       duration: 3000
     });

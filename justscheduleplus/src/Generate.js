@@ -366,7 +366,7 @@ class Generate extends Component {
                     </div>
                     <div className="generate-content">
                         <div style={{ display: "flex", marginTop: 15, marginLeft: 40 }}>
-                            <span>Select position  :</span>
+                            <span>Choose position  :</span>
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPosition} toggle={this.selectPosition} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
@@ -384,7 +384,7 @@ class Generate extends Component {
                             </Dropdown>
                         </div>
                         <div style={{ display: "flex", marginTop: 10, marginLeft: 40 }}>
-                            <span>Select period times per days :</span>
+                            <span>Choose period times per days :</span>
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPeriod} toggle={this.selectPeriodTimes} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
@@ -402,7 +402,7 @@ class Generate extends Component {
                             </Dropdown>
                         </div>
                         <div style={{ display: "flex", marginTop: 10, marginLeft: 40 }}>
-                            <span>Select work persons per days :</span>
+                            <span>Choose work persons per days :</span>
                             <Dropdown className="select_gen" isOpen={this.state.dropdownPerson} toggle={this.selectPersons} direction='down' size="sm">
                                 <DropdownToggle tag="div">
                                     <div className="dropdown_gen">
@@ -432,7 +432,7 @@ class Generate extends Component {
                                 </DropdownMenu>
                             </Dropdown>
                             <div>
-                                <input type="text" name="reason" className="input-holi" value={this.state.holiday.reason} onChange={event => this.handleChange(event)}></input>
+                                <input type="text" name="reason" placeholder="reason" className="input-holi" value={this.state.holiday.reason} onChange={event => this.handleChange(event)}></input>
                                 <span className="valgenerate">{this.state.validate}</span>
                             </div>
                             <button className="manage-gen" onClick={event => this.handleSubmit(event)}>Add</button>

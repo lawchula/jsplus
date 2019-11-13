@@ -61,12 +61,13 @@ class Company extends Component {
                 alert("Not have Permission")
                 window.location.href = "/User";
             } else {
-                this.getCompanyandDepartmentFromDB()
+                this.getCompanyandDepartmentFromDB();
             }
         }
     }
 
     getCompanyandDepartmentFromDB = async () => {
+        console.log("KUY")
         var token = localStorage.getItem('tk')
         const othepram = {
             headers: {

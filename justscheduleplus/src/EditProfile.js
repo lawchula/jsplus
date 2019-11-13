@@ -259,7 +259,7 @@ class AdminHome extends Component {
               <div className="zindex"></div>
 
               <div className="edit-profile">
-                {userImg == "" ? " " : (<img className="edit-userimg" src={userImg}></img>)}
+               <img className="edit-userimg" src={userImg}></img> 
               </div>
               <span className="selectedfile2">
                 {userImages == null ? "no file selected" : userImgName}

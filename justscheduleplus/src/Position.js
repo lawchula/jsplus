@@ -135,10 +135,10 @@ class Position extends Component {
             <img src={close} onClick={(e) => this.onClose(e)} className="close-create"></img>
           </div>
           <div className="position-content">
-            <span>** Every department must have 1 manager</span>
+            <span style={{color:'red',fontWeight:'bold',fontSize:13,marginLeft:20}}>** Every department must have 1 manager</span>
             <div className="add-position">
               <span>Position : </span>
-              <input name="newposition" value={newposition} onChange={event => this.handleChange(event)}></input>
+              <input name="newposition" placeholder="position" value={newposition} onChange={event => this.handleChange(event)}></input>
               <button style={{ marginLeft: 7 }} onClick={this.handleSubmit} className="addp-but" >Add</button>
             </div>
             <span className="val">{this.state.validate}</span>

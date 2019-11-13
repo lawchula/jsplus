@@ -11,6 +11,9 @@ import url from './url';
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from 'reactstrap';
 import Position from './Position';
+import infor from './Images/infor.png';
+import ExampleImport from './ExampleImport';
+
 
 
 class Department extends Component {
@@ -38,7 +41,8 @@ class Department extends Component {
             changeposition: {},
             positionname: null,
             notification: [],
-            loading: true
+            loading: true,
+            showImport:false
         }
     }
 
@@ -165,9 +169,7 @@ class Department extends Component {
         for (let i = 0; i < this.state.newusers.length; i++) {
             if (this.state.newusers[i].position === "Please select position") {
                 alert("Position of "+this.state.newusers[i].name+" "+this.state.newusers[i].surname+" is invalid")
-            }else if(this.state.newuser[i].name === "" || this.state.newuser[i].surname === "" || this.state.newuser[i].email === "" || this.state.newuser[i].telno === ""){
-                alert("Invalid user informations")
-            } else {
+             } else {
                 const Url = url + "/user/insert";
                 const othepram = {
                     headers: {
@@ -261,7 +263,7 @@ class Department extends Component {
 
     addUserfromExcel = (event) => {
         for (let i = 0; i < event.length; i++) {
-            if (event[i].length > 0) {
+            if (event[i].length > 0 && event[i][0] !== undefined && event[i][1] !== undefined && event[i][2] !== undefined && event[i][3] !== undefined) {
                 var a = {}
                 const random = Math.floor(Math.random() * 9999999) + 1
                 const password = event[i][0].substring(0, 1) + event[i][1].substring(0, 1) + random
@@ -276,6 +278,11 @@ class Department extends Component {
                 a.positionid = null
                 a.password = password
                 this.state.newusers.push(a)
+            }else{
+                alert("Invalid user information at row "+event.length)
+                // this.setState({
+                //     newusers:[]
+                // })
             }
         }
         this.state.rows = []
@@ -330,7 +337,7 @@ class Department extends Component {
         event.preventDefault();
         const { newuser } = this.state
         if (newuser.name.trim() == "" || newuser.surname.trim() == "" || newuser.email.trim() == "" || newuser.telno.trim() == "") {
-            this.setState({ val: "Please fill information" })
+            this.setState({ val: "Invalid user information" })
             newuser.name = ""
             newuser.surname = ""
             newuser.email = ""
@@ -387,6 +394,12 @@ class Department extends Component {
         this.state.changeposition.newposition = pid
         this.setState({
             positionname: pname
+        })
+    }
+
+    showExample = () =>{
+        this.setState({
+          showImport: !this.state.showImport
         })
     }
 
@@ -471,8 +484,9 @@ class Department extends Component {
                                 <button className="add-staff-butt" onClick={this.showPosition}>CREATE POSITION</button>
                                 <button className="add-staff-butt" onClick={this.addStaff}>ADD STAFF</button>
                                 <button className="add-staff-butt2" onClick={this.addUserfromExcel(this.state.rows)}>IMPORT STAFF</button>
-                                <label htmlFor="upload-excel" className="add-staff-excel">Import</label>
+                                <label htmlFor="upload-excel" className="add-staff-excel" >Import</label>
                                 <input type="file" id="upload-excel" accept=".xlsx, .xls" onChange={this.fileHandler.bind(this)} style={{ "padding": "10px" }} />
+                                <img src={infor} style={{width:28,height:28,marginLeft:10}} onClick={this.showExample}></img>
                             </div>
                             :
                             <div className="add-staff2">
@@ -527,6 +541,7 @@ class Department extends Component {
                         {this.state.newusers.length == 0 ? null : <button className="add-staff-butt3" onClick={this.insertUser}>Save</button>}
                     </div>
                     <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
+                    <ExampleImport show={this.state.showImport} onClose={this.showExample}></ExampleImport>
                 </React.Fragment>
                 }
             </div>
