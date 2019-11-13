@@ -166,29 +166,35 @@ class Department extends Component {
     }
 
     insertUser = () => {
+        let check = false
         for (let i = 0; i < this.state.newusers.length; i++) {
             if (this.state.newusers[i].position === "Please select position") {
-                alert("Position of "+this.state.newusers[i].name+" "+this.state.newusers[i].surname+" is invalid")
-             } else {
-                const Url = url + "/user/insert";
-                const othepram = {
-                    headers: {
-                        "content-type": "application/json; charset=UTF-8",
-                    },
-                    body: JSON.stringify({
-                        user: this.state.newusers,
-                    }),
-                    method: "POST"
-                };
-                fetch(Url, othepram)
-                    .then(res => {
-                        this.sendEmail()
-                        alert('Add user success');
-                        this.setState({ newusers: [] });
-                        this.componentDidMount()
-                    })
-                    .catch(error => console.log(error));
+                alert("Position of " + this.state.newusers[i].name + " " + this.state.newusers[i].surname + " is invalid")
+            }else{
+                check = false
             }
+        }
+
+        if(!check){
+            const Url = url + "/user/insert";
+            const othepram = {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8",
+                },
+                body: JSON.stringify({
+                    user: this.state.newusers,
+                }),
+                method: "POST"
+            };
+            fetch(Url, othepram)
+                .then(res => res.json())
+                .then(json => {
+                    this.sendEmail()
+                    alert('Import From Excel Success');
+                    this.setState({ newusers: [] });
+                    this.componentDidMount()
+                })
+                .catch(error => console.log(error));
         }
     }
 
@@ -538,7 +544,7 @@ class Department extends Component {
                                 })}
                             </tbody>
                         </Table>
-                        {this.state.newusers.length == 0 ? null : <button className="add-staff-butt3" onClick={this.insertUser}>Save</button>}
+                        {this.state.newusers.length == 0 ? null : <button className="add-staff-butt3" onClick={() => this.insertUser()}>Save</button>}
                     </div>
                     <Position show={this.state.showposition} onClose={this.showPosition} test={this.props.location.state.manageDepartment}></Position>
                     <ExampleImport show={this.state.showImport} onClose={this.showExample}></ExampleImport>
