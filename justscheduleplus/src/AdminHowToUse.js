@@ -50,11 +50,11 @@ class Home extends Component {
       <div className="howtouse3">
         <Header />
         <div className="topnav">
-          <div className="toppage">
+          {/* <div className="toppage">
             <div className="nav">
               <span className="navtext">How To Use : Admin</span>
             </div>
-          </div>
+          </div> */}
           <div className="inpic">
             <img className="howtopic" src={Adminpic}></img>
             <div className="admintextboxes">

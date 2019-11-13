@@ -17,9 +17,8 @@
   top: 20%;
   margin: auto;
   width: 750px;
-  background-color: #fafafb;
+  background-color: none;
   border-radius:5px;
-  /* box-shadow: 0px 0px 2px 3px #808080; */
 }
 .Addbutton {
   margin-left: 285px;
@@ -35,7 +34,6 @@
   border-radius: 20px;
 }
 .all{
-  box-shadow: 0px 0px 2px 3px #808080;
   border-radius: 5px;
 }
 

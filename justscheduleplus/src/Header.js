@@ -636,7 +636,7 @@ class Header extends Component {
                 <Nav className="ml-auto" navbar >
                   <div id="first-header">
                     <NavItem>
-                      <NavLink href=""  ><b className="firstheader-item">HOW TO USE</b></NavLink>
+                      <NavLink href="/Howtouse"  ><b className="firstheader-item">HOW TO USE</b></NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink href="" ><b className="firstheader-item">ABOUT US</b></NavLink>

@@ -44,6 +44,9 @@ class Position extends Component {
     if (this.props.onClose != undefined) {
       this.props.onClose(e);
     }
+    this.setState({
+      newpositions:[]
+    })
   };
 
   handleSubmit = (event) => {

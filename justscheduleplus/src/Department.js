@@ -305,7 +305,7 @@ class Department extends Component {
                 body: JSON.stringify({
                     email: this.state.newusers[i].email,
                     subject: this.state.subject,
-                    username: this.state.newusers[i].email,
+                    username: this.state.newusers[i].username,
                     password: this.state.newusers[i].password
                 }),
                 method: "POST"
@@ -461,9 +461,9 @@ class Department extends Component {
                 {!loading && <React.Fragment>
                     <div className="dp-ds-container">
                         <div className="dp-header">
-                            <div className="col-5">
+                            <div className="col-3">
                                 <div className="dp-img">
-                                    {/* <img className="department-pictures" src={department.Department_Picture}></img> */}
+                                {department.Department_Picture === "" ? null :  <img className="dp-img2" src={department.Department_Picture}></img>}       
                                 </div>
                             </div>
                             <div className="dp-description col-9">

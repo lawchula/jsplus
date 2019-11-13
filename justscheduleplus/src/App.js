@@ -12,6 +12,7 @@ import Department from './Department';
 import ManagerHowToUse from "./ManagerHowToUse";
 import StaffHowToUse from "./StaffHowToUse";
 import AdminHowToUse from "./AdminHowToUse";
+import Howtouse from './HowToUse';
 
 class App extends Component {
   render() {
@@ -19,13 +20,14 @@ class App extends Component {
       <div className="App">
         <Router>
           <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/Schedule" component={Schedule} />
-          <Route path="/User" component={User} />
-          <Route path="/EditProfile" component={EditProfile} />
-          <Route path="/Company" component={Company} />
-          <Route path="/Department" component={Department} />
-          <Redirect to="/" />
+            <Route exact path="/" component={Home} />
+            <Route path="/Schedule" component={Schedule} />
+            <Route path="/User" component={User} />
+            <Route path="/EditProfile" component={EditProfile} />
+            <Route path="/Company" component={Company} />
+            <Route path="/Department" component={Department} />
+            <Route path="/Howtouse" component={Howtouse} />
+            <Redirect to="/" />
           </Switch>
         </Router>
         {/* <TestComponent2></TestComponent2> */}
